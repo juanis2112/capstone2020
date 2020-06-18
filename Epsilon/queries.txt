@@ -1,0 +1,17 @@
+create table user_app ( username varchar(50) PRIMARY KEY, passwd varchar(50));
+insert into user_app (username, passwd) values ('juanf', 'admin');
+insert into user_app (username, passwd) values ('danielr', 'student');
+insert into user_app (username, passwd) values ('alexc', 'teacher');
+
+
+
+create table students (username varchar(50) PRIMARY KEY, student_name varchar(50), 
+					   class_name varchar(50),
+					   grade1 varchar(50),
+					   grade2 varchar(50),
+					   grade3 varchar(50),
+					   grade_final varchar(50));
+					   
+insert into students (username, student_name, class_name, grade1, grade2, grade3, grade_final) values ('danielr', 'daniel', 'algebra', '4','4','4','5');
+insert into user_app (username, passwd, user_type) values ('juanitag', 'student', 'student');
+insert into students (username, student_name, class_name, grade1, grade2, grade3, grade_final) values ('juanita', 'juanita', 'algebra', '4.5','5','4.9','5');

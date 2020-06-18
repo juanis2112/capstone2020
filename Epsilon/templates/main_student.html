@@ -1,0 +1,31 @@
+<form action="{{url_for('main_student')}}" method="POST">
+  <div>
+  <table class="table table-striped table-hover table-bordered table-sm bg-white">
+        <thead>
+          <tr>
+            <td>Materias</td>
+            <td>Corte1</td>
+            <td>Corte2</td>
+            <td>Corte3</td>
+            <td>Nota Final</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for class in classes %}
+          <tr>
+            <td>{{class.2}}</td>
+            <td>{{class.3}}</td>
+            <td>{{class.4}}</td>
+            <td>{{class.5}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+</form>
+
+<form action="{{url_for('main_window')}}">
+  <button class="submit">
+    Log out
+  </button>
+</form>
