@@ -9,13 +9,16 @@ Created on Mon Jun  8 16:29:36 2020
 # Third party imports
 import psycopg2
 from flask import Flask, render_template, request, redirect, url_for, flash
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Connection to DataBase
 conn = psycopg2.connect(user = "postgres",
                         password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "users_app")
+                        database = "epsilon")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -81,16 +84,59 @@ def main_teacher():
     data = cur.fetchall()
     return render_template('main_teacher.html', classes = data) 
 
-@app.route('/class/<string:class_name>', methods = ['POST','GET'])
+@app.route('/class/<string:class_name>', methods = ['POST', 'GET'])
 def show_class(class_name):
-    #query para crear tabla que muestra los estudiantes inscritos en la materia seleccionada
+    #query para crear tabla que muestra los estudiantes en orden alfabetico inscritos en la materia seleccionada
     cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
     data = cur.fetchall()
-    return render_template('class.html', students = data, class_name=class_name)    
+    return render_template('class.html', students_class = data, class_name=class_name)    
     
-   
-#-----------------------------------------------------------------------------#
 
+@app.route('/class_edit/<string:class_name>', methods = ['POST','GET'])
+def edit_grade(class_name):
+    #query para crear tabla que muestra los estudiantes en orden alfabetico inscritos en la materia seleccionada
+    cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
+    data = cur.fetchall()
+    return render_template('class_edit.html', class_name = class_name, students_class = data)
+
+@app.route('/class_update/<string:class_name>', methods=['POST'])
+def update_grade(class_name):
+    cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
+    students_class = cur.fetchall()
+    
+    
+    # Mover a administrador 
+    df = pd.DataFrame(students_class, columns =['user', 'student', 'class_name', 'grade1', 'grade2', 'grade3', 'grade_final'])
+    df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
+    conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
+    sns.set(font_scale=1.2)
+    ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Promedio estudiantes materia")
+    ax.set(
+        ylabel="Numero estudiantes",
+        xlabel="Promedio Final",
+        )
+    plt.savefig('Reporte.png')
+    
+    # ---------------------------------------
+   
+    if request.method == 'POST':
+        for student in students_class:
+            grade1 = request.form['grade1_'+student[0]]
+            grade2 = request.form['grade2_'+student[0]]
+            grade3 = request.form['grade3_'+student[0]]
+            grade_final = str(round((float(grade1)+float(grade2)+float(grade3))/3,2))
+            cur.execute("""
+                UPDATE students
+                SET grade1 = %s,
+                    grade2 = %s,
+                    grade3 = %s,
+                    grade_final = %s
+                WHERE username = %s and class_name = %s
+            """, (grade1, grade2, grade3, grade_final, student[0], class_name))
+            conn.commit()
+            return redirect(url_for('show_class', class_name = class_name))
+
+#-----------------------------------------------------------------------------#
 @app.route("/main_admin", methods=['POST', 'GET'])
 def main_admin():
     cur.execute('select * from user_app')
@@ -98,8 +144,13 @@ def main_admin():
     return render_template('main_student.html', users = data) 
 
 
+## REPORTES
+
+#1 Grafica de barras con definitivas (estudiantes por cada rango de notas)
+#2 Grafica de lineas con definitivas (estudiantes por cada rango de notas) para cada grupo
+#3 Grafica de lineas con progreso cortes estudiantes 
 
 
 
 if __name__ == "__main__":
-    app.run(port = 3000, debug = True)
+    app.run(port = 2000, debug = True)
