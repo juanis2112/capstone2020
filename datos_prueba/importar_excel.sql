@@ -225,6 +225,12 @@ insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,n
 VALUES (900085,1,20,3.5,20,2.8,20,5.0,15,3.5,25,4.5);
 
 insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
+VALUES (900085,2,20,3.5,20,2.8,20,5.0,15,3.5,25,4.5);
+
+insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
+VALUES (900085,3,20,3.5,20,2.8,20,5.0,15,3.5,25,4.5);
+
+insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
 VALUES (937607,1,20,2.5,20,4.8,20,5.0,15,4.5,25,1.5);
 
 insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
