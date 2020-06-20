@@ -47,9 +47,6 @@ CREATE TABLE Public.tablaEmpleado(
 COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
 COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/información_profesores.csv' DELIMITER ',' CSV HEADER;
 
-select * from tablaEstudiante
-select * from tablaEmpleado
-
 /* Conjuntos de entidades */
 
 Create table Programa(
@@ -158,102 +155,80 @@ create table curso_sem (
 	foreign key (sem_id) references semestre
 );
 
-drop table curso_sem
-
-
-select * from mytable
-
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo,programa,facultad_o_escuela) 
-select distinct 1,programa, facultad_o_escuela from mytable
-
-select * from Programa
+select distinct 1,programa, facultad_o_escuela from tablaEstudiante;
 
 /* Metiendo a la tabla de Personas */
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual)
-select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual from tablaEstudiante
+select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual from tablaEstudiante;
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual from tablaEmpleado
-
-select * from Personas
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual from tablaEmpleado;
 
 /* Metiendo a la tabla de Estudiante */
 
 insert into Estudiante(codigo,documento_ingreso,acceso,subacceso)
-select distinct codigo,documento_ingreso,acceso,subacceso from tablaEstudiante
-
-select * from Estudiante
+select distinct codigo,documento_ingreso,acceso,subacceso from tablaEstudiante;
 
 /* Metiendo a la tabla Empleado */
 
 insert into Empleado(codigo,esProfesor,esAdmin)
-select distinct Codigo_empleado,esProfesor,esAdmin from tablaEmpleado
-
-select * from Empleado
+select distinct Codigo_empleado,esProfesor,esAdmin from tablaEmpleado;
 
 /* Metiendo a la tabla de Asignaturas*/
 
 insert into Asignaturas(codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura)
-select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura from mytable
-
-select * from Asignaturas
+select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura from tablaEstudiante;
 
 /* Metiendo a la tabla de Semestre*/
 
-insert into semestre(periodo,anio,grupo) VALUES (2,2017,1)
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,1)
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,2)
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,1)
+insert into semestre(periodo,anio,grupo) VALUES (2,2017,1);
+insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
+insert into semestre(periodo,anio,grupo) VALUES (1,2018,2);
+insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
 
 /* Metiendo a la tabla dicta */
 
-insert into dicta(codigo,sem_id) VALUES (4321,1) 
-insert into dicta(codigo,sem_id) VALUES (4327,2)
-insert into dicta(codigo,sem_id) VALUES (4334,3)
-
-select * from dicta
+insert into dicta(codigo,sem_id) VALUES (4321,1); 
+insert into dicta(codigo,sem_id) VALUES (4327,2);
+insert into dicta(codigo,sem_id) VALUES (4334,3);
 
 /* Metiendo a la tabla curso_sem */
 
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (573951,1) 
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (259845,2)
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,3)
-
-select * from curso_sem
+insert into curso_sem(codigo_asignatura,sem_id) VALUES (573951,1); 
+insert into curso_sem(codigo_asignatura,sem_id) VALUES (259845,2);
+insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,3);
 
 /* Metiendo a la tabla inscrito */
 
-insert into inscrito(codigo) VALUES (900085)
-insert into inscrito(codigo) VALUES (937607)
-insert into inscrito(codigo) VALUES (861029)
-
-select * from inscrito
+insert into inscrito(codigo) VALUES (900085);
+insert into inscrito(codigo) VALUES (937607);
+insert into inscrito(codigo) VALUES (861029);
 
 /* Metiendo a la tabla ofrece */
 
-insert into ofrece(codigo_asignatura) VALUES (573951)
-insert into ofrece(codigo_asignatura) VALUES (259845)
-insert into ofrece(codigo_asignatura) VALUES (748061)
+insert into ofrece(codigo_asignatura) VALUES (573951);
+insert into ofrece(codigo_asignatura) VALUES (259845);
+insert into ofrece(codigo_asignatura) VALUES (748061);
 
 /* Metiendo a la tabla pertenece */
 
-insert into pertenece(codigo) VALUES (4321)
-insert into pertenece(codigo) VALUES (4327)
-insert into pertenece(codigo) VALUES (4334)
-
-select * from pertenece
+insert into pertenece(codigo) VALUES (4321);
+insert into pertenece(codigo) VALUES (4327);
+insert into pertenece(codigo) VALUES (4334);
 
 /* Metiendo a la tabla toma */
 
 insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
-VALUES (900085,1,20,3.5,20,2.8,20,5.0,15,3.5,25,4.5)
+VALUES (900085,1,20,3.5,20,2.8,20,5.0,15,3.5,25,4.5);
 
 insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
-VALUES (937607,1,20,2.5,20,4.8,20,5.0,15,4.5,25,1.5)
+VALUES (937607,1,20,2.5,20,4.8,20,5.0,15,4.5,25,1.5);
 
 insert into toma(codigo,sem_id,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5)
-VALUES (861029,1,20,0.5,20,1.8,20,2.0,15,3.5,25,2.5)
+VALUES (861029,1,20,0.5,20,1.8,20,2.0,15,3.5,25,2.5);
 
-drop table tablaEstudiante
+drop table tablaEstudiante;
+drop table tablaEmpleado;
