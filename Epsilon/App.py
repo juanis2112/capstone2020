@@ -59,7 +59,7 @@ def login():
                 else:
                     return redirect(url_for('main_student',user_name = username_input))
         
-        except: 
+        except Exception: 
             flash("El usuario no se encuentra registrado")
             return render_template('login.html')
 
