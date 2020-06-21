@@ -29,7 +29,7 @@ app.secret_key = 'mysecretkey' #(???)
 # Main Window
 @app.route("/")
 def main_window():
-    return render_template('/login/login.html')
+    return render_template('login.html')
     
 
 @app.route("/login", methods=['POST', 'GET'])
