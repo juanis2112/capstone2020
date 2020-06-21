@@ -1,4 +1,4 @@
-<form action="{{url_for('main_teacher')}}" method="POST">
+<form action="{{url_for('main_teacher', user_name = user_name)}}" method="POST">
   <div>
   <table class="table table-striped table-hover table-bordered table-sm bg-white">
         <thead>
@@ -8,9 +8,7 @@
         </thead>
         <tbody>
           {% for class in classes %}
-          <tr>
-          <a href="/class/{{class.2}}">{{class.2}}</a>
-          </tr>
+          <tr><td> <a href="/class/{{class.0}}">{{class.0}}</a> </td></tr>
           {% endfor %}
         </tbody>
       </table>
