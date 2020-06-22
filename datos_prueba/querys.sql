@@ -27,7 +27,7 @@ ORDER BY(nombre_asignatura)
 	
  
 -- Query consulta estudiantes y notas por materia y profesor 
-SELECT nombre_est,nota1,nota2,nota3,nota4,nota5
+SELECT nombre_est,nota1,nota2,nota3,nota4,nota5  -- pedir usuario del estudiante, apellido1 y apellido2
 FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
 WHERE 
 	personas.usuario = 'PROF' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN

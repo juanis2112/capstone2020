@@ -18,7 +18,7 @@ conn = psycopg2.connect(user = "postgres",
                         password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "CAPSTONE")
+                        database = "Epsilon")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -69,7 +69,6 @@ def login():
 @app.route("/main_student/<string:user_name>", methods=['POST', 'GET'])
 def main_student(user_name):
     #FALTA LA NOTA FINAL
-    user_name = str(user_name)
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5 
             FROM semestre,curso_sem,toma,asignaturas,(personas join estudiante on personas.codigo = estudiante.codigo)
             WHERE 
@@ -108,41 +107,41 @@ def main_teacher(user_name):
     data = cur.fetchall()
     return render_template('main_teacher.html', classes = data, user_name = user_name) 
 
-@app.route('/class/<string:class_name>', methods = ['POST', 'GET'])
-def show_class(class_name):
-    #query para crear tabla que muestra los estudiantes en orden alfabetico inscritos en la materia seleccionada
-    #dictada por el profesor seleccionado (nombre de usuario)
-    cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
+@app.route("/class/<string:user_name>/<string:class_name>", methods = ['POST', 'GET'])
+def show_class(user_name, class_name,):
+    cur.execute("""SELECT nombre_est,nota1,nota2,nota3,nota4,nota5
+                FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
+                WHERE 
+                	personas.usuario = '%s' AND
+                	nombre_asignatura = '%s' AND
+                	anio = (select max(anio) from RESUMEN) AND
+                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                ORDER BY(nombre_est)""" % (user_name, class_name)
+                )
     data = cur.fetchall()
     final_grade = 3
-    return render_template('class.html', students_class = data, class_name=class_name, NotaFinal = final_grade)    
+    return render_template('class.html', user_name = user_name, students_class = data, class_name=class_name, NotaFinal = final_grade)    
     
 
-@app.route('/class_edit/<string:class_name>', methods = ['POST','GET'])
-def edit_grade(class_name):
-    #query para crear tabla que muestra los estudiantes en orden alfabetico inscritos en la materia seleccionada
-    cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
+@app.route("/class_edit/<string:user_name>/<string:class_name>", methods = ['POST','GET'])
+def edit_grade(user_name, class_name):
+    cur.execute("""SELECT nombre_est,nota1,nota2,nota3,nota4,nota5
+                FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
+                WHERE 
+                	personas.usuario = '%s' AND
+                	nombre_asignatura = '%s' AND
+                	anio = (select max(anio) from RESUMEN) AND
+                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                ORDER BY(nombre_est)""" % (user_name, class_name)
+                )
     data = cur.fetchall()
-    return render_template('class_edit.html', class_name = class_name, students_class = data)
+    return render_template('class_edit.html', user_name = user_name, class_name = class_name, students_class = data)
 
-@app.route('/class_update/<string:class_name>', methods=['POST'])
-def update_grade(class_name):
+@app.route("/class_update/<string:user_name>/<string:class_name>", methods=['POST'])
+def update_grade(class_name, user_name):
     cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
     students_class = cur.fetchall()
-    
-    
-    # Mover a administrador 
-    df = pd.DataFrame(students_class, columns =['user', 'student', 'class_name', 'grade1', 'grade2', 'grade3', 'grade4','grade5','grade_final'])
-    df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
-    conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
-    sns.set(font_scale=1.2)
-    ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Promedio estudiantes materia")
-    ax.set(
-        ylabel="Numero estudiantes",
-        xlabel="Promedio Final",
-        )
-    plt.savefig('Reporte.png')
-    
+
     # ---------------------------------------
    
     if request.method == 'POST':
@@ -162,7 +161,7 @@ def update_grade(class_name):
                 WHERE username = %s and class_name = %s
             """, (grade1, grade2, grade3, grade_final, student[0], class_name))
             conn.commit()
-            return redirect(url_for('show_class', class_name = class_name))
+            return redirect(url_for('show_class', user_name = user_name, class_name = class_name))
 
 #-----------------------------------------------------------------------------#
 @app.route("/main_admin", methods=['POST', 'GET'])
@@ -170,10 +169,28 @@ def main_admin():
     return render_template('main_admin.html') 
 
 @app.route("/students", methods=['POST', 'GET'])
-def load_students():
+def load_students(students_class):
     cur.execute("select usuario, nombre, apellido_1, apellido_2 from personas where tipo='estudiante'")
     data = cur.fetchall()
+    
+        
+    # Mover a administrador 
+    df = pd.DataFrame(students_class, columns =['user', 'student', 'class_name', 'grade1', 'grade2', 'grade3', 'grade4','grade5','grade_final'])
+    df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
+    conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
+    sns.set(font_scale=1.2)
+    ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Promedio estudiantes materia")
+    ax.set(
+        ylabel="Numero estudiantes",
+        xlabel="Promedio Final",
+        )
+    plt.savefig('Reporte.png')
+    
+    
     return render_template('students.html', students = data) 
+
+
+
 
 @app.route("/teachers", methods=['POST', 'GET'])
 def load_teachers():
