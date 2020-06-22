@@ -17,24 +17,23 @@ WHERE
 ORDER BY(nombre_asignatura);
 
 -- Query consulta asignaturas dadas por un profesor
-SELECT distinct nombre_asignatura
-FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
-WHERE 
-	personas.usuario = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+SELECT DISTINCT nombre_asignatura
+FROM RESUMEN
+WHERE
+	prof_usr = 'mauro.artigiani' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-ORDER BY(nombre_asignatura)
+ORDER BY(nombre_asignatura)	
 	
- 
 -- Query consulta estudiantes y notas por materia y profesor 
-SELECT nombre_est,nota1,nota2,nota3,nota4,nota5  -- pedir usuario del estudiante, apellido1 y apellido2
-FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
-WHERE 
-	personas.usuario = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+SELECT nombre_est,ap1_est,ap2_est,est_usr,nota1,nota2,nota3,nota4,nota5
+FROM RESUMEN 
+WHERE
+	prof_usr = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
 	nombre_asignatura = 'Algebra lineal' AND -- MATERIA SELECCIONADA
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-ORDER BY(nombre_est);
+ORDER BY(nombre_est)
 
 -- Query consulta de todas las asignaturas,codigo,creditos,grupos,porcentajes y profesor.
 SELECT distinct nombre_asignatura,codigo_asignatura,creditos_asignatura,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5,nombre_prof
@@ -52,14 +51,14 @@ SET -- Las 'nueva nota' se reemplazan por la nueva nota NUMERICA NO STRING
 	nota3 = 3.0,
 	nota4 = 4.0,
 	nota5 = 5.0
-WHERE
+WHERE	
 	toma.sem_id = (
 		select sem_id
-		from RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
+		from RESUMEN
 		where 
-			personas.usuario = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+			prof_usr = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
 			nombre_asignatura = 'Algebra lineal' AND -- MATERIA SELECCIONADA
-			RESUMEN.est_usr = 'vgcscwwo' AND -- USUARIO DEL ESTUDIANTE A CAMBIAR NOTAS
+			RESUMEN.est_usr = 'oauoyodf' AND -- USUARIO DEL ESTUDIANTE A CAMBIAR NOTAS
 			anio = (select max(anio) from RESUMEN) AND
 			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 	)

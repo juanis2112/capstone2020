@@ -207,7 +207,7 @@ insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
+insert into semestre(periodo,anio,grupo) VALUES (2,2018,2);
 
 /* Metiendo a la tabla dicta */
 
@@ -269,16 +269,16 @@ drop table tablaEmpleado;
 
 -- VISTA ayuda en consultas 
 
-CREATE VIEW RESUMEN AS 
-SELECT Bc.codigo as est_cod,Bc.nombre as nombre_est,Bc.usuario as est_usr,Bc.apellido_1 as ap1_est, Bc.apellido_2 as ap2_est, Bc.correo_institucional as est_mail,Bc.documento_actual as est_id,Bc.sexo as est_sex,Bc.sem_id,Bd.porcentaje1,nota1,Bd.porcentaje2,nota2,Bd.porcentaje3,nota3,Bd.porcentaje4,nota4,Bd.porcentaje5,nota5,Bd.codigo as prof_cod, Bd.nombre as nombre_prof,Bd.apellido_1 as ap1_prof ,Bd.apellido_2 as ap2_prof,Bd.correo_institucional as prof_mail, Bd.sexo as prof_sex, Bd.documento_actual as prof_id,Bd.codigo_asignatura,Bd.nombre_asignatura, Bd.creditos_asignatura, periodo,anio,grupo 
+CREATE VIEW RESUMEN AS
+SELECT Bc.codigo as est_cod,Bc.nombre as nombre_est,Bc.usuario as est_usr,Bc.apellido_1 as ap1_est, Bc.apellido_2 as ap2_est, Bc.correo_institucional as est_mail,Bc.documento_actual as est_id,Bc.sexo as est_sex,Bc.sem_id,Bd.porcentaje1,nota1,Bd.porcentaje2,nota2,Bd.porcentaje3,nota3,Bd.porcentaje4,nota4,Bd.porcentaje5,nota5,Bd.codigo as prof_cod, Bd.nombre as nombre_prof,Bd.usuario as prof_usr,Bd.apellido_1 as ap1_prof ,Bd.apellido_2 as ap2_prof,Bd.correo_institucional as prof_mail, Bd.sexo as prof_sex, Bd.documento_actual as prof_id,Bd.codigo_asignatura,Bd.nombre_asignatura, Bd.creditos_asignatura, periodo,anio,grupo
 FROM
 	(select * from Personas natural join toma) as Bc join
-	(select B1.codigo, nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,B2.sem_id,codigo_asignatura,nombre_asignatura,creditos_asignatura,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5 
+	(select B1.codigo, nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,B2.sem_id,codigo_asignatura,nombre_asignatura,creditos_asignatura,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
 	 FROM
-		(select Personas.codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,sem_id 
-		 from Personas join 
-		 dicta on Personas.codigo = dicta.codigo ) as B1 join 
-		(select codigo_asignatura,nombre_asignatura,creditos_asignatura,semestre.sem_id,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5 
+		(select Personas.codigo,nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,sem_id
+		 from Personas join
+		 dicta on Personas.codigo = dicta.codigo ) as B1 join
+		(select codigo_asignatura,nombre_asignatura,creditos_asignatura,semestre.sem_id,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
 		 FROM
 			(select Asignaturas.codigo_asignatura, nombre_asignatura,creditos_asignatura,sem_id,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
 			FROM
