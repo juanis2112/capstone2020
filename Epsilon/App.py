@@ -169,28 +169,10 @@ def main_admin():
     return render_template('main_admin.html') 
 
 @app.route("/students", methods=['POST', 'GET'])
-def load_students(students_class):
+def load_students():
     cur.execute("select usuario, nombre, apellido_1, apellido_2 from personas where tipo='estudiante'")
     data = cur.fetchall()
-    
-        
-    # Mover a administrador 
-    df = pd.DataFrame(students_class, columns =['user', 'student', 'class_name', 'grade1', 'grade2', 'grade3', 'grade4','grade5','grade_final'])
-    df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
-    conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
-    sns.set(font_scale=1.2)
-    ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Promedio estudiantes materia")
-    ax.set(
-        ylabel="Numero estudiantes",
-        xlabel="Promedio Final",
-        )
-    plt.savefig('Reporte.png')
-    
-    
     return render_template('students.html', students = data) 
-
-
-
 
 @app.route("/teachers", methods=['POST', 'GET'])
 def load_teachers():
@@ -200,7 +182,13 @@ def load_teachers():
 
 @app.route("/classes", methods=['POST', 'GET'])
 def load_classes():
-    cur.execute("select nombre_asignatura, codigo_asignatura, creditos_asignatura from asignaturas")
+    cur.execute("""SELECT nombre_asignatura,codigo_asignatura,creditos_asignatura,grupo,porcentaje1,
+                porcentaje2,porcentaje3,porcentaje4,porcentaje5,nombre_prof, ap1_prof
+            FROM RESUMEN
+            WHERE
+            	anio = (select max(anio) from RESUMEN) AND
+            	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+            ORDER BY(nombre_asignatura)""")
     data = cur.fetchall()
     return render_template('classes.html', classes = data) 
 
