@@ -44,16 +44,16 @@ CREATE TABLE Public.tablaEmpleado(
 );
 
 
-COPY Public.tablaEstudiante FROM '/Users/temp/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/Users/temp/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Conjuntos de entidades */
 
 Create table Programa(
-	 codigo Integer NOT NULL
+	 codigo_programa Integer NOT NULL
 	,programa VARCHAR(100) NOT NULL
 	,facultad_o_escuela VARCHAR(100) NOT NULL
-	, PRIMARY KEY(codigo)
+	, PRIMARY KEY(codigo_programa)
 );
 
 create table Personas(
@@ -113,20 +113,26 @@ create table semestre (
 
 create table ofrece(
 	codigo_asignatura VARCHAR(100) NOT NULL,
+	codigo_programa Integer NOT NULL,
 	PRIMARY KEY (codigo_asignatura),
-	FOREIGN KEY (codigo_asignatura) references Asignaturas
+	FOREIGN KEY (codigo_asignatura) references Asignaturas,
+	FOREIGN KEY (codigo_programa) references Programa
 );
 
 create table Pertenece(
 	codigo Integer NOT NULL,
+	codigo_programa Integer NOT NULL,
 	PRIMARY KEY (codigo),
-	FOREIGN KEY (codigo) references Empleado
+	FOREIGN KEY (codigo) references Empleado,
+	FOREIGN KEY (codigo_programa) references Programa
 );
 
 create table inscrito(
 	codigo Integer NOT NULL,
+	codigo_programa Integer NOT NULL,
 	PRIMARY KEY (codigo),
-	FOREIGN KEY (codigo) references Estudiante
+	FOREIGN KEY (codigo) references Estudiante,
+	FOREIGN KEY (codigo_programa) references Programa
 );
 
 create table dicta (
@@ -159,7 +165,7 @@ create table curso_sem (
 );
 
 /* Metiendo a la tabla de Programa */
-insert into Programa(codigo,programa,facultad_o_escuela) 
+insert into Programa(codigo_programa,programa,facultad_o_escuela) 
 select distinct 1,programa, facultad_o_escuela from tablaEstudiante;
 
 /* Metiendo a la tabla de Personas */
@@ -201,6 +207,7 @@ insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
 insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
+insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
 
 /* Metiendo a la tabla dicta */
 
@@ -210,6 +217,7 @@ insert into dicta(codigo,sem_id) VALUES (4334,3);
 insert into dicta(codigo,sem_id) VALUES (4334,5);
 insert into dicta(codigo,sem_id) VALUES (4321,6);
 insert into dicta(codigo,sem_id) VALUES (4321,7);
+insert into dicta(codigo,sem_id) VALUES (4327,8);
 
 /* Metiendo a la tabla curso_sem */
 
@@ -219,24 +227,25 @@ insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,3);
 insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,5);
 insert into curso_sem(codigo_asignatura,sem_id) VALUES (573951,6);
 insert into curso_sem(codigo_asignatura,sem_id) VALUES (883658,7);
+insert into curso_sem(codigo_asignatura,sem_id) VALUES (883658,8);
 
 /* Metiendo a la tabla inscrito */
 
-insert into inscrito(codigo) VALUES (900085);
-insert into inscrito(codigo) VALUES (937607);
-insert into inscrito(codigo) VALUES (861029);
+insert into inscrito(codigo,codigo_programa) VALUES (900085,1);
+insert into inscrito(codigo,codigo_programa) VALUES (937607,1);
+insert into inscrito(codigo,codigo_programa) VALUES (861029,1);
 
 /* Metiendo a la tabla ofrece */
 
-insert into ofrece(codigo_asignatura) VALUES (573951);
-insert into ofrece(codigo_asignatura) VALUES (259845);
-insert into ofrece(codigo_asignatura) VALUES (748061);
+insert into ofrece(codigo_asignatura,codigo_programa) VALUES (573951,1);
+insert into ofrece(codigo_asignatura,codigo_programa) VALUES (259845,1);
+insert into ofrece(codigo_asignatura,codigo_programa) VALUES (748061,1);
 
 /* Metiendo a la tabla pertenece */
 
-insert into pertenece(codigo) VALUES (4321);
-insert into pertenece(codigo) VALUES (4327);
-insert into pertenece(codigo) VALUES (4334);
+insert into pertenece(codigo,codigo_programa) VALUES (4321,1);
+insert into pertenece(codigo,codigo_programa) VALUES (4327,1);
+insert into pertenece(codigo,codigo_programa) VALUES (4334,1);
 
 /* Metiendo a la tabla toma */
 
@@ -248,6 +257,12 @@ insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (861029,1,0
 insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,5,0.5,1.8,2.0,3.5,2.5);
 insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,6,5.0,4.0,3.0,2.0,1.0);
 insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,7,1.0,4.0,3.0,2.0,5.0);
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (861029,7,3.0,4.0,2.0,1.0,0.0);
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (937607,7,1.0,2.8,1.0,1.0,4.8);
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (731600,7,5.0,3.8,4.0,2.0,4.8);
+
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (847443,8,5.0,3.8,4.0,2.0,4.8);
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (792681,8,1.0,2.8,3.0,4.0,4.8);
 
 drop table tablaEstudiante;
 drop table tablaEmpleado;
