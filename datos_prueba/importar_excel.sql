@@ -44,8 +44,8 @@ CREATE TABLE Public.tablaEmpleado(
 );
 
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/información_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/temp/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/temp/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Conjuntos de entidades */
 
@@ -66,6 +66,7 @@ create table Personas(
 	documento_actual VARCHAR(100) NOT NULL,
 	usuario VARCHAR(100) NOT NULL,
 	contrasena VARCHAR(100) NOT NULL,
+	tipo VARCHAR(50) NOT NULL,
 	primary key(codigo)
 );
 
@@ -163,16 +164,16 @@ select distinct 1,programa, facultad_o_escuela from tablaEstudiante;
 
 /* Metiendo a la tabla de Personas */
 
-insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena)
-select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual,'ESTU','ESTU' from tablaEstudiante;
+insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
+select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),'estudiante', 'estudiante' from tablaEstudiante;
 
-insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual,'ADMIN','ADMIN' 
+insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'administrador', 'administrador' 
 from tablaEmpleado
 where esAdmin='1';
 
-insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual,'PROF','PROF' 
+insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'profesor', 'profesor' 
 from tablaEmpleado
 where esAdmin='0';
 
