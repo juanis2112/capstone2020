@@ -9,9 +9,7 @@
         <tbody>
           {% for teacher in teachers %}
           <tr>
-            <td> <a href="/main_teacher/{{teacher.0}}">{{teacher.1}}</a> </td>
-            <td> <a href="/main_teacher/{{teacher.0}}">{{teacher.2}}</a> </td>
-            <td> <a href="/main_teacher/{{teacher.0}}">{{teacher.3}}</a> </td>
+            <td> <a href="/main_teacher/{{teacher.0}}">{{teacher.1}} {{teacher.2}} {{teacher.3}}</a> </td>
           </tr>
           {% endfor %}
         </tbody>

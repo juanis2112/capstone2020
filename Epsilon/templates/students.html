@@ -9,9 +9,7 @@
         <tbody>
           {% for student in students %}
           <tr>
-            <td> <a href="/main_student/{{student.0}}">{{student.1}}</a> </td>
-            <td> <a href="/main_student/{{student.0}}">{{student.2}}</a> </td>
-            <td> <a href="/main_student/{{student.0}}">{{student.3}}</a> </td>
+            <td> <a href="/main_student/{{student.0}}">{{student.1}}{{student.2}}{{student.3}}</a> </td>
           </tr>
           {% endfor %}
         </tbody>
