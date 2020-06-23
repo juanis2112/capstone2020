@@ -46,19 +46,27 @@ ORDER BY(nombre_asignatura);
 -- UPDATE para las notas de los estudiantes.
 UPDATE toma
 SET -- Las 'nueva nota' se reemplazan por la nueva nota NUMERICA NO STRING
-	nota1 = 1.0,
-	nota2 = 2.0,
-	nota3 = 3.0,
-	nota4 = 4.0,
-	nota5 = 5.0
+	nota1 = 0.0,
+	nota2 = 0.5,
+	nota3 = 0.7,
+	nota4 = 0.9,
+	nota5 = 0.0
 WHERE	
 	toma.sem_id = (
 		select sem_id
 		from RESUMEN
 		where 
-			prof_usr = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+			prof_usr = 'mauro.artigiani' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
 			nombre_asignatura = 'Algebra lineal' AND -- MATERIA SELECCIONADA
-			RESUMEN.est_usr = 'oauoyodf' AND -- USUARIO DEL ESTUDIANTE A CAMBIAR NOTAS
+			RESUMEN.est_usr = 'rsoykrea' AND -- USUARIO DEL ESTUDIANTE A CAMBIAR NOTAS
 			anio = (select max(anio) from RESUMEN) AND
 			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-	)
+	) AND 
+	toma.codigo = (
+		select distinct est_cod
+		from RESUMEN
+		where
+			est_usr = 'rsoykrea'
+	);
+	
+select * from resumen;
