@@ -12,13 +12,15 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 # Connection to DataBase
 conn = psycopg2.connect(user = "postgres",
                         password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "Epsilon")
+                        database = "Epsilon2")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -69,20 +71,13 @@ def login():
 @app.route("/main_student/<string:user_name>", methods=['POST', 'GET'])
 def main_student(user_name):
     #FALTA LA NOTA FINAL
-    cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5 
-            FROM semestre,curso_sem,toma,asignaturas,(personas join estudiante on personas.codigo = estudiante.codigo)
-            WHERE 
-            	semestre.sem_id = toma.sem_id AND
-            	semestre.sem_id = curso_sem.sem_id AND
-            	anio = (select max(anio) from semestre) AND
-            	periodo = (select max(periodo) from semestre where anio = (select max(anio) from semestre)) AND
-            	curso_sem.codigo_asignatura = asignaturas.codigo_asignatura AND
-            	estudiante.codigo =( 
-            		select estudiante.codigo 
-            		from personas,estudiante 
-            		where 
-            			personas.codigo = estudiante.codigo AND
-            			usuario = '%s')""" % user_name)
+    cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
+                    FROM RESUMEN
+                    WHERE 
+                    	est_usr = %s AND
+                    	anio = (select max(anio) from RESUMEN) AND
+                    	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                    ORDER BY(nombre_asignatura)""" , (user_name,))
     data = cur.fetchall()
     return render_template('main_student.html', classes = data, user_name = user_name)       
     
@@ -90,78 +85,87 @@ def main_student(user_name):
 
 @app.route("/main_teacher/<string:user_name>", methods=['POST', 'GET'])
 def main_teacher(user_name):
-    cur.execute("""SELECT nombre_asignatura
-            FROM semestre,curso_sem,dicta,asignaturas,(personas join empleado on personas.codigo = empleado.codigo)
-            WHERE 
-            	semestre.sem_id = dicta.sem_id AND
-            	semestre.sem_id = curso_sem.sem_id AND
-            	anio = (select max(anio) from semestre) AND
-            	periodo = (select max(periodo) from semestre where anio = (select max(anio) from semestre)) AND
-            	curso_sem.codigo_asignatura = asignaturas.codigo_asignatura AND
-            	empleado.codigo =( 
-            		select empleado.codigo 
-            		from personas,empleado 
-            		where 
-            			personas.codigo = empleado.codigo AND
-            			usuario = '%s')""" % user_name)
+    cur.execute("""SELECT DISTINCT nombre_asignatura
+                    FROM RESUMEN
+                    WHERE
+                    	prof_usr = %s AND
+                    	anio = (select max(anio) from RESUMEN) AND
+                    	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                    ORDER BY(nombre_asignatura)	""", (user_name,))
     data = cur.fetchall()
     return render_template('main_teacher.html', classes = data, user_name = user_name) 
 
 @app.route("/class/<string:user_name>/<string:class_name>", methods = ['POST', 'GET'])
 def show_class(user_name, class_name,):
-    cur.execute("""SELECT nombre_est,nota1,nota2,nota3,nota4,nota5
-                FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
-                WHERE 
-                	personas.usuario = '%s' AND
-                	nombre_asignatura = '%s' AND
+    cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5
+                FROM RESUMEN 
+                WHERE
+                	prof_usr = %s AND
+                	nombre_asignatura = %s AND
                 	anio = (select max(anio) from RESUMEN) AND
                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-                ORDER BY(nombre_est)""" % (user_name, class_name)
+                ORDER BY(nombre_est)""" , (user_name, class_name)
                 )
     data = cur.fetchall()
     final_grade = 3
-    return render_template('class.html', user_name = user_name, students_class = data, class_name=class_name, NotaFinal = final_grade)    
+    return render_template('class.html', user_name = user_name, students_class = data, class_name=class_name, final_grade = final_grade)    
     
 
 @app.route("/class_edit/<string:user_name>/<string:class_name>", methods = ['POST','GET'])
 def edit_grade(user_name, class_name):
-    cur.execute("""SELECT nombre_est,nota1,nota2,nota3,nota4,nota5
-                FROM RESUMEN join personas on RESUMEN.prof_cod = personas.codigo
-                WHERE 
-                	personas.usuario = '%s' AND
-                	nombre_asignatura = '%s' AND
+    cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5
+                FROM RESUMEN 
+                WHERE
+                	prof_usr = %s AND
+                	nombre_asignatura = %s AND
                 	anio = (select max(anio) from RESUMEN) AND
                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-                ORDER BY(nombre_est)""" % (user_name, class_name)
+                ORDER BY(nombre_est)""", (user_name, class_name)
                 )
-    data = cur.fetchall()
-    return render_template('class_edit.html', user_name = user_name, class_name = class_name, students_class = data)
+    students_class = cur.fetchall()
+    return render_template('class_edit.html', user_name = user_name, class_name = class_name, students_class = students_class)
 
 @app.route("/class_update/<string:user_name>/<string:class_name>", methods=['POST'])
 def update_grade(class_name, user_name):
-    cur.execute(f"select * FROM students WHERE class_name = '{class_name}'")
+    cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5
+                FROM RESUMEN 
+                WHERE
+                	prof_usr = %s AND
+                	nombre_asignatura = %s AND
+                	anio = (select max(anio) from RESUMEN) AND
+                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                ORDER BY(nombre_est)""", (user_name, class_name)
+                )
     students_class = cur.fetchall()
-
-    # ---------------------------------------
-   
     if request.method == 'POST':
         for student in students_class:
-            grade1 = request.form['grade1_'+student[0]]
-            grade2 = request.form['grade2_'+student[0]]
-            grade3 = request.form['grade3_'+student[0]]
-            grade4 = request.form['grade4_'+student[0]]
-            grade5 = request.form['grade5_'+student[0]]
+            grade1 = float(request.form['grade1_'+student[0]])
+            grade2 = float(request.form['grade2_'+student[0]])
+            grade3 = float(request.form['grade3_'+student[0]])
+            grade4 = float(request.form['grade4_'+student[0]])
+            grade5 = float(request.form['grade5_'+student[0]])
             grade_final = str(round((float(grade1)+float(grade2)+float(grade3)+float(grade4)+float(grade5))/3,2))
-            cur.execute("""
-                UPDATE students
-                SET nota1 = %s,
-                    nota2 = %s,
-                    nota3 = %s,
-                    grade_final = %s
-                WHERE username = %s and class_name = %s
-            """, (grade1, grade2, grade3, grade_final, student[0], class_name))
+            cur.execute("""UPDATE toma
+                        SET 
+                        	nota1  = %s,
+                        	nota2  = %s,
+                        	nota3  = %s,
+                        	nota4  = %s,
+                        	nota5  = %s
+                        WHERE	
+                        	toma.sem_id = (
+                        		select sem_id
+                        		from RESUMEN
+                        		where 
+                        			prof_usr = %s AND
+                        			nombre_asignatura = %s AND
+                        			RESUMEN.est_usr = %s AND
+                        			anio = (select max(anio) from RESUMEN) AND
+                        			periodo = (select max(periodo) from RESUMEN where anio = 
+                                      (select max(anio) from RESUMEN)))""",
+                        (grade1, grade2, grade3, grade4, grade5, user_name, class_name, student[0]))
             conn.commit()
-            return redirect(url_for('show_class', user_name = user_name, class_name = class_name))
+            return redirect(url_for('show_class', user_name = user_name, class_name = class_name, final_grade = grade_final))
 
 #-----------------------------------------------------------------------------#
 @app.route("/main_admin", methods=['POST', 'GET'])
@@ -182,7 +186,7 @@ def load_teachers():
 
 @app.route("/classes", methods=['POST', 'GET'])
 def load_classes():
-    cur.execute("""SELECT nombre_asignatura,codigo_asignatura,creditos_asignatura,grupo,porcentaje1,
+    cur.execute("""SELECT distinct prof_usr, nombre_asignatura,codigo_asignatura,creditos_asignatura,grupo,porcentaje1,
                 porcentaje2,porcentaje3,porcentaje4,porcentaje5,nombre_prof, ap1_prof
             FROM RESUMEN
             WHERE
@@ -191,6 +195,37 @@ def load_classes():
             ORDER BY(nombre_asignatura)""")
     data = cur.fetchall()
     return render_template('classes.html', classes = data) 
+
+@app.route("/class_report/<string:class_name>/<string:user_name>", methods=['POST', 'GET'])
+def show_class_admin(class_name, user_name):
+    cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5
+                 FROM RESUMEN 
+                 WHERE
+                 	prof_usr = %s AND
+                 	nombre_asignatura = %s AND
+                 	anio = (select max(anio) from RESUMEN) AND
+                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                 ORDER BY(nombre_est)""" , (user_name, class_name)
+                 )
+    data = cur.fetchall()
+    df = pd.DataFrame(data, columns =['user', 'student','last_name1', 'last_name2', 'grade1', 'grade2', 'grade3', 'grade4','grade5'])
+    df['grade_final'] = (df['grade1'] + df['grade2'] + df['grade3'] + df['grade4'] + df['grade5']) /5
+    df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
+    conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
+    sns.set(font_scale=1.2)
+    ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Promedio estudiantes materia")
+    ax.set(
+        ylabel="Numero estudiantes",
+        xlabel="Promedio Final",
+        )
+    
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
+    return render_template('class_report.html', image=figdata_png) 
+    
+    
 
 
 ## REPORTES
