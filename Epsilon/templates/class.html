@@ -1,1 +1,77 @@
-<form action="{{url_for('show_class', user_name = user_name, class_name = class_name )}} method="POST">  <div>  <table class="table table-striped table-hover table-bordered table-sm bg-white">        <thead>          <tr>            <td>Estudiantes</td>            <td>Corte1</td>            <td>Corte2</td>            <td>Corte3</td>            <td>Corte4</td>            <td>Corte5</td>            <td>Nota Final</td>          </tr>        </thead>        <tbody>          {% for student in students_class %}          <tr>            <td>{{student.1}}{{student.2}}{{student.3}}</td>            <td>{{student.4}}</td>            <td>{{student.5}}</td>            <td>{{student.6}}</td>            <td>{{student.7}}</td>            <td>{{student.8}}</td>            <td>{{final_grade}}          </tr>          {% endfor %}                   <a href="/class_edit/{{user_name}}/{{class_name}}" class="btn btn-secondary">Editar</a>        </tbody>      </table>    </div></form><form action="{{url_for('main_window')}}">  <button class="submit">    Log out  </button></form>
+<form action="{{url_for('show_class', user_name = user_name, class_name = class_name)}}" method="POST">
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+  </head>
+  <body>
+      <div>
+          <div class="header">
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              <form action="{{url_for('main_window')}}">
+                <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
+              </form>
+          </div>
+          <div class="row">
+              <div class="col-3 menu">
+              <ul>
+                  <li><div class="menu-box"><p>Cursos dictados en la actualidad</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
+                  <li><div class="menu-box"><p>Cursos históricos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
+              </ul>
+              </div>
+
+              <form class="col-9" method="POST">
+                  <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
+                  <table class="center">
+                      <tr>
+                          <th>Estudiantes</th>
+                          <th>Corte1</th>
+                          <th>Corte2</th>
+                          <th>Corte3</th>
+                          <th>Corte4</th>
+                          <th>Corte5</th>
+                      </tr>
+                      {% for student in students_class %}
+                      <tr>
+                          <td>{{student.0}} </td>
+                          <td><input type="text" value={{student.1}} readonly size="5"></td>
+                          <td><input type="text" value={{student.2}} readonly size="5"></td>
+                          <td><input type="text" value={{student.3}} readonly size="5"></td>
+                          <td><input type="text" value={{student.4}} readonly size="5"></td>
+                          <td><input type="text" value={{student.5}} readonly size="5"></td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+                  <br>
+                  <br>
+                  <input type="button" onclick="habilitar()" value="Editar" id="boton-editar">
+                  <input type="submit" onclick="habilitar()" value="Guardar">
+                  <input type="button" onclick="habilitar()" value="Descargar">
+                  <input type="reset" value="restaurar" onclick="deshabilitar()">
+              </form>
+          </div>
+      </div>
+  <script>
+  function habilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=false;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="#073D72";
+      document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+  }
+
+  function deshabilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=true;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="white";
+      document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+  }
+  </script>
+  </body>
+  </html>
+  </form>
