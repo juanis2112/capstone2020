@@ -1,49 +1,147 @@
-<form action="{{url_for('load_classes')}} method="POST">
-  <div>
-  <table class="table table-striped table-hover table-bordered table-sm bg-white">
-        <thead>
-          <tr>
-            <td>Asignatura</td>
-            <td>Código</td>
-            <td>Créditos</td>
-            <td>Grupo</td>
-            <td>% Corte 1</td>
-            <td>% Corte 2</td>
-            <td>% Corte 3</td>
-            <td>% Corte 4</td>
-            <td>% Corte 5</td>
-            <td>Nombre Profesor</td>
-            
-          </tr>
-        </thead>
-        <tbody>
-          {% for class_name in classes %}
-          <tr>
-            <td>{{class_name.1}} </td>
-            <td>{{class_name.2}} </td>
-            <td>{{class_name.3}} </td>
-            <td>{{class_name.4}} </td>
-            <td>{{class_name.5}} </td>
-            <td>{{class_name.6}} </td>
-            <td>{{class_name.7}} </td>
-            <td>{{class_name.8}} </td>
-            <td>{{class_name.9}} </td>
-            <td> <a href="/class_report/{{class_name.1}}/{{class_name.0}}">{{class_name.10}} {{class_name.11}}</a> </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<form action="{{url_for('load_classes')}}" method="POST">
+  <!DOCTYPE html>
+  <html lang="en">
+  <style>
+
+  a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:hover {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  a:active {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  </style>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+  </head>
+  <body>
+      <div>
+          <div class="header">
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              <form action="{{url_for('main_window')}}">
+                <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
+              </form>
+          </div>
+          <div class="row">
+              <div class="col-3 menu">
+              <ul>
+                  <form action="{{url_for('load_students')}}">
+                      <li>
+                        <div class="menu-box">
+                          <div>
+                            <button class="submit">
+                              Estudiantes
+                            </button>
+                          </div>
+                          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                        </div>
+                      </li>
+                  </form>
+                  <form action="{{url_for('load_teachers')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div>
+                          <button class="submit">
+                            Profesores
+                          </button>
+                        </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                      </div>
+                    </li>
+                  </form>
+                  <form action="{{url_for('load_classes')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div>
+                          <button class="submit">
+                            Materias
+                          </button>
+                        </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                      </div>
+                    </li>
+                  </form>
+                  <form action="{{url_for('main_window')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div>
+                          <button class="submit">
+                            Alertas
+                          </button>
+                        </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                      </div>
+                    </li>
+                  </form>
+              </ul>
+              </div>
+              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
+            <table class="center">
+                  <tr>
+                      <th>Asignaturas</th>
+                      <th>Código</th>
+                      <th>Créditos</th>
+                      <th>Grupo</th>
+                      <th>% Corte 1</th>
+                      <th>% Corte 2</th>
+                      <th>% Corte 3</th>
+                      <th>% Corte 4</th>
+                      <th>% Corte 5</th>
+                      <th>Nombre profesor</th>
+                  </tr>
+                  {% for class_name in classes %}
+                  <tr>
+                      <td><input type="text" value={{class_name.1}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.2}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.3}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.4}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.5}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.6}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.7}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.8}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.9}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.10}}{{class_name.11}} readonly size="5"></td>
+
+                  </tr>
+                  {% endfor %}
+              </table>
+      </div>
     </div>
-</form>
+  <script>
+  function habilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=false;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="#073D72";
+      document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+  }
 
-<form action="{{url_for('main_window')}}">
-  <button class="submit">
-    Log out
-  </button>
-</form>
-
-<form action="{{url_for('main_admin')}}">
-  <button class="submit">
-    Atrás
-  </button>
+  function deshabilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=true;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="white";
+      document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+  }
+  </script>
+  </body>
+  </html>
 </form>

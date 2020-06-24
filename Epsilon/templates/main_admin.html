@@ -1,27 +1,115 @@
-<form action="{{url_for('load_students')}}">
-  <button class="submit">
-    Listado de Estudiantes
-  </button>
-</form>
-<form action="{{url_for('load_teachers')}}">
-  <button class="submit">
-    Listado de Profesores
-  </button>
-</form>
-<form action="{{url_for('load_classes')}}">
-  <button class="submit">
-    Listado de Materias
-  </button>
-</form>
-<form action="{{url_for('main_window')}}">
-  <button class="submit">
-    Alertas
-  </button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<style>
 
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:hover {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+a:active {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+</head>
+<body>
+    <div>
+        <div class="header">
+            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <form action="{{url_for('main_window')}}">
+              <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-3 menu">
+            <ul>
+                <form action="{{url_for('load_students')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div>
+                          <button class="submit">
+                            Estudiantes
+                          </button>
+                        </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                      </div>
+                    </li>
+                </form>
+                <form action="{{url_for('load_teachers')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div>
+                        <button class="submit">
+                          Profesores
+                        </button>
+                      </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+                </form>
+                <form action="{{url_for('load_classes')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div>
+                        <button class="submit">
+                          Materias
+                        </button>
+                      </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+                </form>
+                <form action="{{url_for('main_window')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div>
+                        <button class="submit">
+                          Alertas
+                        </button>
+                      </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+                </form>
+            </ul>
+            </div>
+        </div>
+    </div>
+<script>
+function habilitar(){
+    var casillas_notas=document.getElementsByClassName("table-toggle");
+    for(var i=0;i<casillas_notas.length;i++){
+        casillas_notas[i].readOnly=false;
+    }
+    document.getElementById("boton-editar").style.backgroundColor="#073D72";
+    document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+}
 
-<form action="{{url_for('main_window')}}">
-  <button class="submit">
-    Log out
-  </button>
-</form>
+function deshabilitar(){
+    var casillas_notas=document.getElementsByClassName("table-toggle");
+    for(var i=0;i<casillas_notas.length;i++){
+        casillas_notas[i].readOnly=true;
+    }
+    document.getElementById("boton-editar").style.backgroundColor="white";
+    document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+}
+</script>
+</body>
+</html>
