@@ -147,25 +147,30 @@ def update_grade(class_name, user_name):
             grade_final = str(round((float(grade1)+float(grade2)+float(grade3)+float(grade4)+float(grade5))/3,2))
             cur.execute("""UPDATE toma
                         SET 
-                        	nota1  = %s,
-                        	nota2  = %s,
-                        	nota3  = %s,
-                        	nota4  = %s,
-                        	nota5  = %s
+                        	nota1 = %s,
+                        	nota2 = %s,
+                        	nota3 = %s,
+                        	nota4 = %s,
+                        	nota5 = %s
                         WHERE	
                         	toma.sem_id = (
                         		select sem_id
                         		from RESUMEN
                         		where 
-                        			prof_usr = %s AND
-                        			nombre_asignatura = %s AND
-                        			RESUMEN.est_usr = %s AND
+                        			prof_usr = %s AND 
+                        			nombre_asignatura = %s AND 
+                        			RESUMEN.est_usr = %s AND 
                         			anio = (select max(anio) from RESUMEN) AND
-                        			periodo = (select max(periodo) from RESUMEN where anio = 
-                                      (select max(anio) from RESUMEN)))""",
-                        (grade1, grade2, grade3, grade4, grade5, user_name, class_name, student[0]))
+                        			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                                	) AND 
+                                	toma.codigo = (
+                                		select distinct est_cod
+                                		from RESUMEN
+                                		where
+                                			est_usr = %s)""", 
+                (grade1, grade2, grade3, grade4, grade5, user_name, class_name, student[0], student[0]))
             conn.commit()
-            return redirect(url_for('show_class', user_name = user_name, class_name = class_name, final_grade = grade_final))
+        return redirect(url_for('show_class', user_name = user_name, class_name = class_name, final_grade = grade_final))
 
 #-----------------------------------------------------------------------------#
 @app.route("/main_admin", methods=['POST', 'GET'])
