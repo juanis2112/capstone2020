@@ -4,12 +4,12 @@
   <style>
 
   a:link {
-    color: white;
+    color: green;
     background-color: transparent;
     text-decoration: none;
   }
   a:visited {
-    color: white;
+    color: green;
     background-color: transparent;
     text-decoration: none;
   }
@@ -94,33 +94,31 @@
               <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
             <table class="center">
                   <tr>
-                      <th>Asignaturas</th>
+                      <th>Asignatura</th>
                       <th>Código</th>
                       <th>Créditos</th>
-                      <th>Grupo</th>
                       <th>% Corte 1</th>
                       <th>% Corte 2</th>
                       <th>% Corte 3</th>
                       <th>% Corte 4</th>
                       <th>% Corte 5</th>
-                      <th>Nombre profesor</th>
                   </tr>
                   {% for class_name in classes %}
                   <tr>
+                      <td><a href="/groups/{{class_name.0}}">{{class_name.0}}</a><td>
                       <td><input type="text" value={{class_name.1}} readonly size="5"></td>
                       <td><input type="text" value={{class_name.2}} readonly size="5"></td>
                       <td><input type="text" value={{class_name.3}} readonly size="5"></td>
                       <td><input type="text" value={{class_name.4}} readonly size="5"></td>
                       <td><input type="text" value={{class_name.5}} readonly size="5"></td>
                       <td><input type="text" value={{class_name.6}} readonly size="5"></td>
-                      <td><input type="text" value={{class_name.7}} readonly size="5"></td>
-                      <td><input type="text" value={{class_name.8}} readonly size="5"></td>
-                      <td><input type="text" value={{class_name.9}} readonly size="5"></td>
-                      <td><input type="text" value={{class_name.10}}{{class_name.11}} readonly size="5"></td>
-
+                      <td><input type="text" value={{class_name.7}} readonly size="5"></td>                  
                   </tr>
                   {% endfor %}
               </table>
+              <br>
+              <br>
+              <a href="/admin_classes_edit/" class="btn">Editar</a>
       </div>
     </div>
   <script>
