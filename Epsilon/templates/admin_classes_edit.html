@@ -1,12 +1,6 @@
-<form action="{{url_for('admin_main_teacher', user_name = user_name)}}" method="POST">
+<form action="{{url_for('admin_update_class')}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}"/>
-  </head>
   <style>
 
   a:link {
@@ -30,6 +24,12 @@
     text-decoration: underline;
   }
   </style>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+  </head>
   <body>
       <div>
           <div class="header">
@@ -91,13 +91,35 @@
                   </form>
               </ul>
               </div>
-        <div class="col-9">
-        <ul>
-           {% for teacher in teachers %}
-           <li><a href="/main_teacher_admin/{{teacher.0}}">{{teacher.1}} {{teacher.2}} {{teacher.3}}</li>
-           {% endfor %}
-        </ul>
-        </div>
+              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
+            <table class="center">
+                  <tr>
+                      <th>Asignaturas</th>
+                      <th>Código</th>
+                      <th>Créditos</th>
+                      <th>% Corte 1</th>
+                      <th>% Corte 2</th>
+                      <th>% Corte 3</th>
+                      <th>% Corte 4</th>
+                      <th>% Corte 5</th>
+                  </tr>
+                  {% for class_name in classes %}
+                  <tr>
+                      <td><input type="text" value={{class_name.0}} readonly size="5"></td>
+                      <td><input type="text" value={{class_name.1}} readonly size="5"></td>
+                      <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}"></td>
+                      <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}"></td>
+                      <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}"></td>
+                      <td><input type="text" name="term3_{{class_name.1}}" value="{{class_name.5}}"></td>
+                      <td><input type="text" name="term4_{{class_name.1}}" value="{{class_name.6}}"></td>
+                      <td><input type="text" name="term5_{{class_name.1}}" value="{{class_name.7}}"></td>
+
+                  </tr>
+                  {% endfor %}
+              </table>
+              <button type="submit" class="btn btn-primary btn-block">
+                    Guardar
+              </button>
       </div>
     </div>
   <script>

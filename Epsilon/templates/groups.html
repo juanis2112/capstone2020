@@ -1,21 +1,15 @@
-<form action="{{url_for('admin_main_teacher', user_name = user_name)}}" method="POST">
+<form action="{{url_for('load_groups', class_name = class_name)}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}"/>
-  </head>
   <style>
 
   a:link {
-    color: white;
+    color: green;
     background-color: transparent;
     text-decoration: none;
   }
   a:visited {
-    color: white;
+    color: green;
     background-color: transparent;
     text-decoration: none;
   }
@@ -30,6 +24,12 @@
     text-decoration: underline;
   }
   </style>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+  </head>
   <body>
       <div>
           <div class="header">
@@ -91,13 +91,21 @@
                   </form>
               </ul>
               </div>
-        <div class="col-9">
-        <ul>
-           {% for teacher in teachers %}
-           <li><a href="/main_teacher_admin/{{teacher.0}}">{{teacher.1}} {{teacher.2}} {{teacher.3}}</li>
-           {% endfor %}
-        </ul>
-        </div>
+              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
+            <table class="center">
+                  <tr>
+                      <th>Grupo</th>
+                      <th>Profesor</th>
+                  </tr>
+                  {% for group in groups %}
+                  <tr>
+                      <td><input type="text" value={{group.1}} readonly size="5"></td>
+                      <td><a href="/class_admin/{{group.2}}/{{group.0}}">{{group.3}}{{group.4}}{{group.5}}</a></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+              <br>
+              <br>
       </div>
     </div>
   <script>
