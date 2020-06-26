@@ -1,6 +1,6 @@
 <html lang="en">
 <style>
-    a.btn {
+    .btn {
       -webkit-border-radius: 4px;
       -moz-border-radius: 4px;
       border-radius: 4px;
@@ -19,53 +19,59 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
   </head>
   <body>
       <div>
           <div class="header">
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              <form action="{{url_for('main_window')}}">
-                <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-              </form>
+              <a href="{{ url_for('main_window') }}">
+                <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+              </a>
           </div>
           <div class="row">
               <div class="col-3 menu">
               <ul>
-                  <li><div class="menu-box"><p>Cursos dictados en la actualidad</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
-                  <li><div class="menu-box"><p>Cursos históricos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
+                <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teacher.png') }}" width="30px" width="30px"></div></li>
+                <li><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
               </ul>
               </div>
-              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
-              <form action="{{url_for('update_grade', user_name = user_name, class_name = class_name)}}" method="POST">
-              <table class="table table-striped table-hover table-bordered table-sm bg-white">
-                      <thead>
-                      <tr>
-                          <th>Estudiantes</th>
-                          <th>Corte1</th>
-                          <th>Corte2</th>
-                          <th>Corte3</th>
-                          <th>Corte4</th>
-                          <th>Corte5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {% for student in students_class %}
-                      <tr>
-                          <td>{{student.1}}{{student.2}}{{student.3}}</td>
-                          <td><input type="text" name="grade1_{{student.0}}" value="{{student.4}}"></td>
-                          <td><input type="text" name="grade2_{{student.0}}" value="{{student.5}}"></td>
-                          <td><input type="text" name="grade3_{{student.0}}" value="{{student.6}}"></td>
-                          <td><input type="text" name="grade4_{{student.0}}" value="{{student.7}}"></td>
-                          <td><input type="text" name="grade5_{{student.0}}" value="{{student.8}}"></td>
-                      </tr>
-                    {% endfor %}
-                    </tbody>
-              </table>
-              <button type="submit" class="btn btn-primary btn-block">
-                    Guardar
-              </button>
-              </form>
+              <div class="col-9">
+                  <a href="{{url_for('show_class', user_name = user_name, class_name = class_name)}}" class="btn">
+                      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                  <form action="{{url_for('update_grade', user_name = user_name, class_name = class_name)}}" method="POST">
+                  <table class="center table table-striped table-hover table-bordered table-sm bg-white">
+                          <thead>
+                          <tr>
+                              <th>Estudiantes</th>
+                              <th>Corte1</th>
+                              <th>Corte2</th>
+                              <th>Corte3</th>
+                              <th>Corte4</th>
+                              <th>Corte5</th>
+                              <th>Nota final</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for student in students_class %}
+                          <tr>
+                              <td>{{student.1}}{{student.2}}{{student.3}}</td>
+                              <td><input type="text" name="grade1_{{student.0}}" value="{{student.4}}" size="5"></td>
+                              <td><input type="text" name="grade2_{{student.0}}" value="{{student.5}}" size="5"></td>
+                              <td><input type="text" name="grade3_{{student.0}}" value="{{student.6}}" size="5"></td>
+                              <td><input type="text" name="grade4_{{student.0}}" value="{{student.7}}" size="5"></td>
+                              <td><input type="text" name="grade5_{{student.0}}" value="{{student.8}}" size="5"></td>
+                              <td><input type="text" name="grade6_{{student.0}}" value="{{student.9}}" size="5"></td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                  </table>
+                  <button type="submit" class="btn">
+                        Guardar
+                  </button>
+                  </form>
+              </div>
           </div>
       </div>
 </body>

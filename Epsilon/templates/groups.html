@@ -34,9 +34,9 @@
       <div>
           <div class="header">
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              <form action="{{url_for('main_window')}}">
-                <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-              </form>
+              <a href="{{ url_for('main_window') }}">
+                <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+              </a>
           </div>
           <div class="row">
               <div class="col-3 menu">
