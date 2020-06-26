@@ -72,10 +72,11 @@ WHERE
 select * from resumen;
 
 
-SELECT grupo,prof_usr,nombre_asignatura, nombre_prof,ap1_prof,ap2_prof
+-- Query consulta grupos de una materia seleccionada 
+SELECT distinct nombre_asignatura,grupo,prof_usr, nombre_prof,ap1_prof,ap2_prof
 FROM RESUMEN 
 WHERE 
 	nombre_asignatura = 'Algebra lineal' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-group by(grupo,nombre_asignatura,prof_usr,nombre_prof,ap1_prof,ap2_prof);
+ORDER BY(grupo);

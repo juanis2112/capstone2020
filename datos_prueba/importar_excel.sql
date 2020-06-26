@@ -13,10 +13,10 @@ CREATE TABLE Public.tablaEstudiante(
   ,Programa              VARCHAR(100) NOT NULL
   ,Semestre              INTEGER  NOT NULL
   ,Creditos_inscritos    INTEGER  NOT NULL
-  ,Codigo_Asignatura     INTEGER  NOT NULL
+  ,Codigo_Asignatura     VARCHAR  NOT NULL
   ,Nombre_Asignatura     VARCHAR(100) NOT NULL
   ,Creditos_Asignatura   INTEGER  NOT NULL
-  ,Grupo_Asignatura      BIT  NOT NULL
+  ,Grupo_Asignatura      INTEGER  NOT NULL
   ,Tipologia_Asignatura  VARCHAR(100) NOT NULL
   ,Nota_1er_Corte        NUMERIC(3,1) NOT NULL
   ,Corte_1p              INTEGER  NOT NULL
@@ -43,9 +43,17 @@ CREATE TABLE Public.tablaEmpleado(
 	esAdmin bool NOT NULL
 );
 
+CREATE TABLE Public.tablaProfesores(
+	nombre_completo VARCHAR(100) NOT NULL,
+	correo VARCHAR(100) NOT NULL,
+	nombre_asignatura VARCHAR(100) NOT NULL,
+	grupo INTEGER NOT NULL,
+	usuario VARCHAR(100) NOT NULL
+);
 
 COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
 COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Conjuntos de entidades */
 
@@ -107,7 +115,6 @@ create table semestre (
 	grupo numeric,
 	primary key(sem_id)
 );
-
 
 /* Conjuntos de relaciones */
 
@@ -200,72 +207,95 @@ select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologi
 
 /* Metiendo a la tabla de Semestre*/
 
-insert into semestre(periodo,anio,grupo) VALUES (2,2017,1);
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,2);
-insert into semestre(periodo,anio,grupo) VALUES (1,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (2,2018,1);
-insert into semestre(periodo,anio,grupo) VALUES (2,2018,2);
+insert into semestre(periodo,anio,grupo)
+select 2 as periodo,2020 as anio,ga.grupo 
+from (
+	select nombre_asignatura,grupo 
+	from personas join (
+		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
+		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
+	)as B
+	on personas.usuario = B.usuario
+)as ga;
 
 /* Metiendo a la tabla dicta */
 
-insert into dicta(codigo,sem_id) VALUES (4321,1); 
-insert into dicta(codigo,sem_id) VALUES (4327,2);
-insert into dicta(codigo,sem_id) VALUES (4334,3);
-insert into dicta(codigo,sem_id) VALUES (4334,5);
-insert into dicta(codigo,sem_id) VALUES (4321,6);
-insert into dicta(codigo,sem_id) VALUES (4321,7);
-insert into dicta(codigo,sem_id) VALUES (4327,8);
+insert into dicta(codigo,sem_id)
+select distinct asig.codigo,(
+	select max(sem_id) - ( 
+		select count(nombre_asignatura) 
+		from(
+			select personas.codigo,personas.usuario,codigo_asignatura,nombre_asignatura,grupo 
+			from personas join (
+				select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
+				from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
+			)as B
+			on personas.usuario = B.usuario) as B
+	)
+	from semestre
+)+row_number() over(order by asig.nombre_asignatura asc) as sem_id
+from (
+	select codigo,nombre_asignatura
+	from personas join (
+		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
+		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
+	)as B
+	on personas.usuario = B.usuario
+) as asig; 
 
 /* Metiendo a la tabla curso_sem */
 
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (573951,1); 
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (259845,2);
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,3);
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (748061,5);
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (573951,6);
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (883658,7);
-insert into curso_sem(codigo_asignatura,sem_id) VALUES (883658,8);
+insert into curso_sem(codigo_asignatura,sem_id)
+select distinct asig.codigo_asignatura,(
+	select max(sem_id) - ( 
+		select count(nombre_asignatura) 
+		from(
+			select personas.codigo,personas.usuario,codigo_asignatura,nombre_asignatura,grupo 
+			from personas join (
+				select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
+				from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
+			)as B
+			on personas.usuario = B.usuario) as B
+	)
+	from semestre
+)+row_number() over(order by asig.nombre_asignatura asc) as sem_id
+from (
+	select nombre_asignatura,codigo_asignatura
+	from personas join (
+		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
+		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
+	)as B
+	on personas.usuario = B.usuario
+) as asig; 
 
 /* Metiendo a la tabla inscrito */
 
-insert into inscrito(codigo,codigo_programa) VALUES (900085,1);
-insert into inscrito(codigo,codigo_programa) VALUES (937607,1);
-insert into inscrito(codigo,codigo_programa) VALUES (861029,1);
+insert into inscrito(codigo,codigo_programa)
+select distinct codigo,codigo_programa 
+from tablaEstudiante as te join programa as pr on te.programa = pr.programa;
 
 /* Metiendo a la tabla ofrece */
 
-insert into ofrece(codigo_asignatura,codigo_programa) VALUES (573951,1);
-insert into ofrece(codigo_asignatura,codigo_programa) VALUES (259845,1);
-insert into ofrece(codigo_asignatura,codigo_programa) VALUES (748061,1);
+insert into ofrece(codigo_asignatura,codigo_programa)
+select distinct  codigo_asignatura,codigo_programa 
+from tablaEstudiante as te join programa as pr on te.programa = pr.programa;
 
 /* Metiendo a la tabla pertenece */
 
-insert into pertenece(codigo,codigo_programa) VALUES (4321,1);
-insert into pertenece(codigo,codigo_programa) VALUES (4327,1);
-insert into pertenece(codigo,codigo_programa) VALUES (4334,1);
+insert into pertenece(codigo,codigo_programa)
+select distinct codigo,1 as codigo_programa
+from tablaProfesores as tp join personas on tp.usuario = personas.usuario;
 
 /* Metiendo a la tabla toma */
 
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,1,3.5,2.8,5.0,3.5,4.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,2,3.5,2.8,5.0,3.5,4.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,3,3.5,2.8,5.0,3.5,4.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (937607,1,2.5,4.8,5.0,4.5,1.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (861029,1,0.5,1.8,2.0,3.5,2.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,5,0.5,1.8,2.0,3.5,2.5);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,6,5.0,4.0,3.0,2.0,1.0);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (900085,7,1.0,4.0,3.0,2.0,5.0);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (861029,7,3.0,4.0,2.0,1.0,0.0);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (937607,7,1.0,2.8,1.0,1.0,4.8);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (731600,7,5.0,3.8,4.0,2.0,4.8);
+insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5)
 
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (847443,8,5.0,3.8,4.0,2.0,4.8);
-insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5) VALUES (792681,8,1.0,2.8,3.0,4.0,4.8);
+select distinct codigo,sem_id,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
+from tablaEstudiante as te join curso_sem as cs on te.codigo_asignatura = cs.codigo_asignatura;
 
 drop table tablaEstudiante;
 drop table tablaEmpleado;
+drop table tablaProfesores;
 
 -- VISTA ayuda en consultas 
 
@@ -286,3 +316,4 @@ FROM
 				semestre on B.sem_id = semestre.sem_id) as B2
 	on B1.sem_id = B2.sem_id) as Bd
 	on Bc.sem_id = Bd.sem_id;
+	
