@@ -1,125 +1,98 @@
 <form action="{{url_for('admin_update_class')}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
-  <style>
-
-  a:link {
-    color: white;
-    background-color: transparent;
-    text-decoration: none;
-  }
-  a:visited {
-    color: white;
-    background-color: transparent;
-    text-decoration: none;
-  }
-  a:hover {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-  }
-  a:active {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-  }
-  </style>
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
   </head>
   <body>
       <div>
           <div class="header">
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              <form action="{{url_for('main_window')}}">
-                <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-              </form>
+              <a href="{{ url_for('main_window') }}">
+                <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+              </a>
           </div>
           <div class="row">
               <div class="col-3 menu">
               <ul>
-                  <form action="{{url_for('load_students')}}">
+                <a href="{{url_for('load_students')}}">
                       <li>
                         <div class="menu-box">
-                          <div>
-                            <button class="submit">
-                              Estudiantes
-                            </button>
+                          <div >
+                            Estudiantes
                           </div>
-                          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
                         </div>
                       </li>
-                  </form>
-                  <form action="{{url_for('load_teachers')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
+                </a>
+                <a href="{{url_for('load_teachers')}}">
+                      <li>
+                        <div class="menu-box">
+                          <div >
                             Profesores
-                          </button>
+                          </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
                         </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                      </div>
-                    </li>
-                  </form>
-                  <form action="{{url_for('load_classes')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
+                      </li>
+                </a>
+                <a href="{{url_for('load_classes')}}">
+                      <li>
+                        <div class="menu-box">
+                          <div >
                             Materias
-                          </button>
+                          </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
                         </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                      </div>
-                    </li>
-                  </form>
-                  <form action="{{url_for('main_window')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
+                      </li>
+                </a>
+                <a href="{{url_for('main_window')}}">
+                      <li>
+                        <div class="menu-box">
+                          <div >
                             Alertas
-                          </button>
+                          </div>
+                        <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
                         </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                      </div>
-                    </li>
-                  </form>
+                      </li>
+                </a>
               </ul>
               </div>
-              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
-            <table class="center">
-                  <tr>
-                      <th>Asignaturas</th>
-                      <th>Código</th>
-                      <th>Créditos</th>
-                      <th>% Corte 1</th>
-                      <th>% Corte 2</th>
-                      <th>% Corte 3</th>
-                      <th>% Corte 4</th>
-                      <th>% Corte 5</th>
-                  </tr>
-                  {% for class_name in classes %}
-                  <tr>
-                      <td><input type="text" value={{class_name.0}} readonly size="5"></td>
-                      <td><input type="text" value={{class_name.1}} readonly size="5"></td>
-                      <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}"></td>
-                      <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}"></td>
-                      <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}"></td>
-                      <td><input type="text" name="term3_{{class_name.1}}" value="{{class_name.5}}"></td>
-                      <td><input type="text" name="term4_{{class_name.1}}" value="{{class_name.6}}"></td>
-                      <td><input type="text" name="term5_{{class_name.1}}" value="{{class_name.7}}"></td>
+            <div class="col-9">
+              <a href={{url_for('load_classes')}} class="btn">
+                      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+              </a>
+              <table class="center">
+                    <tr>
+                        <th>Asignaturas</th>
+                        <th>Código</th>
+                        <th>Créditos</th>
+                        <th>% Corte 1</th>
+                        <th>% Corte 2</th>
+                        <th>% Corte 3</th>
+                        <th>% Corte 4</th>
+                        <th>% Corte 5</th>
+                    </tr>
+                    {% for class_name in classes %}
+                    <tr>
+                        <td><input type="text" value={{class_name.0}} readonly size="5"></td>
+                        <td><input type="text" value={{class_name.1}} readonly size="5"></td>
+                        <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}" size="5"></td>
+                        <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}" size="5"></td>
+                        <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}" size="5"></td>
+                        <td><input type="text" name="term3_{{class_name.1}}" value="{{class_name.5}}" size="5"></td>
+                        <td><input type="text" name="term4_{{class_name.1}}" value="{{class_name.6}}" size="5"></td>
+                        <td><input type="text" name="term5_{{class_name.1}}" value="{{class_name.7}}" size="5"></td>
 
-                  </tr>
-                  {% endfor %}
-              </table>
-              <button type="submit" class="btn btn-primary btn-block">
-                    Guardar
-              </button>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <button type="submit" class="btn">
+                      Guardar
+                </button>
+              </div>
       </div>
     </div>
   <script>

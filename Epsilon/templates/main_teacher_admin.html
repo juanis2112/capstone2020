@@ -28,27 +28,68 @@ a:active {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
 </head>
 <body>
     <div>
         <div class="header">
             <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-            <form action="{{url_for('main_window')}}">
-              <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-            </form>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
         </div>
         <div class="row">
-            <div class="col-3 menu">
-            <ul>
-                <li><div class="menu-box"><p>Cursos dictados en la actualidad</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
-                <li><div class="menu-box"><p>Cursos históricos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
-            </ul>
-            </div>
+          <div class="col-3 menu">
+          <ul>
+            <a href="{{url_for('load_students')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Estudiantes
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_teachers')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Profesores
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_classes')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Materias
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('main_window')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Alertas
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+          </ul>
+          </div>
             <div class="col-9">
+              <a href="{{url_for('admin_main_teacher', user_name = user_name)}}" class="btn">
+                  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+              </a>
             <ul>
                {% for class in classes %}
-               <li><a href="/class_admin/{{user_name}}/{{class.0}}">{{class.0}}</a> <a href="/class_report/{{class.0}}/{{user_name}}">Reporte</a> </li>
+               <li><a href="/class_admin/{{user_name}}/{{class.0}}">{{class.0}}</a> <a href="/class_report/{{class.0}}/{{user_name}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.jpg') }}"></a> </li>
                {% endfor %}
             </ul>
             </div>

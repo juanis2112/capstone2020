@@ -1,93 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
 
-a:link {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-}
-a:visited {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-}
-a:hover {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
-a:active {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
-</style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
 </head>
 <body>
     <div>
         <div class="header">
             <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-            <form action="{{url_for('main_window')}}">
-              <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-            </form>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
         </div>
         <div class="row">
             <div class="col-3 menu">
             <ul>
-                <form action="{{url_for('load_students')}}">
+              <a href="{{url_for('load_students')}}">
                     <li>
                       <div class="menu-box">
-                        <div>
-                          <button class="submit">
-                            Estudiantes
-                          </button>
+                        <div >
+                          Estudiantes
                         </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                      <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
                       </div>
                     </li>
-                </form>
-                <form action="{{url_for('load_teachers')}}">
-                  <li>
-                    <div class="menu-box">
-                      <div>
-                        <button class="submit">
+              </a>
+              <a href="{{url_for('load_teachers')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div >
                           Profesores
-                        </button>
+                        </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
                       </div>
-                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                    </div>
-                  </li>
-                </form>
-                <form action="{{url_for('load_classes')}}">
-                  <li>
-                    <div class="menu-box">
-                      <div>
-                        <button class="submit">
+                    </li>
+              </a>
+              <a href="{{url_for('load_classes')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div >
                           Materias
-                        </button>
+                        </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
                       </div>
-                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                    </div>
-                  </li>
-                </form>
-                <form action="{{url_for('main_window')}}">
-                  <li>
-                    <div class="menu-box">
-                      <div>
-                        <button class="submit">
+                    </li>
+              </a>
+              <a href="{{url_for('main_window')}}">
+                    <li>
+                      <div class="menu-box">
+                        <div >
                           Alertas
-                        </button>
+                        </div>
+                      <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
                       </div>
-                      <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                    </div>
-                  </li>
-                </form>
+                    </li>
+              </a>
             </ul>
             </div>
         </div>

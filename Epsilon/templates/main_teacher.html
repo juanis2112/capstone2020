@@ -28,27 +28,27 @@ a:active {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
 </head>
 <body>
     <div>
         <div class="header">
             <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-            <form action="{{url_for('main_window')}}">
-              <input type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo" />
-            </form>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
         </div>
         <div class="row">
             <div class="col-3 menu">
             <ul>
-                <li><div class="menu-box"><p>Cursos dictados en la actualidad</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
-                <li><div class="menu-box"><p>Cursos históricos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
+              <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teacher.png') }}" width="30px" width="30px"></div></li>
+              <li><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
             </ul>
             </div>
             <div class="col-9">
             <ul>
                {% for class in classes %}
-               <li><a href="/class/{{user_name}}/{{class.0}}">{{class.0}}</a></li>
+               <a href="/class/{{user_name}}/{{class.0}}"><li>{{class.0}}</li></a>
                {% endfor %}
             </ul>
             </div>
