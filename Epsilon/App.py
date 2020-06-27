@@ -17,10 +17,10 @@ import base64
 
 # Connection to DataBase
 conn = psycopg2.connect(user = "postgres",
-                        password = "test",
+                        password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "capstone")
+                        database = "test1")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -39,7 +39,6 @@ def login():
     if request.method == 'POST':
         username_input = request.form['username']
         password_input = request.form['passwd']
-        print(username_input)
         # Verify username is on the database
         try: 
             cur.execute("select usuario from personas where usuario='"+username_input+"'")
@@ -276,7 +275,6 @@ def admin_update_class():
             per3 = int(request.form['term3_'+class_name[1]])
             per4 = int(request.form['term4_'+class_name[1]])
             per5 = int(request.form['term5_'+class_name[1]])
-            print(credit)
             cur.execute("""UPDATE asignaturas
                         SET 
                         	creditos_asignatura = %s,
@@ -298,7 +296,7 @@ def admin_update_class():
 #------ Reportes -----------
 
 @app.route("/class_report/<string:class_name>/<string:user_name>", methods=['POST', 'GET'])
-def show_class_admin(class_name, user_name):
+def one_group_report(class_name, user_name):
     cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2)
                  FROM RESUMEN 
                  WHERE
@@ -325,7 +323,53 @@ def show_class_admin(class_name, user_name):
     figfile.seek(0)
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
     return render_template('class_report.html', image=figdata_png) 
+
+@app.route("/groups_report/<string:class_name>/", methods=['POST', 'GET'])
+def groups_report(class_name):
+    cur.execute("""SELECT distinct nombre_asignatura,grupo
+                FROM RESUMEN 
+                WHERE 
+                	nombre_asignatura = %s AND
+                	anio = (select max(anio) from RESUMEN) AND
+                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                ORDER BY(grupo)""", (class_name,))
+    data = cur.fetchall()
+    groups = [x[1] for x in data]
+    groups_data =[]
+    for group in data:
+        cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2)
+                     FROM RESUMEN 
+                     WHERE
+                     	nombre_asignatura = %s AND
+                        grupo = %s AND
+                     	anio = (select max(anio) from RESUMEN) AND
+                     	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                     ORDER BY(nombre_est)""" , (class_name, group[1])
+                     )
+        groups_data.append(cur.fetchall())
+    plt.figure(figsize=(8,6))
+    sns.set(font_scale=1.2)   
+    ax = plt.subplot(111)  
+    for idx, data in enumerate(groups_data):
+        df = pd.DataFrame(data, columns =['user', 'student','last_name1', 'last_name2', 'grade1', 'grade2', 'grade3', 'grade4','grade5', 'grade_final'])
+        df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
+        conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
+        ax.bar(df["grupo_promedio"], conteo_promedio, label = "Grupo %s" % idx)
+        #ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Nota final estudiantes Curso %s" % class_name)
+    ax.set(
+        ylabel="Numero estudiantes",
+        xlabel="Promedio Final",
+        title="Nota final estudiantes Curso %s" % class_name
+        )
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
+    return render_template('groups_report.html', image=figdata_png) 
     
+
+
+
 ## REPORTES
 
 #1 Grafica de barras con definitivas (estudiantes por cada rango de notas) [YA]
