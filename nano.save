@@ -1,4 +1,0 @@
-SELECT grupo,prof_usr,nombre_asignatura, nombre_prof,ap1_prof,ap2_prof
-FROM RESUMEN
-WHERE
-	 nombre_asignatura = 'Algebra lineal'

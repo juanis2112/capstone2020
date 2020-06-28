@@ -1,33 +1,0 @@
-<form action="{{url_for('show_class', user_name = user_name, class_name = class_name)}} method="POST">
-  <div>  <table class="table table-striped table-hover table-bordered table-sm bg-white">
-    <thead>
-      <tr>
-        <td>Estudiantes</td>
-         <td>Corte1</td>
-         <td>Corte2</td>
-         <td>Corte3</td>
-         <td>Corte4</td>
-         <td>Corte5</td>
-         <td>Nota Final</td>
-       </tr>
-     </thead>
-     <tbody>
-       {% for student in students_class %}
-       <tr>            <td>{{student.0}}</td>
-         <td>{{student.1}}</td>
-         <td>{{student.2}}</td>
-         <td>{{student.3}}</td>
-         <td>{{student.4}}</td>
-         <td>{{student.5}}</td>
-         <td>{{student.5}}</td>
-       </tr>
-       {% endfor %}         
-       <a href="/class_edit/{{user_name}}/{{class_name}}" class="btn btn-secondary">Editar</a>
-     </tbody>
-   </table>
- </div>
-</form>
-<form action="{{url_for('main_window')}}">  
-  <button class="submit">
-    Log out
-  </button></form>

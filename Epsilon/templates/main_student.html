@@ -47,7 +47,9 @@ a:active {
             </ul>
             </div>
 
-            <form class="col-9" method="POST">
+            <div class="col-9">
+             <a href="{{url_for('load_students')}}" class="btn">
+              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
                 <table class="center">
                     <tr>
                         <th>Materias</th>
@@ -73,7 +75,7 @@ a:active {
                 <br>
                 <br>
                 <input type="button" onclick="habilitar()" value="Descargar">
-            </form>
+            </div>
         </div>
     </div>
 <script>
