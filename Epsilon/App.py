@@ -7,21 +7,19 @@ Created on Mon Jun  8 16:29:36 2020
 """
 
 # Third party imports
-import psycopg2
-from flask import Flask, render_template, request, redirect, url_for, flash
-import pandas as pd
-import seaborn as sns
+from flask import flash, Flask, redirect, render_template, request, url_for 
 import matplotlib.pyplot as plt
-import numpy as np
-from io import BytesIO
-import base64
+import pandas as pd
+import psycopg2
+import seaborn as sns
+
 
 # Connection to DataBase
 conn = psycopg2.connect(user = "postgres",
-                        password = "Mate1234",
+                        password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "Epsilon2")
+                        database = "Epsilon_Data")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -359,7 +357,6 @@ def student_report(user_name):
                   )
     data = cur.fetchall()
     x = ['Corte1', 'Corte2','Corte3','Corte4','Corte5','Nota final']
-    y = [y for y in data]
     #y =  [2,3.5,4,3.8,3.7,3.6]
     plt.plot(x,data[0], marker ='o')
     plt.xlabel('Cortes')
