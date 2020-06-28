@@ -48,7 +48,7 @@ def login():
             cur.execute("select contrasena from personas where usuario='"+username_input+"'")
             passwd =  str(cur.fetchone()[0])
             if password_input != passwd:
-                flash("La contraseña es incorrecta", 'error')
+                flash('La contraseña es incorrecta', 'error')
                 return render_template('login.html')
             
             else:   
@@ -64,7 +64,7 @@ def login():
                     return redirect(url_for('main_student',user_name = username_input))
         
         except Exception: 
-            flash("El usuario no se encuentra registrado", 'error')
+            flash('El usuario no se encuentra registrado', 'error')
             return render_template('login.html')
 
 
@@ -371,7 +371,7 @@ def student_report(user_name):
     plt.savefig(figfile, format='png')
     figfile.seek(0)
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
-    return render_template('class_report.html', image=figdata_png) 
+    return render_template('students_report.html', image=figdata_png) 
     
 if __name__ == "__main__":
     app.run(port = 2000, debug = True, use_reloader=False)
