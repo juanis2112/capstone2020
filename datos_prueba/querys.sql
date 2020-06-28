@@ -2,10 +2,15 @@
 SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
 FROM RESUMEN
 WHERE 
-	est_usr = 'myacusbw' AND
+	est_usr = 'daniel.felipe' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(nombre_asignatura);
+
+select * 
+from asignaturas join curso_sem on asignaturas.codigo_asignatura = curso_sem.codigo_asignatura
+where
+	nombre_asignatura = 'Algebra lineal';
 
 -- Query consulta asignaturas y porcentaje notas de un estudiante
 SELECT nombre_asignatura,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
@@ -80,3 +85,18 @@ WHERE
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(grupo);
+
+-- Query promedios por cohorte para un estudiante
+
+select 
+	round(sum(creditos_asignatura*nota1)/sum(creditos_asignatura),2) as promedio_cohorte1,
+	round(sum(creditos_asignatura*nota2)/sum(creditos_asignatura),2) as promedio_cohorte2,
+	round(sum(creditos_asignatura*nota3)/sum(creditos_asignatura),2) as promedio_cohorte3,
+	round(sum(creditos_asignatura*nota4)/sum(creditos_asignatura),2) as promedio_cohorte4,
+	round(sum(creditos_asignatura*nota5)/sum(creditos_asignatura),2) as promedio_cohorte5,
+	round(sum(creditos_asignatura*round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2) as promedio_semestral
+from RESUMEN
+where
+	est_usr = 'daniel.felipe' AND
+	anio = (select max(anio) from RESUMEN) AND
+	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));

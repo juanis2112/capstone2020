@@ -98,7 +98,7 @@ create table Empleado(
 Create table Asignaturas(
 	codigo_asignatura VARCHAR(100) NOT NULL,
 	nombre_asignatura VARCHAR(100) NOT NULL,
-	creditos_asignatura VARCHAR(100) NOT NULL,
+	creditos_asignatura NUMERIC NOT NULL,
 	tipologia_asignatura VARCHAR(100) NOT NULL,
 	porcentaje1 NUMERIC NOT NULL,
 	porcentaje2 NUMERIC NOT NULL,
@@ -208,7 +208,7 @@ select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologi
 /* Metiendo a la tabla de Semestre*/
 
 insert into semestre(periodo,anio,grupo)
-select 2 as periodo,2020 as anio,ga.grupo 
+select 2 as periodo,2020 as anio,ga.grupo
 from (
 	select nombre_asignatura,grupo 
 	from personas join (
