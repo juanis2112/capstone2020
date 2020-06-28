@@ -1,6 +1,29 @@
 <form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
+  <style>
+
+  a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:hover {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  a:active {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  </style>
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,14 +84,15 @@
               </ul>
               </div>
         <div class="col-9">
-          <a href="{{url_for('main_admin')}}" class="btn">
+          <a href="{{url_for('admin_main_teacher', user_name = user_name)}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
           </a>
         <ul>
-           {% for student in students %}
-           <a href="/main_student/{{student.0}}"><li>{{student.1}} {{student.2}} {{student.3}}</a><a href="/student_report/{{student.0}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.jpg') }}"></a></li> 
-           {% endfor %}
-           
+          <p>
+          {% if image != None %}
+          <img src="data:image/png;base64,{{ image }}">
+          {% endif %}
+          </p>
         </ul>
         </div>
       </div>

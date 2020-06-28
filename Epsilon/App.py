@@ -12,6 +12,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 from io import BytesIO
 import base64
 
@@ -324,50 +325,35 @@ def one_group_report(class_name, user_name):
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
     return render_template('class_report.html', image=figdata_png) 
 
-@app.route("/groups_report/<string:class_name>/", methods=['POST', 'GET'])
-def groups_report(class_name):
-    cur.execute("""SELECT distinct nombre_asignatura,grupo
-                FROM RESUMEN 
-                WHERE 
-                	nombre_asignatura = %s AND
-                	anio = (select max(anio) from RESUMEN) AND
-                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-                ORDER BY(grupo)""", (class_name,))
+@app.route("/student_report/<string:user_name>/", methods=['POST', 'GET'])
+def student_report(user_name):
+    cur.execute("""select 
+                 	round(sum(creditos_asignatura*nota1)/sum(creditos_asignatura),2) as promedio_cohorte1,
+                 	round(sum(creditos_asignatura*nota2)/sum(creditos_asignatura),2) as promedio_cohorte2,
+                 	round(sum(creditos_asignatura*nota3)/sum(creditos_asignatura),2) as promedio_cohorte3,
+                 	round(sum(creditos_asignatura*nota4)/sum(creditos_asignatura),2) as promedio_cohorte4,
+                 	round(sum(creditos_asignatura*nota5)/sum(creditos_asignatura),2) as promedio_cohorte5,
+                 	round(sum(creditos_asignatura*round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2) as promedio_semestral
+                from RESUMEN
+                where
+                 	est_usr = 'daniel.felipe' AND
+                 	anio = (select max(anio) from RESUMEN) AND
+                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""" , (user_name,)
+                  )
     data = cur.fetchall()
-    groups = [x[1] for x in data]
-    groups_data =[]
-    for group in data:
-        cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2)
-                     FROM RESUMEN 
-                     WHERE
-                     	nombre_asignatura = %s AND
-                        grupo = %s AND
-                     	anio = (select max(anio) from RESUMEN) AND
-                     	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
-                     ORDER BY(nombre_est)""" , (class_name, group[1])
-                     )
-        groups_data.append(cur.fetchall())
-    plt.figure(figsize=(8,6))
-    sns.set(font_scale=1.2)   
-    ax = plt.subplot(111)  
-    for idx, data in enumerate(groups_data):
-        df = pd.DataFrame(data, columns =['user', 'student','last_name1', 'last_name2', 'grade1', 'grade2', 'grade3', 'grade4','grade5', 'grade_final'])
-        df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
-        conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
-        ax.bar(df["grupo_promedio"], conteo_promedio, label = "Grupo %s" % idx)
-        #ax = conteo_promedio.plot.bar(x="Promedio Final", y="Numero Estudiantes", rot=50, title="Nota final estudiantes Curso %s" % class_name)
-    ax.set(
-        ylabel="Numero estudiantes",
-        xlabel="Promedio Final",
-        title="Nota final estudiantes Curso %s" % class_name
-        )
+    x = ['Corte1', 'Corte2','Corte3','Corte4','Corte5','Nota final']
+    y =  [2,3.5,4,3.8,3.7,3.6]
+    plt.plot(x,y, marker ='o')
+    plt.xlabel('Cortes')
+    plt.ylabel('Promedio')
+    plt.title('Promedio de notas estudiante')
+    
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
     figfile.seek(0)
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
-    return render_template('groups_report.html', image=figdata_png) 
+    return render_template('class_report.html', image=figdata_png) 
     
-
 
 
 ## REPORTES
