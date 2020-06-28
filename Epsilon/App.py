@@ -28,7 +28,7 @@ cur = conn.cursor()
 app = Flask(__name__)
 
 # For starting a session
-app.secret_key = 'mysecretkey' #(???)
+app.secret_key = 'mysecretkey' 
 
 
 # Main Window
@@ -342,6 +342,7 @@ def one_group_report(class_name, user_name):
     plt.savefig(figfile, format='png')
     figfile.seek(0)
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
+    plt.close()
     return render_template('class_report.html', image=figdata_png) 
 
 @app.route("/student_report/<string:user_name>/", methods=['POST', 'GET'])
@@ -361,17 +362,16 @@ def student_report(user_name):
                   )
     data = cur.fetchall()
     x = ['Corte1', 'Corte2','Corte3','Corte4','Corte5','Nota final']
-    #y =  [2,3.5,4,3.8,3.7,3.6]
     plt.plot(x,data[0], marker ='o')
     plt.xlabel('Cortes')
     plt.ylabel('Promedio')
-    plt.title('Promedio de notas estudiante')
-    
+    plt.title('Promedio de notas estudiante')    
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
     figfile.seek(0)
-    figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
-    return render_template('students_report.html', image=figdata_png) 
+    image = base64.b64encode(figfile.getvalue()).decode('utf-8')
+    plt.close()
+    return render_template('students_report.html', image=image) 
     
 if __name__ == "__main__":
     app.run(port = 2000, debug = True, use_reloader=False)
