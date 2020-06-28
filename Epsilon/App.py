@@ -21,7 +21,7 @@ conn = psycopg2.connect(user = "postgres",
                         password = "Jgrccgv",
                         host = "localhost",
                         port = "5432",
-                        database = "test1")
+                        database = "Epsilon_Data")
 cur = conn.cursor()
 app = Flask(__name__)
 
@@ -181,7 +181,24 @@ def main_admin():
 def load_students():
     cur.execute("select usuario, nombre, apellido_1, apellido_2 from personas where tipo='estudiante'")
     data = cur.fetchall()
-    return render_template('students.html', students = data) 
+    data_complete = []
+    for user in data:
+        user_info = list(user)
+        cur.execute("""select 
+                 	round(sum(creditos_asignatura*round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2) as promedio_semestral
+                from RESUMEN
+                where
+                 	est_usr = %s AND
+                 	anio = (select max(anio) from RESUMEN) AND
+                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""" , (user[0],)
+                  ) 
+        promedio = float(cur.fetchone()[0])
+        cur.execute("""select sum(creditos_asignatura) as creditos from resumen group by(nombre_est,est_cod)""") 
+        credito_suma = float(cur.fetchone()[0])
+        user_info.append(credito_suma)
+        user_info.append(promedio)
+        data_complete.append(user_info)    
+    return render_template('students.html', students = data_complete) 
 
 
 #----------------- Teachers ------------------
@@ -336,14 +353,15 @@ def student_report(user_name):
                  	round(sum(creditos_asignatura*round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2) as promedio_semestral
                 from RESUMEN
                 where
-                 	est_usr = 'daniel.felipe' AND
+                 	est_usr = %s AND
                  	anio = (select max(anio) from RESUMEN) AND
                  	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""" , (user_name,)
                   )
     data = cur.fetchall()
     x = ['Corte1', 'Corte2','Corte3','Corte4','Corte5','Nota final']
-    y =  [2,3.5,4,3.8,3.7,3.6]
-    plt.plot(x,y, marker ='o')
+    y = [y for y in data]
+    #y =  [2,3.5,4,3.8,3.7,3.6]
+    plt.plot(x,data[0], marker ='o')
     plt.xlabel('Cortes')
     plt.ylabel('Promedio')
     plt.title('Promedio de notas estudiante')
@@ -354,16 +372,6 @@ def student_report(user_name):
     figdata_png = base64.b64encode(figfile.getvalue()).decode('utf-8')
     return render_template('class_report.html', image=figdata_png) 
     
-
-
-## REPORTES
-
-#1 Grafica de barras con definitivas (estudiantes por cada rango de notas) [YA]
-#2 Grafica de lineas con definitivas (estudiantes por cada rango de notas) para cada grupo
-#3 Grafica de lineas con progreso cortes estudiantes 
-
-
-
 if __name__ == "__main__":
     app.run(port = 2000, debug = True, use_reloader=False)
     
