@@ -84,12 +84,12 @@ a:active {
           </ul>
           </div>
             <div class="col-9">
-              <a href="{{url_for('admin_main_teacher', user_name = user_name)}}" class="btn">
+              <a href="{{url_for('load_teachers')}}" class="btn">
                   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
               </a>
             <ul>
                {% for class in classes %}
-               <li><a href="/class_admin/{{user_name}}/{{class.0}}">{{class.0}}</a> <a href="/class_report/{{class.0}}/{{user_name}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.jpg') }}"></a> </li>
+               <li><a href="/class_admin/{{user_name}}/{{class.0}}">{{class.0}}</a> <a href="/class_report/{{class.0}}/{{user_name}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}"></a> </li>
                {% endfor %}
             </ul>
             </div>

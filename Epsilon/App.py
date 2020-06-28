@@ -18,10 +18,10 @@ import base64
 
 # Connection to DataBase
 conn = psycopg2.connect(user = "postgres",
-                        password = "Jgrccgv",
+                        password = "Mate1234",
                         host = "localhost",
                         port = "5432",
-                        database = "test1")
+                        database = "Epsilon2")
 cur = conn.cursor()
 app = Flask(__name__)
 

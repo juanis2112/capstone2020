@@ -28,7 +28,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='template_general/css/styletemplate.css') }}" />
+      <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
   </head>
   <body>
       <div>
@@ -41,71 +41,68 @@
           <div class="row">
               <div class="col-3 menu">
               <ul>
-                  <form action="{{url_for('load_students')}}">
-                      <li>
-                        <div class="menu-box">
-                          <div>
-                            <button class="submit">
-                              Estudiantes
-                            </button>
-                          </div>
-                          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
-                        </div>
-                      </li>
-                  </form>
-                  <form action="{{url_for('load_teachers')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
-                            Profesores
-                          </button>
-                        </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                <a href="{{url_for('load_students')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Estudiantes
                       </div>
-                    </li>
-                  </form>
-                  <form action="{{url_for('load_classes')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
-                            Materias
-                          </button>
-                        </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_teachers')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Profesores
                       </div>
-                    </li>
-                  </form>
-                  <form action="{{url_for('main_window')}}">
-                    <li>
-                      <div class="menu-box">
-                        <div>
-                          <button class="submit">
-                            Alertas
-                          </button>
-                        </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_classes')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Materias
                       </div>
-                    </li>
-                  </form>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('main_window')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Alertas
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
               </ul>
               </div>
-              <botton class="table-button">Volver <img src="imabien\retorno.png" height="13px" width="13px" style="border-radius: 7px;"></botton>
-            <table class="center">
-                  <tr>
-                      <th>Grupo</th>
-                      <th>Profesor</th>
-                  </tr>
-                  {% for group in groups %}
-                  <tr>
-                      <td><input type="text" value={{group.1}} readonly size="5"></td>
-                      <td><a href="/class_admin/{{group.2}}/{{group.0}}">{{group.3}}{{group.4}}{{group.5}}</a></td>
-                  </tr>
-                  {% endfor %}
-              </table>
-              <br>
-              <br>
+              <div class="col-9">
+                <a href="{{url_for('load_classes')}}" class="btn">
+                  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                </a>
+              <table class="center">
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Profesor</th>
+                    </tr>
+                    {% for group in groups %}
+                    <tr>
+                        <td><input type="text" value={{group.1}} readonly size="5"></td>
+                        <td><a href="/class_admin/{{group.2}}/{{group.0}}" style="color: black;">{{group.3}}{{group.4}}{{group.5}}</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <br>
+              </div>
+              
       </div>
     </div>
   <script>
