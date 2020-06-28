@@ -211,7 +211,6 @@ iframe {
   max-width: 100%;
 }
 
-
 /*------------------------------------------------------------------
 [  ]*/
 .login100-form {
@@ -469,4 +468,7 @@ iframe {
     visibility: visible;
     opacity: 1;
   }
+}
+.error {
+    color: red
 }

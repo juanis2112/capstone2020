@@ -6,6 +6,10 @@ Created on Mon Jun  8 16:29:36 2020
 @author: juanis
 """
 
+# Standard library imports
+import base64
+from io import BytesIO
+
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for 
 import matplotlib.pyplot as plt
@@ -44,7 +48,7 @@ def login():
             cur.execute("select contrasena from personas where usuario='"+username_input+"'")
             passwd =  str(cur.fetchone()[0])
             if password_input != passwd:
-                flash("La contraseña es incorrecta")
+                flash("La contraseña es incorrecta", 'error')
                 return render_template('login.html')
             
             else:   
@@ -60,7 +64,7 @@ def login():
                     return redirect(url_for('main_student',user_name = username_input))
         
         except Exception: 
-            flash("El usuario no se encuentra registrado")
+            flash("El usuario no se encuentra registrado", 'error')
             return render_template('login.html')
 
 
