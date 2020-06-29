@@ -6,6 +6,15 @@
 ```bash
 $ git clone https://github.com/juanis2112/capstone2020
 ```
+
+### Clonando el Repositorio
+
+Para acceder a la rama con el release 0.1 de la aplicación debe ejecutar:
+
+```bash
+$ git checkout v0.1
+```
+
 ### Generando la base de datos
 
 Para generar la base de datos de la aplicación es necesario contar con PostgreSQL y pgAdmin4 y generar una base de datos con nombre `capstone` desde pgAdmin4 o la terminal. 
