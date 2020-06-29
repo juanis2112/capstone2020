@@ -14,7 +14,7 @@ Primero debe abrir el archivo `importar_excel.sql` con un editor de texto y en l
 
 Una vez los paths correspondan con los archivos en su repositorio, debe correr el archivo `importar_excel.sql` en el `Query Tool` de su base de datos `capstone`.
 
-Finalmente, para que la conexión con su base de datos sea exitosa, debe abrir el archivo `Epsilon/App.py de su repositorio y reemplazar los strings que corresponden "user" y "password" en la linea 22, por su usuario y contraseña correspondientes a su base de datos.
+Finalmente, para que la conexión con su base de datos sea exitosa, debe abrir el archivo `Epsilon/App.py de su repositorio y reemplazar los strings que corresponden "user" y "password" en la linea 18, por su usuario y contraseña correspondientes a su base de datos.
 
 ### Creando un ambiente 
 
