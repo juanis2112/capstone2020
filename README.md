@@ -7,7 +7,13 @@
 $ git clone https://github.com/juanis2112/capstone2020
 ```
 
-### Clonando el Repositorio
+### Accediendo al release
+
+Primero debe acceder a la carpeta de su repositorio ejecutando:
+
+```bash
+$ cd capstone
+```
 
 Para acceder a la rama con el release 0.1 de la aplicación debe ejecutar:
 
@@ -47,7 +53,7 @@ $ workon capstone
 Después de crear el ambiente, debe instalar las dependecias, las cuales se encuentran todas en el archivo de requirements.txt
 
 ```bash
-$ conda install --file requirements/conda.txt
+$ conda install --file requirements.txt
 ```
 
 Si esta usando `pip` y `virtualenv` corra:
