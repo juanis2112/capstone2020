@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Mon Jun  8 16:29:36 2020
-
-@author: juanis
+Webapp that allows browsing, modifying, analysing student data.
 """
 
 # Standard library imports
