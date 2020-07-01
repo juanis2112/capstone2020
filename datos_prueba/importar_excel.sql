@@ -216,6 +216,7 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 )as ga;
 
 /* Metiendo a la tabla dicta */
@@ -241,6 +242,7 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 ) as asig; 
 
 /* Metiendo a la tabla curso_sem */
@@ -266,6 +268,7 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 ) as asig; 
 
 /* Metiendo a la tabla inscrito */
@@ -290,8 +293,12 @@ from tablaProfesores as tp join personas on tp.usuario = personas.usuario;
 
 insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5)
 
-select distinct codigo,sem_id,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
-from tablaEstudiante as te join curso_sem as cs on te.codigo_asignatura = cs.codigo_asignatura;
+select distinct codigo,sem.sem_id,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
+from 
+	(tablaEstudiante as te join curso_sem as cs on te.codigo_asignatura = cs.codigo_asignatura) as f1 join
+	semestre as sem on sem.sem_id = f1.sem_id
+where f1.Grupo_asignatura = sem.grupo
+order by(codigo);
 
 drop table tablaEstudiante;
 drop table tablaEmpleado;
