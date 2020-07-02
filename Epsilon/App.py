@@ -10,16 +10,17 @@ from io import BytesIO
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import psycopg2
 import seaborn as sns
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="password",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="capstone")
+                        database="Epsilon_3")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -78,6 +79,18 @@ def main_student(user_name):
                     ORDER BY(nombre_asignatura)""", (user_name,))
     data = cur.fetchall()
     return render_template('main_student.html', classes=data, user_name=user_name)
+
+@app.route("/student_data/<string:user_name>", methods=['POST', 'GET'])
+def personal_data(user_name):
+    cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2, 
+                correo_institucional, documento_actual from personas 
+                WHERE
+                    usuario = %s""", (user_name,))
+    data = cur.fetchall()[0]
+    print(data)
+    return render_template('student_data.html', student_data=data, user_name=user_name)
+
+    
 
 
 # - Teacher Page ----------------------------------------------------------------------------------
@@ -185,7 +198,7 @@ def update_grade(class_name, user_name):
                     (grade1, grade2, grade3, grade4, grade5, user_name, class_name,
                      student[0], student[0]))
         conn.commit()
-        return redirect(url_for('show_class', user_name=user_name,
+    return redirect(url_for('show_class', user_name=user_name,
                                 class_name=class_name))
 
 
@@ -354,7 +367,7 @@ def admin_update_class():
                     RESUMEN.nombre_asignatura = %s)""",
                     (credit, per1, per2, per3, per4, per5, class_name[0]))
         conn.commit()
-        return redirect(url_for('load_classes', classes=classes))
+    return redirect(url_for('load_classes', classes=classes))
 
 
 # ---- Admin: Reports -----------------------------------------------------------------------------
@@ -433,6 +446,57 @@ def student_report(user_name):
     image = base64.b64encode(figfile.getvalue()).decode('utf-8')
     plt.close()
     return render_template('students_report.html', image=image)
+
+@app.route("/groups_report/<string:class_name>/", methods=['POST', 'GET'])
+def groups_report(class_name):
+    cur.execute("""SELECT distinct nombre_asignatura,grupo
+                FROM RESUMEN 
+                WHERE 
+                	nombre_asignatura = %s AND
+                	anio = (select max(anio) from RESUMEN) AND
+                	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                ORDER BY(grupo)""", (class_name,))
+    data = cur.fetchall()
+    data_student =[]
+    groups_data =[]
+    for group in data:
+        cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2)
+                     FROM RESUMEN 
+                     WHERE
+                     	nombre_asignatura = %s AND
+                        grupo = %s AND
+                     	anio = (select max(anio) from RESUMEN) AND
+                     	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                     ORDER BY(nombre_est)""" , (class_name, group[1])
+                     )                    
+        groups_data.append(cur.fetchall())  
+    N = 10
+    width = 0.4
+    ind = np.arange(N)
+    plt.figure(figsize=(12,10))
+    sns.set(font_scale=0.8)
+    ax = plt.subplot(111)
+    plot = []
+    color = ['r','b','g']
+    for idx, data in enumerate(groups_data):
+        df = pd.DataFrame(data, columns =['user', 'student','last_name1', 'last_name2', 'grade1', 'grade2', 'grade3', 'grade4','grade5', 'grade_final'])
+        df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
+        conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
+        #x = [i.left for i in conteo_promedio.index]
+        y = [i for i in conteo_promedio]
+        plot.append(ax.bar(ind+idx*0.4, y, width=0.4, align='center', color=color[idx]))
+    ax.set_ylabel('Numero de estudiantes')
+    ax.set_xticks(ind+width)
+    ax.set_xticklabels(['(0, 0.5]', '(0.5, 1]', '(1, 1.5]', '(1.5, 2]', '(2, 2.5]', '(2.5, 3]', '(3, 3.5]', '(3.5, 4]', '(4, 4.5]', '(4.5, 5]'])
+    ax.legend( (plot[0][0], plot[1][0]), ('grupo1', 'grupo2') )    
+    #plt.savefig("Ejemplo1.png")
+    plt.tight_layout
+    figfile = BytesIO()
+    plt.savefig(figfile, format='png')
+    figfile.seek(0)
+    image = base64.b64encode(figfile.getvalue()).decode('utf-8')
+    plt.close()
+    return render_template('groups_report.html', image=image) 
 
 
 if __name__ == "__main__":

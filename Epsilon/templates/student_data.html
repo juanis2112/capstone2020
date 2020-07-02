@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
+<form action="{{url_for('personal_data', user_name = user_name)}}" method="POST">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -42,36 +42,19 @@ a:active {
         <div class="row">
             <div class="col-3 menu">
             <ul>
-                <li><a href="{{url_for('personal_data', user_name = user_name)}}"><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></a></li>
+                <li><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
                 <li><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
             </ul>
             </div>
 
             <div class="col-9">
-             <a href="{{url_for('load_students')}}" class="btn">
-              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
-                <table class="center">
-                    <tr>
-                        <th>Materias</th>
-                        <th>Corte1</th>
-                        <th>Corte2</th>
-                        <th>Corte3</th>
-                        <th>Corte4</th>
-                        <th>Corte5</th>
-                        <th>Nota Final</th>
-                    </tr>
-                    {% for class in classes %}
-                    <tr>
-                        <td>{{class.0}} </td>
-                        <td><input type="text" style="border: 0px;" value={{class.1}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.2}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.3}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.4}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.5}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.6}} readonly size="5"></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+               <br>
+               Nombre: {{student_data.1}} <br>
+               Apellidos: {{student_data.2}} {{student_data.3}} <br>
+               Código: {{student_data.0}} <br>
+               Correo: {{student_data.4}} <br>
+               Documento: {{student_data.5}} <br>
                 <br>
                 <br>
                 <input type="button" onclick="habilitar()" value="Descargar">
