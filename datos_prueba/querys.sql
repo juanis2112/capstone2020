@@ -96,4 +96,3 @@ where
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
 	
-select * from resumen where est_usr = 'santiago.martinez' order by(periodo,anio);
