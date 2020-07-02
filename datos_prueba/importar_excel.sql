@@ -51,9 +51,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM 'C:/Users/juank/Desktop/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM 'C:\Users\juank\Desktop\capstone2020\datos_prueba\informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM 'C:\Users\juank\Desktop\capstone2020\datos_prueba\Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Conjuntos de entidades */
 
