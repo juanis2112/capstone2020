@@ -77,8 +77,8 @@
                     </tr>
                     {% for class_name in classes %}
                     <tr>
-                        <td><input type="text" value={{class_name.0}} readonly size="5"></td>
-                        <td><input type="text" value={{class_name.1}} readonly size="5"></td>
+                        <td>{{class_name.0}} </td>
+                        <td>{{class_name.1}} </td>
                         <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}" size="5"></td>
                         <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}" size="5"></td>
                         <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}" size="5"></td>

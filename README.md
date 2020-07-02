@@ -6,6 +6,21 @@
 ```bash
 $ git clone https://github.com/juanis2112/capstone2020
 ```
+
+### Accediendo al release
+
+Primero debe acceder a la carpeta de su repositorio ejecutando:
+
+```bash
+$ cd capstone
+```
+
+Para acceder a la rama con el release 0.1 de la aplicación debe ejecutar:
+
+```bash
+$ git checkout v0.1
+```
+
 ### Generando la base de datos
 
 Para generar la base de datos de la aplicación es necesario contar con PostgreSQL y pgAdmin4 y generar una base de datos con nombre `capstone` desde pgAdmin4 o la terminal. 
@@ -14,7 +29,7 @@ Primero debe abrir el archivo `importar_excel.sql` con un editor de texto y en l
 
 Una vez los paths correspondan con los archivos en su repositorio, debe correr el archivo `importar_excel.sql` en el `Query Tool` de su base de datos `capstone`.
 
-Finalmente, para que la conexión con su base de datos sea exitosa, debe abrir el archivo `Epsilon/App.py de su repositorio y reemplazar los strings que corresponden "user" y "password" en la linea 22, por su usuario y contraseña correspondientes a su base de datos.
+Finalmente, para que la conexión con su base de datos sea exitosa, debe abrir el archivo `Epsilon/App.py de su repositorio y reemplazar los strings que corresponden "user" y "password" en la linea 18, por su usuario y contraseña correspondientes a su base de datos.
 
 ### Creando un ambiente 
 
@@ -38,7 +53,7 @@ $ workon capstone
 Después de crear el ambiente, debe instalar las dependecias, las cuales se encuentran todas en el archivo de requirements.txt
 
 ```bash
-$ conda install --file requirements/conda.txt
+$ conda install --file requirements.txt
 ```
 
 Si esta usando `pip` y `virtualenv` corra:

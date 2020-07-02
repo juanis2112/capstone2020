@@ -2,15 +2,10 @@
 SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
 FROM RESUMEN
 WHERE 
-	est_usr = 'daniel.felipe' AND
+	est_usr = 'juanita.gomez' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(nombre_asignatura);
-
-select * 
-from asignaturas join curso_sem on asignaturas.codigo_asignatura = curso_sem.codigo_asignatura
-where
-	nombre_asignatura = 'Algebra lineal';
 
 -- Query consulta asignaturas y porcentaje notas de un estudiante
 SELECT nombre_asignatura,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
@@ -25,7 +20,7 @@ ORDER BY(nombre_asignatura);
 SELECT DISTINCT nombre_asignatura
 FROM RESUMEN
 WHERE
-	prof_usr = 'mauro.artigiani' AND
+	prof_usr = 'margot.salas' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(nombre_asignatura)	
@@ -34,7 +29,7 @@ ORDER BY(nombre_asignatura)
 SELECT nombre_est,ap1_est,ap2_est,est_usr,nota1,nota2,nota3,nota4,nota5
 FROM RESUMEN 
 WHERE
-	prof_usr = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+	prof_usr = 'alexander.caicedo' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
 	nombre_asignatura = 'Algebra lineal' AND -- MATERIA SELECCIONADA
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
@@ -100,3 +95,4 @@ where
 	est_usr = 'daniel.felipe' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
+	
