@@ -114,3 +114,23 @@ create table curso_sem (
 	foreign key (codigo_asignatura) references Asignaturas,
 	foreign key (sem_id) references semestre
 );	
+
+-- VISTA ayuda en consultas 
+
+CREATE VIEW RESUMEN AS
+SELECT Bc.codigo as est_cod,Bc.nombre as nombre_est,Bc.usuario as est_usr,Bc.apellido_1 as ap1_est, Bc.apellido_2 as ap2_est, Bc.correo_institucional as est_mail,Bc.documento_actual as est_id,Bc.sexo as est_sex,Bc.sem_id,Bd.porcentaje1,nota1,Bd.porcentaje2,nota2,Bd.porcentaje3,nota3,Bd.porcentaje4,nota4,Bd.porcentaje5,nota5,Bd.codigo as prof_cod, Bd.nombre as nombre_prof,Bd.usuario as prof_usr,Bd.apellido_1 as ap1_prof ,Bd.apellido_2 as ap2_prof,Bd.correo_institucional as prof_mail, Bd.sexo as prof_sex, Bd.documento_actual as prof_id,Bd.codigo_asignatura,Bd.nombre_asignatura, Bd.creditos_asignatura, periodo,anio,grupo
+FROM
+	(select * from Personas natural join toma) as Bc join
+	(select B1.codigo, nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,B2.sem_id,codigo_asignatura,nombre_asignatura,creditos_asignatura,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
+	 FROM
+		(select Personas.codigo,nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,sem_id
+		 from Personas join
+		 dicta on Personas.codigo = dicta.codigo ) as B1 join
+		(select codigo_asignatura,nombre_asignatura,creditos_asignatura,semestre.sem_id,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
+		 FROM
+			(select Asignaturas.codigo_asignatura, nombre_asignatura,creditos_asignatura,sem_id,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
+			FROM
+				Asignaturas join curso_sem on Asignaturas.codigo_asignatura =  curso_sem.codigo_asignatura ) as B join
+				semestre on B.sem_id = semestre.sem_id) as B2
+	on B1.sem_id = B2.sem_id) as Bd
+	on Bc.sem_id = Bd.sem_id;

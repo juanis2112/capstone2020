@@ -2,7 +2,7 @@
 SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
 FROM RESUMEN
 WHERE 
-	est_usr = 'felipe.guzman' AND
+	est_usr = 'juanita.gomez' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(nombre_asignatura);
@@ -20,7 +20,7 @@ ORDER BY(nombre_asignatura);
 SELECT DISTINCT nombre_asignatura
 FROM RESUMEN
 WHERE
-	prof_usr = 'alexander.caicedo' AND
+	prof_usr = 'margot.salas' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
 ORDER BY(nombre_asignatura)	
@@ -29,7 +29,7 @@ ORDER BY(nombre_asignatura)
 SELECT nombre_est,ap1_est,ap2_est,est_usr,nota1,nota2,nota3,nota4,nota5
 FROM RESUMEN 
 WHERE
-	prof_usr = 'margot.salas' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
+	prof_usr = 'alexander.caicedo' AND -- USUARIO DEL PROFESOR QUE HIZO LOGIN
 	nombre_asignatura = 'Algebra lineal' AND -- MATERIA SELECCIONADA
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
@@ -95,3 +95,5 @@ where
 	est_usr = 'daniel.felipe' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
+	
+select * from resumen where est_usr = 'santiago.martinez' order by(periodo,anio);
