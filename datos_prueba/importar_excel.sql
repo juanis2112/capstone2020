@@ -13,7 +13,7 @@ CREATE TABLE Public.tablaEstudiante(
   ,Programa              VARCHAR(100) NOT NULL
   ,Semestre              INTEGER  NOT NULL
   ,Creditos_inscritos    INTEGER  NOT NULL
-  ,Codigo_Asignatura     VARCHAR  NOT NULL
+  ,Codigo_Asignatura     VARCHAR(100)  NOT NULL
   ,Nombre_Asignatura     VARCHAR(100) NOT NULL
   ,Creditos_Asignatura   INTEGER  NOT NULL
   ,Grupo_Asignatura      INTEGER  NOT NULL
@@ -51,159 +51,56 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM 'C:/Users/juank/Desktop/capstone2020/datos_prueba/Datos_prueba.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM 'C:\Users\juank\Desktop\capstone2020\datos_prueba\informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM 'C:\Users\juank\Desktop\capstone2020\datos_prueba\Datos_profesores.csv' DELIMITER ',' CSV HEADER;
-
-/* Conjuntos de entidades */
-
-Create table Programa(
-	 codigo_programa Integer NOT NULL
-	,programa VARCHAR(100) NOT NULL
-	,facultad_o_escuela VARCHAR(100) NOT NULL
-	, PRIMARY KEY(codigo_programa)
-);
-
-create table Personas(
-	codigo Integer NOT NULL,
-	nombre VARCHAR(100) NOT NULL,
-	apellido_1 VARCHAR(100) NOT NULL,
-	apellido_2 VARCHAR(100) NOT NULL,
-	correo_institucional VARCHAR(100) NOT NULL,
-	sexo VARCHAR(10) NOT NULL,
-	documento_actual VARCHAR(100) NOT NULL,
-	usuario VARCHAR(100) NOT NULL,
-	contrasena VARCHAR(100) NOT NULL,
-	tipo VARCHAR(50) NOT NULL,
-	primary key(codigo)
-);
-
-Create table Estudiante(
-	codigo Integer NOT NULL,
-	documento_ingreso Integer NOT NULL,
-	acceso VARCHAR(100) NOT NULL,
-	subacceso VARCHAR(100) NOT NULL,
-	PRIMARY KEY(codigo),
-	FOREIGN KEY (codigo) references Personas
-);
-
-create table Empleado(
-	codigo Integer NOT NULL,
-	esProfesor bool NOT NULL,
-	esAdmin bool NOT NULL,
-	PRIMARY KEY(codigo),
-	FOREIGN KEY (codigo) references Personas
-);
-
-Create table Asignaturas(
-	codigo_asignatura VARCHAR(100) NOT NULL,
-	nombre_asignatura VARCHAR(100) NOT NULL,
-	creditos_asignatura NUMERIC NOT NULL,
-	tipologia_asignatura VARCHAR(100) NOT NULL,
-	porcentaje1 NUMERIC NOT NULL,
-	porcentaje2 NUMERIC NOT NULL,
-	porcentaje3 NUMERIC NOT NULL,
-	porcentaje4 NUMERIC NOT NULL,
-	porcentaje5 NUMERIC NOT NULL,
-	PRIMARY KEY(codigo_asignatura)
-);
-
-create table semestre (
-	sem_id serial,
-	periodo numeric,
-	anio numeric,
-	grupo numeric,
-	primary key(sem_id)
-);
-
-/* Conjuntos de relaciones */
-
-create table ofrece(
-	codigo_asignatura VARCHAR(100) NOT NULL,
-	codigo_programa Integer NOT NULL,
-	PRIMARY KEY (codigo_asignatura),
-	FOREIGN KEY (codigo_asignatura) references Asignaturas,
-	FOREIGN KEY (codigo_programa) references Programa
-);
-
-create table Pertenece(
-	codigo Integer NOT NULL,
-	codigo_programa Integer NOT NULL,
-	PRIMARY KEY (codigo),
-	FOREIGN KEY (codigo) references Empleado,
-	FOREIGN KEY (codigo_programa) references Programa
-);
-
-create table inscrito(
-	codigo Integer NOT NULL,
-	codigo_programa Integer NOT NULL,
-	PRIMARY KEY (codigo),
-	FOREIGN KEY (codigo) references Estudiante,
-	FOREIGN KEY (codigo_programa) references Programa
-);
-
-create table dicta (
-	codigo Integer not null,
-	sem_id serial not null,
-	primary key(codigo,sem_id),
-	foreign key (codigo) references Empleado,
-	foreign key (sem_id) references semestre
-);
-
-create table toma (
-	codigo Integer not null,
-	sem_id serial not null,
-	nota1 numeric not null,
-	nota2 numeric not null,
-	nota3 numeric not null,
-	nota4 numeric not null,
-	nota5 numeric not null,
-	primary key(codigo,sem_id),
-	foreign key (codigo) references Estudiante,
-	foreign key (sem_id) references semestre
-);
-
-create table curso_sem (
-	codigo_asignatura VARCHAR(100) NOT NULL,
-	sem_id serial NOT NULL,
-	primary key(sem_id),
-	foreign key (codigo_asignatura) references Asignaturas,
-	foreign key (sem_id) references semestre
-);
+COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2020_2.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
-select distinct 1,programa, facultad_o_escuela from tablaEstudiante;
+select distinct 1,programa, facultad_o_escuela 
+from tablaEstudiante
+where 1 not in (select codigo_programa from programa);
 
 /* Metiendo a la tabla de Personas */
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),'estudiante', 'estudiante' from tablaEstudiante;
+select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),'estudiante', 'estudiante' from tablaEstudiante
+where codigo not in (select codigo from personas);
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
 select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'administrador', 'administrador' 
 from tablaEmpleado
-where esAdmin='1';
+where 
+	esAdmin='1' and
+	Codigo_empleado not in (select codigo from personas);
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
 select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'profesor', 'profesor' 
 from tablaEmpleado
-where esAdmin='0';
+where 
+	esAdmin='0' and 
+	Codigo_empleado not in (select codigo from personas);
 
 /* Metiendo a la tabla de Estudiante */
 
 insert into Estudiante(codigo,documento_ingreso,acceso,subacceso)
-select distinct codigo,documento_ingreso,acceso,subacceso from tablaEstudiante;
+select distinct codigo,documento_ingreso,acceso,subacceso 
+from tablaEstudiante
+where codigo not in (select codigo from estudiante);
 
 /* Metiendo a la tabla Empleado */
 
 insert into Empleado(codigo,esProfesor,esAdmin)
-select distinct Codigo_empleado,esProfesor,esAdmin from tablaEmpleado;
+select distinct Codigo_empleado,esProfesor,esAdmin 
+from tablaEmpleado
+where codigo_empleado not in (select codigo from empleado);
 
 /* Metiendo a la tabla de Asignaturas*/
 
 insert into Asignaturas(codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5)
-select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,Corte_1p,Corte_2p,Corte_3p,Corte_4p,Corte_5p from tablaEstudiante;
+select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,Corte_1p,Corte_2p,Corte_3p,Corte_4p,Corte_5p 
+from tablaEstudiante
+where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
 /* Metiendo a la tabla de Semestre*/
 
@@ -216,6 +113,7 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 )as ga;
 
 /* Metiendo a la tabla dicta */
@@ -241,6 +139,7 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 ) as asig; 
 
 /* Metiendo a la tabla curso_sem */
@@ -266,54 +165,43 @@ from (
 		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
 	)as B
 	on personas.usuario = B.usuario
+	order by(nombre_asignatura)
 ) as asig; 
 
 /* Metiendo a la tabla inscrito */
 
 insert into inscrito(codigo,codigo_programa)
 select distinct codigo,codigo_programa 
-from tablaEstudiante as te join programa as pr on te.programa = pr.programa;
+from tablaEstudiante as te join programa as pr on te.programa = pr.programa
+where codigo not in (select codigo from inscrito);
 
 /* Metiendo a la tabla ofrece */
 
 insert into ofrece(codigo_asignatura,codigo_programa)
 select distinct  codigo_asignatura,codigo_programa 
-from tablaEstudiante as te join programa as pr on te.programa = pr.programa;
+from tablaEstudiante as te join programa as pr on te.programa = pr.programa
+where codigo_asignatura not in (select codigo_asignatura from ofrece);
 
 /* Metiendo a la tabla pertenece */
 
 insert into pertenece(codigo,codigo_programa)
 select distinct codigo,1 as codigo_programa
-from tablaProfesores as tp join personas on tp.usuario = personas.usuario;
+from tablaProfesores as tp join personas on tp.usuario = personas.usuario
+where codigo not in (select codigo from pertenece);
 
 /* Metiendo a la tabla toma */
 
 insert into toma(codigo,sem_id,nota1,nota2,nota3,nota4,nota5)
-
-select distinct codigo,sem_id,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
-from tablaEstudiante as te join curso_sem as cs on te.codigo_asignatura = cs.codigo_asignatura;
+select distinct codigo,sem.sem_id,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
+from 
+	(tablaEstudiante as te join curso_sem as cs on te.codigo_asignatura = cs.codigo_asignatura) as f1 join
+	semestre as sem on sem.sem_id = f1.sem_id
+where 
+	f1.Grupo_asignatura = sem.grupo AND
+	anio = (select max(anio) from semestre) AND
+	periodo = (select max(periodo) from semestre where anio = (select max(anio) from semestre))
+order by(codigo);
 
 drop table tablaEstudiante;
 drop table tablaEmpleado;
 drop table tablaProfesores;
-
--- VISTA ayuda en consultas 
-
-CREATE VIEW RESUMEN AS
-SELECT Bc.codigo as est_cod,Bc.nombre as nombre_est,Bc.usuario as est_usr,Bc.apellido_1 as ap1_est, Bc.apellido_2 as ap2_est, Bc.correo_institucional as est_mail,Bc.documento_actual as est_id,Bc.sexo as est_sex,Bc.sem_id,Bd.porcentaje1,nota1,Bd.porcentaje2,nota2,Bd.porcentaje3,nota3,Bd.porcentaje4,nota4,Bd.porcentaje5,nota5,Bd.codigo as prof_cod, Bd.nombre as nombre_prof,Bd.usuario as prof_usr,Bd.apellido_1 as ap1_prof ,Bd.apellido_2 as ap2_prof,Bd.correo_institucional as prof_mail, Bd.sexo as prof_sex, Bd.documento_actual as prof_id,Bd.codigo_asignatura,Bd.nombre_asignatura, Bd.creditos_asignatura, periodo,anio,grupo
-FROM
-	(select * from Personas natural join toma) as Bc join
-	(select B1.codigo, nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,B2.sem_id,codigo_asignatura,nombre_asignatura,creditos_asignatura,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
-	 FROM
-		(select Personas.codigo,nombre,usuario,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,sem_id
-		 from Personas join
-		 dicta on Personas.codigo = dicta.codigo ) as B1 join
-		(select codigo_asignatura,nombre_asignatura,creditos_asignatura,semestre.sem_id,periodo,anio,grupo,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
-		 FROM
-			(select Asignaturas.codigo_asignatura, nombre_asignatura,creditos_asignatura,sem_id,porcentaje1,porcentaje2,porcentaje3,porcentaje4,porcentaje5
-			FROM
-				Asignaturas join curso_sem on Asignaturas.codigo_asignatura =  curso_sem.codigo_asignatura ) as B join
-				semestre on B.sem_id = semestre.sem_id) as B2
-	on B1.sem_id = B2.sem_id) as Bd
-	on Bc.sem_id = Bd.sem_id;
-	
