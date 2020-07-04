@@ -115,6 +115,17 @@ create table curso_sem (
 	foreign key (sem_id) references semestre
 );	
 
+-- Creacion tabla para manejar las alarmas
+create table alarmas (
+	usuario VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL,
+	tipo VARCHAR(100) NOT NULL,
+	fecha TIMESTAMP NOT NULL,
+	periodo numeric NOT NULL,
+	anio numeric NOT NULL,
+	nombre_asignatura VARCHAR(100)	
+);
+
 -- VISTA ayuda en consultas 
 
 CREATE VIEW RESUMEN AS
