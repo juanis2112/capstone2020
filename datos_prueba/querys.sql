@@ -83,24 +83,46 @@ ORDER BY(grupo);
 
 -- Query promedios por cohorte para un estudiante
 
-select 
+SELECT 
 	round(sum(creditos_asignatura*nota1)/sum(creditos_asignatura),2) as promedio_cohorte1,
 	round(sum(creditos_asignatura*nota2)/sum(creditos_asignatura),2) as promedio_cohorte2,
 	round(sum(creditos_asignatura*nota3)/sum(creditos_asignatura),2) as promedio_cohorte3,
 	round(sum(creditos_asignatura*nota4)/sum(creditos_asignatura),2) as promedio_cohorte4,
 	round(sum(creditos_asignatura*nota5)/sum(creditos_asignatura),2) as promedio_cohorte5,
 	round(sum(creditos_asignatura*round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2) as promedio_semestral
-from RESUMEN
-where
+FROM RESUMEN
+WHERE
 	est_usr = 'daniel.felipe' AND
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
 	
 -- Query semestres en los que estudiante inscribio asignaturas.
-select distinct anio,periodo from resumen
-where est_usr = 'juanc.llanos'
+SELECT distinct anio,periodo 
+FROM resumen
+WHERE est_usr = 'juanc.llanos'
 
 -- Query semestres en los que profesor dicto asignaturas.
-select distinct anio,periodo from resumen
-where prof_usr = 'margot.salas'
+SELECT distinct anio,periodo 
+FROM resumen
+WHERE prof_usr = 'margot.salas'
+
+-- Query consulta asignaturas y notas de un estudiante en un periodo y anio especifico
+SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
+FROM RESUMEN
+WHERE 
+	est_usr = 'juanita.gomez' AND
+	anio = 2019 AND
+	periodo = 2
+ORDER BY(nombre_asignatura);
+
+-- Query consulta asignaturas dadas por un profesor en un periodo y anio especifico
+SELECT DISTINCT nombre_asignatura
+FROM RESUMEN
+WHERE
+	prof_usr = 'margot.salas' AND
+	anio = 2018 AND
+	periodo = 2
+ORDER BY(nombre_asignatura)	
+
+
 	
