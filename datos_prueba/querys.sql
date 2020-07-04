@@ -97,12 +97,12 @@ WHERE
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
 	
 -- Query semestres en los que estudiante inscribio asignaturas.
-SELECT distinct anio,periodo 
+SELECT distinct cast(anio as varchar)||'-'||cast(periodo as varchar)
 FROM resumen
 WHERE est_usr = 'juanc.llanos'
 
 -- Query semestres en los que profesor dicto asignaturas.
-SELECT distinct anio,periodo 
+SELECT distinct cast(anio as varchar)||'-'||cast(periodo as varchar)
 FROM resumen
 WHERE prof_usr = 'margot.salas'
 
