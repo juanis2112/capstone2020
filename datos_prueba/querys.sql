@@ -96,3 +96,11 @@ where
 	anio = (select max(anio) from RESUMEN) AND
 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
 	
+-- Query semestres en los que estudiante inscribio asignaturas.
+select distinct anio,periodo from resumen
+where est_usr = 'juanc.llanos'
+
+-- Query semestres en los que profesor dicto asignaturas.
+select distinct anio,periodo from resumen
+where prof_usr = 'margot.salas'
+	
