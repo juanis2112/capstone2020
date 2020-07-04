@@ -6,11 +6,11 @@ def alerta_estudiante_materia(materia,corte):
     # Funcion que recibe el dataframe de una materia con sus estudiantes y notas respectivas y saca alertas en un corte determinado
     # materia: data frame de una materia especifica
     # corte: nombre del corte sobre el cual se saca alertas
-        for index,row in materia.iterrows(): #Por cada row(estudiante) vamos viendo si el estudiante en ese corte saco alguna nota baja
-            if row[corte] < 3 and row[corte] >= 2: #row[corte] es la nota de la materia del estudiante ne esa asignatura
-                print("El Estudiante "+ row["Nombres_Estudiante"]+  " se encuentra en Alerta nota baja, en " + corte +" en la materia " + row["Nombre_Asignatura"])
-            elif row[corte] < 2:
-                print("El Estudiante "+ row["Nombres_Estudiante"]+  " se encuentra en Alerta nota muy baja en "+ corte+" en la materia " + row["Nombre_Asignatura"])
+    for index,row in materia.iterrows(): #Por cada row(estudiante) vamos viendo si el estudiante en ese corte saco alguna nota baja
+        if row[corte] < 3 and row[corte] >= 2: #row[corte] es la nota de la materia del estudiante ne esa asignatura
+            print("El Estudiante "+ row["Nombres_Estudiante"]+  " se encuentra en Alerta nota baja, en " + corte +" en la materia " + row["Nombre_Asignatura"])
+        elif row[corte] < 2:
+            print("El Estudiante "+ row["Nombres_Estudiante"]+  " se encuentra en Alerta nota muy baja en "+ corte+" en la materia " + row["Nombre_Asignatura"])
 #--------------------------------------------------------------------------------
 def alerta_corte(corte,df):
     # Funcion saca las alertas para un corte para todas las materias

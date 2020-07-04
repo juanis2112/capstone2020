@@ -47,8 +47,8 @@ a:active {
             </div>
             <div class="col-9">
             <ul>
-               {% for class in classes %}
-               <a href="/class/{{user_name}}/{{class.0}}"><li>{{class.0}}</li></a>
+               {% for period in periods %}
+               <a href="{{url_for('classes', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>
                {% endfor %}
             </ul>
             </div>

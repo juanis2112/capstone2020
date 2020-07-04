@@ -66,7 +66,7 @@
           </a>
         <ul>
            {% for teacher in teachers %}
-           <a href="/main_teacher_admin/{{teacher.0}}"><li>{{teacher.1}} {{teacher.2}} {{teacher.3}}</li></a>
+           <a href="{{url_for('admin_main_teacher', user_name = teacher.0)}}"><li>{{teacher.1}} {{teacher.2}} {{teacher.3}}</li></a>
            {% endfor %}
         </ul>
         </div>

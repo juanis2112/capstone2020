@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
+<form action="{{url_for('period_classes', user_name = user_name, year = year, period = period)}}" method="POST">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -51,26 +51,9 @@ a:active {
              <a href="{{url_for('load_students')}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
                 <table class="center">
-                    <tr>
-                        <th>Materias</th>
-                        <th>Corte1</th>
-                        <th>Corte2</th>
-                        <th>Corte3</th>
-                        <th>Corte4</th>
-                        <th>Corte5</th>
-                        <th>Nota Final</th>
-                    </tr>
-                    {% for class in classes %}
-                    <tr>
-                        <td>{{class.0}} </td>
-                        <td><input type="text" style="border: 0px;" value={{class.1}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.2}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.3}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.4}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.5}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.6}} readonly size="5"></td>
-                    </tr>
-                    {% endfor %}
+                     {% for period in periods %}
+                     <a href="{{url_for('period_classes', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>
+                     {% endfor %}
                 </table>
                 <br>
                 <br>
