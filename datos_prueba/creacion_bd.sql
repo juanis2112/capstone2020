@@ -123,7 +123,8 @@ create table alertas (
 	fecha TIMESTAMP NOT NULL,
 	periodo numeric NOT NULL,
 	anio numeric NOT NULL,
-	nombre_asignatura VARCHAR(100)	
+	nombre_asignatura VARCHAR(100),
+	leido bool NOT NULL DEFAULT FALSE
 );
 
 -- VISTA ayuda en consultas 

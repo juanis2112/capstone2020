@@ -124,5 +124,22 @@ WHERE
 	periodo = 2
 ORDER BY(nombre_asignatura)	
 
+-- Query consulta todas las alertas 
 
+SELECT nombre,apellido_1,apellido_2,texto,alertas.tipo as alerta,fecha,periodo,anio,nombre_asignatura
+FROM alertas join personas on alertas.usuario = personas.usuario;
+
+-- Query consulta numero de alertas por estudiante dado el usuario no leidas
+
+SELECT count(*)
+FROM alertas
+WHERE 
+	usuario = 'juanc.llanos' AND
+	leido = '0';
+
+-- Query consulta cantidad de alertas no leidas
+
+SELECT count(*)
+FROM alertas
+WHERE leido = '0';
 	
