@@ -1262,8 +1262,8 @@ drop table tablaEstudiante;
 drop table tablaEmpleado;
 drop table tablaProfesores;
 								   
--- Insercion de alarmas 
-insert into alarmas values ('juanc.llanos','va bien','promedio','2020-07-04 12:55:25-07',2,2020,'Topologia')								   
+-- Insercion de alertas 
+insert into alertas values ('juanc.llanos','va bien','promedio','2020-07-04 12:55:25-07',2,2020,'Topologia')								   
 -- El formato de la fecha debe ser año-mes-dia hora-minuto-segundo.								   
 
 
