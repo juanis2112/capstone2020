@@ -115,8 +115,8 @@ create table curso_sem (
 	foreign key (sem_id) references semestre
 );	
 
--- Creacion tabla para manejar las alarmas
-create table alarmas (
+-- Creacion tabla para manejar las alertas
+create table alertas (
 	usuario VARCHAR(100) NOT NULL,
 	texto TEXT NOT NULL,
 	tipo VARCHAR(100) NOT NULL,
