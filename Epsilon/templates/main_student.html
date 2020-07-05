@@ -34,7 +34,9 @@ a:active {
 <body>
     <div>
         <div class="header">
+            <a href="{{url_for('show_alerts', user_name=user_name)}}" >
             <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
             </a>

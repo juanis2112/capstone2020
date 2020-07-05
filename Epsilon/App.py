@@ -20,7 +20,7 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_4")
+                        database="Epsilon_5")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -195,8 +195,9 @@ def update_grade(class_name, user_name):
         grade5 = float(request.form['grade5_'+student[0]])
         
         grades = [grade1, grade2, grade3, grade4, grade5]
-        # for grade in grades:
-        #     student_alert(student[0], class_name, grade)          
+        for grade in grades:
+             student_alerts(student[0], class_name, grade)          
+        
         cur.execute("""UPDATE toma
                     SET
                         nota1 = %s,
@@ -525,7 +526,6 @@ def groups_report(class_name):
                 	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
                 ORDER BY(grupo)""", (class_name,))
     data = cur.fetchall()
-    data_student =[]
     groups_data =[]
     for group in data:
         cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+porcentaje5*nota5)/100,2)
@@ -569,18 +569,36 @@ def groups_report(class_name):
 
 def student_alerts(student, class_name, grade):
     #Consulta de la nota final (grade_final)
-    if grade < 2 and row[corte] >= 1: #row[corte] es la nota de la materia del estudiante ne esa asignatura
+    if grade < 2: #row[corte] es la nota de la materia del estudiante ne esa asignatura
         #Consulta que mete el string a la base de datos    
-        alert_student = "Tiene una alerta de nota baja en la materia"+class_name
-        alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota baja, en la materia " +  class_name
-    elif grade < 1:
-        #Consulta que mete el string a la base de datos    
-        alert_student = "Tiene una alerta de nota muy baja en la materia"+class_name
-        alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota muy baja, en la materia " +  class_name
+        if grade >= 1:
+            alert_student = "Tiene una alerta de nota baja en la materia"+class_name
+            alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota baja, en la materia " +  class_name
+            alert_type = 'MEDIA'
+        if grade < 1:
+            #Consulta que mete el string a la base de datos    
+            alert_student = "Tiene una alerta de nota muy baja en la materia"+class_name
+            alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota muy baja, en la materia " +  class_name
+            alert_type ='ALTA'
+        cur.execute("""insert into alarmas (usuario, texto, tipo, fecha, periodo, 
+                    anio, nombre_asignatura) 
+                    values (%s,%s,%s, CURRENT_TIMESTAMP, 
+                            '1', '2020', %s )""", (student, alert_student, alert_type, class_name))
+        conn.commit()
 
-def show_alerts(student):
+@app.route("/student_alerts/<string:user_name>/", methods=['POST', 'GET'])
+def show_alerts(user_name):
+    cur.execute("""SELECT * from alarmas
+                    where usuario=%s""",(user_name,))
+    alerts = cur.fetchall()
     #Consulta que guarda en una variable las alertas del estudiante student
     return render_template('student_alert.html', alerts=alerts) 
+
+@app.route("/student_alerts/", methods=['POST', 'GET'])
+def show_admin_alerts():
+    cur.execute("""SELECT * from alarmas""")
+    alerts = cur.fetchall()
+    return render_template('admin_alert.html', alerts=alerts) 
 
 
 if __name__ == "__main__":
