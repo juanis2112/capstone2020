@@ -99,12 +99,12 @@ WHERE
 -- Query semestres en los que estudiante inscribio asignaturas.
 SELECT distinct cast(anio as varchar)||'-'||cast(periodo as varchar)
 FROM resumen
-WHERE est_usr = 'juanc.llanos'
+WHERE est_usr = 'juanc.llanos';
 
 -- Query semestres en los que profesor dicto asignaturas.
 SELECT distinct cast(anio as varchar)||'-'||cast(periodo as varchar)
 FROM resumen
-WHERE prof_usr = 'margot.salas'
+WHERE prof_usr = 'margot.salas';
 
 -- Query consulta asignaturas y notas de un estudiante en un periodo y anio especifico
 SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5
@@ -142,4 +142,23 @@ WHERE
 SELECT count(*)
 FROM alertas
 WHERE leido = '0';
+
+-- Query promedio acumulado de un estudiante dado su usuario
+
+SELECT round(sum(creditos_asignatura*(nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100)/sum(creditos_asignatura),2) 
+FROM RESUMEN
+WHERE est_usr = 'juanita.gomez';
+
+-- Query periodo academico, promedio por periodo y creditos inscritos
+
+SELECT 
+	distinct cast(anio as varchar)||'-'||cast(periodo as varchar),
+	round(sum(creditos_asignatura*(nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100)/sum(creditos_asignatura),2),
+	sum(creditos_asignatura)
+FROM RESUMEN
+WHERE est_usr = 'juanita.gomez'
+GROUP BY(anio,periodo);
+
+
+
 	
