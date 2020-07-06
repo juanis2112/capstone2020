@@ -11,7 +11,7 @@
       -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
       -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      background: #4479BA;
+      background: white;
       color: #FFF;
       padding: 8px 12px;
       text-decoration: none;
@@ -43,7 +43,7 @@
                 <a href="{{url_for('load_teachers')}}" class="btn">
                       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
                 </a>
-                <table class="center">
+                <table class="center" id="table">
                       <tr>
                           <th>Estudiantes</th>
                           <th>Corte1</th>
@@ -67,6 +67,7 @@
                   </table>
                   <br>
                   <br>
+                  <a onclick="exportF(this)" download class="btn" style="color: black;">Descargar</a>
               </div>
           </div>
       </div>
@@ -78,6 +79,15 @@
       }
       document.getElementById("boton-editar").style.backgroundColor="#073D72";
       document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+  }
+
+  function exportF(elem) {
+    var table = document.getElementById("table");
+    var html = table.outerHTML;
+    var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "notas.xls"); // Choose the file name
+    return false;
   }
 
   function deshabilitar(){

@@ -30,13 +30,6 @@
     opacity: 1; 
     }
     </style>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for category, message in messages %}
-        <div class="{{ category }}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
-    {% endwith %}
 	</head>
 	<body>
 
@@ -49,6 +42,15 @@
 					<form class="login100-form validate-form">
 						<span class="login100-form-title">
 							Ingreso al sistema de notas Epsilon
+							{% with errors = get_flashed_messages(category_filter=["error"]) %}
+							{% if errors %}
+                            <div style="color:red;">
+                            {%- for msg in errors %}
+                            {{ msg }}
+                            {% endfor -%}
+                            </div>
+                            {% endif %}
+                            {% endwith %}
 						</span>
 
 						<div class="wrap-input100 validate-input" data-validate = "Se require un usuario válido">

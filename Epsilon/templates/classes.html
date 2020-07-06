@@ -76,7 +76,7 @@
                       </li>
                 </a>
                 <a href="{{url_for('load_classes')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
                           <div >
                             Materias
@@ -111,16 +111,10 @@
                     <div class="letra">
                         {{class_name.0}}
                         <br>
+                        <a href="/groups_report/{{class_name.0}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}"></a>
                         <br>
                         Código: {{class_name.1}}&nbsp &nbsp &nbsp &nbsp
                         Créditos: {{class_name.2}}&nbsp &nbsp &nbsp &nbsp
-                        <br>
-                        % Corte 1: {{class_name.3}}&nbsp &nbsp &nbsp &nbsp
-                        % Corte 2: {{class_name.4}}&nbsp &nbsp &nbsp &nbsp
-                        % Corte 3: {{class_name.5}}&nbsp &nbsp &nbsp &nbsp
-                        % Corte 4: {{class_name.6}}&nbsp &nbsp &nbsp &nbsp
-                        % Corte 5: {{class_name.7}}&nbsp &nbsp &nbsp &nbsp
-                        <a href="/groups_report/{{class_name.0}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.jpg') }}"></a>
                     </div>
                   </li>
                 </a>

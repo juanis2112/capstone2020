@@ -42,7 +42,7 @@
               <div class="col-3 menu">
               <ul>
                 <a href="{{url_for('load_students')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
                           <div >
                             Estudiantes
@@ -90,7 +90,12 @@
         <ul>
           <p>
           {% if image != None %}
-          <img src="data:image/png;base64,{{ image }}">
+          <div>
+            <img src="data:image/png;base64,{{ image }}">
+          </div>
+          <div>
+            <a href="data:image/png;base64,{{ image }}" download class="btn" style="color: black;">Descargar</a>
+          </div>
           {% endif %}
           </p>
         </ul>

@@ -41,7 +41,9 @@ html {
 .header {
   background-color: #073D72;
   color: #ffffff;
-  padding: 15px;
+  padding-top: 10px;
+  padding-right: 25px;
+  padding-bottom: 5px;
   border-bottom-right-radius: 70px;
   text-align: right;
 }
@@ -63,20 +65,7 @@ html {
   text-align: center;
 }
 
-a .btn {
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: solid 1px #20538D;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-  background: #4479BA;
-  color: #FFF;
-  padding: 8px 12px;
-  text-decoration: none;
-}
+
 
 .btn {
   -webkit-border-radius: 4px;
@@ -87,10 +76,23 @@ a .btn {
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-  background: #4479BA;
-  color: #FFF;
+  background: white;
+  color: black;
   padding: 8px 12px;
   text-decoration: none;
+}
+
+
+.btn:hover{
+  color: black;
+}
+
+.btn:visited{
+  color: black;
+}
+
+.btn:link{
+  color: black;
 }
 
 
@@ -115,16 +117,6 @@ a:visited{
   color: white;
 }
 
-a:hover {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-}
-a:active {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-}
 
 
 a.special:link {color:black;}
@@ -147,11 +139,52 @@ a.special:hover {color:black;}
   background-color: #0099cc;
 }
 
-.top-logo{
-  height: 70px;
-  width: 70px;
-  border-radius: 70px;
+.col-9 li:hover{
+  background-color: #0099cc;
 }
+
+.menu li:active{
+  background-color: #0099cc;
+}
+
+
+
+.notification {
+  text-decoration: none;
+  padding: 1px 1px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+.top-logo{
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+}
+
+
+.top-logo .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+
 
 .col-9 li{
   padding: 8px;
@@ -211,4 +244,26 @@ input[type=button], input[type=submit], input[type=reset] {
   text-decoration: none;
   margin: 4px 2px;
   cursor: pointer;
+}
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+  color: white;
+  background-color: #073D72;
+  display: inline-block;
+  padding: 7px;
+  border-radius: 2px;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  background-color: #0099cc;
 }

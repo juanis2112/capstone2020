@@ -19,9 +19,9 @@
               <div class="col-3 menu">
               <ul>
                 <a href="{{url_for('load_students')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
-                          <div >
+                          <div>
                             Estudiantes
                           </div>
                         <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
@@ -67,12 +67,15 @@
         <ul>
            {% for student in students %}
            <a href="/main_student/{{student.0}}">
-           <li>{{student.1}} {{student.2}} {{student.3}}</a><a href="/student_report/{{student.0}}">
-           <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}"></a> 
-           <br>
-           Creditos: {{student.4}} Promedio: {{student.5}}
-           {% endfor %}  
-           </li>   
+             <li>{{student.1}} {{student.2}} {{student.3}}
+               <a href="/student_report/{{student.0}}">
+                 <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+               </a>
+             <br>
+             Creditos: {{student.4}} Promedio: {{student.5}}
+             {% endfor %}
+             </li>
+           </a>
         </ul>
         </div>
       </div>

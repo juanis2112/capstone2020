@@ -2,6 +2,19 @@
 <form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
 <html lang="en">
 <head>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="../lib/js-xlsx/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="../lib/FileSaver/FileSaver.min.js"></script>
+  <script type="text/javascript" src="../lib/html2canvas/html2canvas.min.js"></script>
+  <script type="text/javascript" src="../tableExport.js"></script>
+  <script type="text/javaScript">
+      var sFileName = 'ngophi';
+      function ExportXLSX(){
+          $('mytable').tableExport({fileName: sFileName,
+                      type: 'xlsx'
+                     });
+      }
+  </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -19,23 +32,20 @@ a:visited {
   background-color: transparent;
   text-decoration: none;
 }
-a:hover {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
-a:active {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
+
+
+
 </style>
 
 <body>
     <div>
         <div class="header">
-            <a href="{{url_for('show_alerts', user_name=user_name)}}" >
-            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <!-- Cambien el 3 equipo de backend -->
+              <span class="badge">1</span>
             </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
@@ -50,9 +60,10 @@ a:active {
             </div>
 
             <div class="col-9">
-             <a href="{{url_for('load_students')}}" class="btn">
-              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
-                <table class="center">
+              <a href="{{url_for('load_students')}}" class="btn">
+                <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+              </a>
+              <table class="center" id="table">
                     <tr>
                         <th>Materias</th>
                         <th>Corte1</th>
@@ -65,40 +76,93 @@ a:active {
                     {% for class in classes %}
                     <tr>
                         <td>{{class.0}} </td>
-                        <td><input type="text" style="border: 0px;" value={{class.1}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.2}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.3}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.4}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.5}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.6}} readonly size="5"></td>
+                        <td>{{class.1}} </td>
+                        <td>{{class.2}} </td>
+                        <td>{{class.3}} </td>
+                        <td>{{class.4}} </td>
+                        <td>{{class.5}} </td>
+                        <td>{{class.6}} </td>
                     </tr>
                     {% endfor %}
                 </table>
                 <br>
                 <br>
-                <input type="button" onclick="habilitar()" value="Descargar">
+                <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
             </div>
         </div>
     </div>
-<script>
-function habilitar(){
-    var casillas_notas=document.getElementsByClassName("table-toggle");
-    for(var i=0;i<casillas_notas.length;i++){
-        casillas_notas[i].readOnly=false;
+    <script>
+    function habilitar(){
+        var casillas_notas=document.getElementsByClassName("table-toggle");
+        for(var i=0;i<casillas_notas.length;i++){
+            casillas_notas[i].readOnly=false;
+        }
+        document.getElementById("boton-editar").style.backgroundColor="#073D72";
+        document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
     }
-    document.getElementById("boton-editar").style.backgroundColor="#073D72";
-    document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
-}
 
-function deshabilitar(){
-    var casillas_notas=document.getElementsByClassName("table-toggle");
-    for(var i=0;i<casillas_notas.length;i++){
-        casillas_notas[i].readOnly=true;
+    function deshabilitar(){
+        var casillas_notas=document.getElementsByClassName("table-toggle");
+        for(var i=0;i<casillas_notas.length;i++){
+            casillas_notas[i].readOnly=true;
+        }
+        document.getElementById("boton-editar").style.backgroundColor="white";
+        document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
     }
-    document.getElementById("boton-editar").style.backgroundColor="white";
-    document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
-}
-</script>
+      var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"Sheet JS"});
+        var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+        function s2ab(s) {
+                        var buf = new ArrayBuffer(s.length);
+                        var view = new Uint8Array(buf);
+                        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+                        return buf;
+        }
+        $("#button-a").click(function(){
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+        });
+
+    function exportReportToExcel() {
+      let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
+      TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
+        name: `export.xlsx`, // fileName you could use any name
+        sheet: {
+          name: 'Sheet 1' // sheetName
+        }
+      });
+    }
+
+      function exportF(elem) {
+        var table = document.getElementById("table");
+        var html = table.outerHTML;
+        var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "notas.xls"); // Choose the file name
+        return false;
+      }
+
+  var inputs = document.querySelectorAll( '.inputfile' );
+  Array.prototype.forEach.call( inputs, function( input )
+  {
+  	var label	 = input.nextElementSibling,
+  		labelVal = label.innerHTML;
+
+  	input.addEventListener( 'change', function( e )
+  	{
+  		var fileName = '';
+  		if( this.files && this.files.length > 1 )
+  			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+  		else
+  			fileName = e.target.value.split( '\\' ).pop();
+
+  		if( fileName )
+  			label.innerHTML = fileName;
+  		else
+  			label.innerHTML = labelVal;
+          console.log("event listener");
+  	});
+      console.log("add event")
+  });
+  </script>
 </body>
 </html>
 </form>
