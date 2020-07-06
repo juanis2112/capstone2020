@@ -19,16 +19,6 @@ a:visited {
   background-color: transparent;
   text-decoration: none;
 }
-a:hover {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
-a:active {
-  color: green;
-  background-color: transparent;
-  text-decoration: underline;
-}
 </style>
 
 <body>
@@ -48,9 +38,9 @@ a:active {
             </div>
 
             <div class="col-9">
-             <a href="{{url_for('load_students')}}" class="btn">
+             <a href="{{url_for('academic_history',user_name=user_name)}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
-                <table class="center">
+                <table class="center" id="table">
                     <tr>
                         <th>Materias</th>
                         <th>Corte1</th>
@@ -74,7 +64,7 @@ a:active {
                 </table>
                 <br>
                 <br>
-                <input type="button" onclick="habilitar()" value="Descargar">
+                <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
             </div>
         </div>
     </div>
@@ -95,6 +85,14 @@ function deshabilitar(){
     }
     document.getElementById("boton-editar").style.backgroundColor="white";
     document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+}
+function exportF(elem) {
+  var table = document.getElementById("table");
+  var html = table.outerHTML;
+  var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+  elem.setAttribute("href", url);
+  elem.setAttribute("download", "notas.xls"); // Choose the file name
+  return false;
 }
 </script>
 </body>
