@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<form action="{{url_for('period_classes', user_name = user_name, year = year, period = period)}}" method="POST">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
+</head>
+<style>
+
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+</style>
+
+<body>
+    <div>
+        <div class="header">
+            <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-3 menu">
+            <ul>
+                <li><a href="{{url_for('personal_data', user_name = user_name)}}"><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></a></li>
+                <li><a href="{{url_for('academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
+            </ul>
+            </div>
+
+            <div class="col-9">
+             <a href="{{url_for('academic_history',user_name=user_name)}}" class="btn">
+              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
+                Listado de materias del periodo {{year}}-{{period}}
+                <table class="center" id="table">
+                    <tr>
+                        <th>Materias</th>
+                        <th>Corte1</th>
+                        <th>Corte2</th>
+                        <th>Corte3</th>
+                        <th>Corte4</th>
+                        <th>Corte5</th>
+                        <th>Nota Final</th>
+                    </tr>
+                    {% for class in classes %}
+                    <tr>
+                        <td>{{class.0}} </td>
+                        <td><input type="text" style="border: 0px;" value={{class.1}} readonly size="5"></td>
+                        <td><input type="text" style="border: 0px;" value={{class.2}} readonly size="5"></td>
+                        <td><input type="text" style="border: 0px;" value={{class.3}} readonly size="5"></td>
+                        <td><input type="text" style="border: 0px;" value={{class.4}} readonly size="5"></td>
+                        <td><input type="text" style="border: 0px;" value={{class.5}} readonly size="5"></td>
+                        <td><input type="text" style="border: 0px;" value={{class.6}} readonly size="5"></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <br>
+                <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+            </div>
+        </div>
+    </div>
+<script>
+function habilitar(){
+    var casillas_notas=document.getElementsByClassName("table-toggle");
+    for(var i=0;i<casillas_notas.length;i++){
+        casillas_notas[i].readOnly=false;
+    }
+    document.getElementById("boton-editar").style.backgroundColor="#073D72";
+    document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+}
+
+function deshabilitar(){
+    var casillas_notas=document.getElementsByClassName("table-toggle");
+    for(var i=0;i<casillas_notas.length;i++){
+        casillas_notas[i].readOnly=true;
+    }
+    document.getElementById("boton-editar").style.backgroundColor="white";
+    document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+}
+function exportF(elem) {
+  var table = document.getElementById("table");
+  var html = table.outerHTML;
+  var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+  elem.setAttribute("href", url);
+  elem.setAttribute("download", "notas.xls"); // Choose the file name
+  return false;
+}
+</script>
+</body>
+</html>
+</form>

@@ -46,9 +46,10 @@ a:active {
             </ul>
             </div>
             <div class="col-9">
-            <ul>
+            Listado de clases del periodo {{year}}-{{period}}
+            <ul style="list-style-type:none">
                {% for class in classes %}
-               <a href="/class/{{user_name}}/{{class.0}}"><li>{{class.0}}</li></a>
+               <a href="/class/{{user_name}}/{{class.0}}/{{year}}{{period}}"><li>{{class.0}}</li></a>
                {% endfor %}
             </ul>
             </div>

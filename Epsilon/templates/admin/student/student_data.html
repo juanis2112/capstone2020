@@ -24,7 +24,12 @@ a:visited {
 <body>
     <div>
         <div class="header">
-            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <a href="{{url_for('show_admin_alerts', user_name=user_name)}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
             </a>
@@ -33,12 +38,12 @@ a:visited {
             <div class="col-3 menu">
             <ul>
                 <li style="background-color: #0099cc;"><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
-                <li><a href="{{url_for('academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
+                <li><a href="{{url_for('admin_academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
             </ul>
             </div>
 
             <div class="col-9">
-              <a href="{{url_for('main_student',user_name=user_name)}}" class="btn">
+              <a href="{{url_for('admin_main_student',user_name=user_name)}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
               <table class="center" id="table" cellspacing="0" cellpadding="0" style="border:none !important;">
                 <tr>

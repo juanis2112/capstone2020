@@ -1,43 +1,29 @@
-<form action="{{url_for('load_classes')}}" method="POST">
-  <style>
-  a.hhh {
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border: solid 1px #20538D;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-    background: #4479BA;
-    color: #FFF;
-    padding: 8px 12px;
-    text-decoration: none;
-  }
-
-  a:link {
-      color: black;
-      background-color: transparent;
-      text-decoration: none;
-  }
-  a:visited {
-      color: black;
-      background-color: transparent;
-      text-decoration: none;
-  }
-  a:hover {
-      color: green;
-      background-color: transparent;
-      text-decoration: underline;
-  }
-  a:active {
-      color: green;
-      background-color: transparent;
-      text-decoration: underline;
-  }
-  </style>
+<form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
+  <style>
+
+  a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:visited {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  a:hover {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  a:active {
+    color: green;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  </style>
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,7 +42,7 @@
               <div class="col-3 menu">
               <ul>
                 <a href="{{url_for('load_students')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
                           <div >
                             Estudiantes
@@ -76,7 +62,7 @@
                       </li>
                 </a>
                 <a href="{{url_for('load_classes')}}">
-                      <li style="background-color: #0099cc;">
+                      <li>
                         <div class="menu-box">
                           <div >
                             Materias
@@ -97,32 +83,23 @@
                 </a>
               </ul>
               </div>
-          <div class="col-9">
-              <div>
-                <a href="{{url_for('main_admin')}}" class="btn">
-                      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                </a>
-             </div>
-             <div>
-                <ul>
-                {% for class_name in classes %}
-                <a href="/groups/{{class_name.0}}">
-                  <li>
-                    <div class="letra">
-                        {{class_name.0}}
-                        <br>
-                        <a href="/groups_report/{{class_name.0}}"><img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}"></a>
-                        <br>
-                        Código: {{class_name.1}}&nbsp &nbsp &nbsp &nbsp
-                        Créditos: {{class_name.2}}&nbsp &nbsp &nbsp &nbsp
-                    </div>
-                  </li>
-                </a>
-                {% endfor %}
-              </ul>
-              </div>
-              <a href="/admin_classes_edit/" class="special">Editar</a>
+        <div class="col-9">
+          <a href="{{url_for('load_students')}}" class="btn">
+              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+          </a>
+        <ul style="list-style-type:none">
+          <p>
+          {% if image != None %}
+          <div>
+            <img src="data:image/png;base64,{{ image }}">
           </div>
+          <div>
+            <a href="data:image/png;base64,{{ image }}" download class="btn" style="color: black;">Descargar</a>
+          </div>
+          {% endif %}
+          </p>
+        </ul>
+        </div>
       </div>
     </div>
   <script>

@@ -1,22 +1,6 @@
 <form action="{{url_for('show_class', user_name = user_name, class_name = class_name)}}" method="POST">
 
   <html lang="en">
-  <style>
-    a.btn {
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      border-radius: 4px;
-      border: solid 1px #20538D;
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
-      -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      background: #4479BA;
-      color: #FFF;
-      padding: 8px 12px;
-      text-decoration: none;
-  }
-  </style>
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,16 +18,19 @@
           <div class="row">
               <div class="col-3 menu">
               <ul>
-                <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;"30px" width="30px"></div></li>
-                <li><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></li>
+                <li><a href="{{url_for('main_teacher', user_name = user_name)}}">
+                <div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px"></div></a></li>
+                <li><a href="{{url_for('class_history', user_name = user_name)}}">
+                <div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
               </ul>
               </div>
 
-              <div class="col-9" method="POST">
+              <div class="col-9">
                 <a href="{{url_for('main_teacher', user_name = user_name)}}" class="btn">
                     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
                 </a>
-                <table class="center">
+                Listado de estudiantes del curso {{class_name}}
+                <table class="center" id="table">
                       <tr>
                           <th>Estudiantes</th>
                           <th>Corte1</th>
@@ -67,6 +54,13 @@
                   </table>
                   <br>
                   <br>
+                  <a href="/class_edit/{{user_name}}/{{class_name}}" class="btn" style="color: black;">Editar</a>
+                  <a id="downloadLink" onclick="exportF(this)" class="btn" style="color: black;">Descargar</a>
+                  <form action="subir-archivo" enctype=multipart/form-data>
+                    <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+                    <label for="file" class="archivo">seleccionar archivo</label>
+                    <input type="submit" class="btn" value="subir" >
+                  </form>
               </div>
           </div>
       </div>
@@ -79,7 +73,14 @@
       document.getElementById("boton-editar").style.backgroundColor="#073D72";
       document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
   }
-
+  function exportF(elem) {
+    var table = document.getElementById("table");
+    var html = table.outerHTML;
+    var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "notas.xls"); // Choose the file name
+    return false;
+  }
   function deshabilitar(){
       var casillas_notas=document.getElementsByClassName("table-toggle");
       for(var i=0;i<casillas_notas.length;i++){
@@ -88,6 +89,28 @@
       document.getElementById("boton-editar").style.backgroundColor="white";
       document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
   }
+  var inputs = document.querySelectorAll( '.inputfile' );
+  Array.prototype.forEach.call( inputs, function( input )
+  {
+  	var label	 = input.nextElementSibling,
+  		labelVal = label.innerHTML;
+
+  	input.addEventListener( 'change', function( e )
+  	{
+  		var fileName = '';
+  		if( this.files && this.files.length > 1 )
+  			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+  		else
+  			fileName = e.target.value.split( '\\' ).pop();
+
+  		if( fileName )
+  			label.innerHTML = fileName;
+  		else
+  			label.innerHTML = labelVal;
+          console.log("event listener");
+  	});
+      console.log("add event")
+  });
   </script>
   </body>
   </html>

@@ -17,10 +17,10 @@ import seaborn as sns
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_5")
+                        database="Epsilon_6")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -78,8 +78,27 @@ def main_student(user_name):
                                 = (select max(anio) from RESUMEN))
                     ORDER BY(nombre_asignatura)""", (user_name,))
     data = cur.fetchall()
-    #Consulta de el numero de alertas
-    return render_template('main_student.html', classes=data, user_name=user_name)
+    cur.execute("""select
+                     round(sum(creditos_asignatura*round((porcentaje1*nota1+
+                      porcentaje2*nota2+porcentaje3*nota3+porcentaje4*nota4+
+                      porcentaje5*nota5)/100,2))/sum(creditos_asignatura),2)
+                     as promedio_semestral
+                from RESUMEN
+                where
+                     est_usr = %s AND
+                     anio = (select max(anio) from RESUMEN) AND
+                     periodo = (select max(periodo) from RESUMEN where anio =
+                             (select max(anio) from RESUMEN));""", (user_name,)
+                    )
+    average = float(cur.fetchone()[0])
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	usuario = %s AND
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/student/main_student.html', classes=data, user_name=user_name,
+                           promedio=average, count = count)
 
 @app.route("/student_data/<string:user_name>", methods=['POST', 'GET'])
 def personal_data(user_name):
@@ -88,7 +107,14 @@ def personal_data(user_name):
                 WHERE
                     usuario = %s""", (user_name,))
     data = cur.fetchall()[0]
-    return render_template('student_data.html', student_data=data, user_name=user_name)
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	usuario = %s AND
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/student/student_data.html', student_data=data, user_name=user_name,
+                           count = count)
 
 @app.route("/academic_history/<string:user_name>", methods=['POST', 'GET'])
 def academic_history(user_name):    
@@ -96,7 +122,14 @@ def academic_history(user_name):
                 FROM resumen
                 WHERE est_usr = %s""", (user_name,))
     periods = cur.fetchall()
-    return render_template('academic_history.html', user_name=user_name, periods = periods)
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	usuario = %s AND
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/student/academic_history.html', user_name=user_name, periods = periods,
+                           count = count)
 
 @app.route("/period_classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
 def period_classes(user_name, year, period):
@@ -110,8 +143,14 @@ def period_classes(user_name, year, period):
                     	periodo = %s
                     ORDER BY(nombre_asignatura);""", (user_name, year, period))
     data = cur.fetchall()
-    #Consulta del numero de alertas
-    return render_template('period_classes.html', classes=data, user_name=user_name)
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	usuario = %s AND
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/student/period_classes.html', classes=data, user_name=user_name,
+                           count = count, year=year, period=period)
     
 
 
@@ -127,7 +166,7 @@ def main_teacher(user_name):
                                 = (select max(anio) from RESUMEN))
                     ORDER BY(nombre_asignatura)    """, (user_name,))
     data = cur.fetchall()
-    return render_template('main_teacher.html', classes=data, user_name=user_name)
+    return render_template('/teacher/main_teacher.html', classes=data, user_name=user_name)
 
 
 @app.route("/class/<string:user_name>/<string:class_name>", methods=['POST', 'GET'])
@@ -146,7 +185,7 @@ def show_class(user_name, class_name,):
                 ORDER BY(nombre_est)""", (user_name, class_name)
                 )
     data = cur.fetchall()
-    return render_template('class.html', user_name=user_name,
+    return render_template('/teacher/class.html', user_name=user_name,
                            students_class=data, class_name=class_name)
 
 
@@ -166,7 +205,7 @@ def edit_grade(user_name, class_name):
                 ORDER BY(nombre_est)""", (user_name, class_name)
                 )
     students_class = cur.fetchall()
-    return render_template('class_edit.html', user_name=user_name,
+    return render_template('/teacher/class_edit.html', user_name=user_name,
                            class_name=class_name,
                            students_class=students_class)
 
@@ -238,7 +277,7 @@ def class_history(user_name):
                 FROM resumen
                 WHERE prof_usr = %s""", (user_name,))
     periods = cur.fetchall()
-    return render_template('class_history.html', user_name=user_name, periods = periods)
+    return render_template('/teacher/class_history.html', user_name=user_name, periods = periods)
 
 @app.route("/classes/<string:user_name>/<string:year><string:period>", methods=['POST', 'GET'])
 def classes(user_name, year, period):
@@ -251,7 +290,7 @@ def classes(user_name, year, period):
                     ORDER BY(nombre_asignatura)""", (user_name, year, period))
     data = cur.fetchall()
     #Consulta del numero de alertas
-    return render_template('historic_teacher.html', classes=data, user_name=user_name, year=year, period=period)
+    return render_template('/teacher/historic_teacher.html', classes=data, user_name=user_name, year=year, period=period)
     
 @app.route("/class/<string:user_name>/<string:class_name>/<string:year><string:period>", methods=['POST', 'GET'])
 def show__historic_class(user_name, class_name, year, period):
@@ -268,15 +307,20 @@ def show__historic_class(user_name, class_name, year, period):
                 ORDER BY(nombre_est)""", (user_name, class_name, year, period)
                 )
     data = cur.fetchall()
-    return render_template('historic_class.html', user_name=user_name,
-                           students_class=data, class_name=class_name)
+    return render_template('/teacher/historic_class.html', user_name=user_name,
+                           students_class=data, class_name=class_name, year=year,
+                           period=period)
 
 
 # --- Admin Page ----------------------------------------------------------------------------------
 @app.route("/main_admin", methods=['POST', 'GET'])
 def main_admin():
-     #Consulta de el numero de alertas 
-    return render_template('main_admin.html')
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """)
+    count = int(cur.fetchone()[0]) 
+    return render_template('/admin/main_admin.html', count=count)
 
 
 # ---- Admin: Students Page -----------------------------------------------------------------------
@@ -286,6 +330,11 @@ def load_students():
                 where tipo='estudiante'""")
     data = cur.fetchall()
     data_complete = []
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """)
+    count = int(cur.fetchone()[0])
     for user in data:
         user_info = list(user)
         cur.execute("""select
@@ -311,8 +360,78 @@ def load_students():
         user_info.append(credito_suma)
         user_info.append(promedio)
         data_complete.append(user_info)
-    return render_template('students.html', students=data_complete)
+    return render_template('/admin/admin_students.html', students=data_complete,
+                           count=count)
 
+@app.route("/admin_main_student/<string:user_name>", methods=['POST', 'GET'])
+def admin_main_student(user_name):
+    cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
+                round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
+                       porcentaje4*nota4+porcentaje5*nota5)/100,2)
+                    FROM RESUMEN
+                    WHERE
+                        est_usr = %s AND
+                        anio = (select max(anio) from RESUMEN) AND
+                        periodo = (select max(periodo) from RESUMEN where anio
+                                = (select max(anio) from RESUMEN))
+                    ORDER BY(nombre_asignatura)""", (user_name,))
+    data = cur.fetchall()
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """)
+    count = int(cur.fetchone()[0])
+    return render_template('/admin/student/main_student.html', classes=data, 
+                           user_name=user_name, count=count)
+
+@app.route("/admin_student_data/<string:user_name>", methods=['POST', 'GET'])
+def admin_personal_data(user_name):
+    cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2, 
+                correo_institucional, documento_actual from personas 
+                WHERE
+                    usuario = %s""", (user_name,))
+    data = cur.fetchall()[0]
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/admin/student/student_data.html', student_data=data, user_name=user_name,
+                           count = count)
+
+@app.route("/admin_academic_history/<string:user_name>", methods=['POST', 'GET'])
+def admin_academic_history(user_name):    
+    cur.execute("""SELECT distinct cast(anio as varchar),cast(periodo as varchar)
+                FROM resumen
+                WHERE est_usr =  %s""", (user_name,))
+    periods = cur.fetchall()
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])  
+    return render_template('/admin/student/academic_history.html', user_name=user_name, periods = periods,
+                           count = count)
+
+@app.route("/admin_period_classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
+def admin_period_classes(user_name, year, period):
+    cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
+                    round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
+                       porcentaje4*nota4+porcentaje5*nota5)/100,2)
+                    FROM RESUMEN
+                    WHERE 
+                    	est_usr = %s AND
+                    	anio = %s AND
+                    	periodo = %s
+                    ORDER BY(nombre_asignatura);""", (user_name, year, period))
+    data = cur.fetchall()
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/admin/student/period_classes.html', classes=data, user_name=user_name,
+                           count = count, year=year, period=period)
 
 # ---- Admin: Teachers Page -----------------------------------------------------------------------
 @app.route("/teachers", methods=['POST', 'GET'])
@@ -320,7 +439,7 @@ def load_teachers():
     cur.execute("""select usuario, nombre, apellido_1, apellido_2 from personas
                 where tipo='profesor' or tipo='administrador'""")
     data = cur.fetchall()
-    return render_template('teachers.html', teachers=data)
+    return render_template('admin/admin_teachers.html', teachers=data)
 
 @app.route("/admin_main_teacher/<string:user_name>", methods=['POST', 'GET'])
 def admin_main_teacher(user_name):   
@@ -330,7 +449,7 @@ def admin_main_teacher(user_name):
                 WHERE prof_usr = %s""", (user_name,))
     periods = cur.fetchall()
     print(periods)
-    return render_template('main_teacher_admin.html', user_name=user_name, periods = periods)
+    return render_template('/admin/admin_main_teacher.html', user_name=user_name, periods = periods)
 
 @app.route("/class_admin/<string:user_name>/<string:class_name>", methods=['POST', 'GET'])
 def admin_show_class(user_name, class_name,):
@@ -348,7 +467,7 @@ def admin_show_class(user_name, class_name,):
                 ORDER BY(nombre_est)""", (user_name, class_name)
                 )
     data = cur.fetchall()
-    return render_template('class_admin.html', user_name=user_name,
+    return render_template('/admin/admin_teacher_class.html', user_name=user_name,
                            students_class=data, class_name=class_name)
 
 
@@ -365,7 +484,7 @@ def load_classes():
                         (select max(anio) from RESUMEN))
             ORDER BY(nombre_asignatura)""")
     data = cur.fetchall()
-    return render_template('classes.html', classes=data)
+    return render_template('/admin/admin_classes.html', classes=data)
 
 
 @app.route("/groups/<string:class_name>", methods=['POST', 'GET'])
@@ -380,7 +499,7 @@ def load_groups(class_name):
                             (select max(anio) from RESUMEN))
                 ORDER BY(grupo)""", (class_name,))
     data = cur.fetchall()
-    return render_template('groups.html', groups=data)
+    return render_template('/admin/admin_groups.html', groups=data)
 
 
 @app.route("/admin_classes_edit/", methods=['POST', 'GET'])
@@ -395,7 +514,7 @@ def admin_edit_class():
                         (select max(anio) from RESUMEN))
             ORDER BY(nombre_asignatura)""")
     classes = cur.fetchall()
-    return render_template('admin_classes_edit.html', classes=classes)
+    return render_template('/admin/admin_classes_edit.html', classes=classes)
 
 
 @app.route("/admin_classes_update", methods=['POST'])
@@ -514,7 +633,7 @@ def student_report(user_name):
     figfile.seek(0)
     image = base64.b64encode(figfile.getvalue()).decode('utf-8')
     plt.close()
-    return render_template('students_report.html', image=image)
+    return render_template('/admin/student/students_report.html', image=image)
 
 @app.route("/groups_report/<string:class_name>/", methods=['POST', 'GET'])
 def groups_report(class_name):
@@ -564,7 +683,7 @@ def groups_report(class_name):
     figfile.seek(0)
     image = base64.b64encode(figfile.getvalue()).decode('utf-8')
     plt.close()
-    return render_template('groups_report.html', image=image) 
+    return render_template('/admin/groups_report.html', image=image) 
 
 
 def student_alerts(student, class_name, grade):
@@ -577,28 +696,39 @@ def student_alerts(student, class_name, grade):
             alert_type = 'MEDIA'
         if grade < 1:
             #Consulta que mete el string a la base de datos    
-            alert_student = "Tiene una alerta de nota muy baja en la materia"+class_name
+            alert_student = "Tiene una alerta de nota muy baja en la materia "+class_name
             alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota muy baja, en la materia " +  class_name
             alert_type ='ALTA'
-        cur.execute("""insert into alarmas (usuario, texto, tipo, fecha, periodo, 
-                    anio, nombre_asignatura) 
+        cur.execute("""insert into alertas (usuario, texto, tipo, fecha, periodo, 
+                    anio, nombre_asignatura, leido) 
                     values (%s,%s,%s, CURRENT_TIMESTAMP, 
-                            '1', '2020', %s )""", (student, alert_student, alert_type, class_name))
+                            '1', '2020', %s, '0' )""", (student, alert_student, alert_type, class_name))
         conn.commit()
 
 @app.route("/student_alerts/<string:user_name>/", methods=['POST', 'GET'])
 def show_alerts(user_name):
-    cur.execute("""SELECT * from alarmas
-                    where usuario=%s""",(user_name,))
-    alerts = cur.fetchall()
-    #Consulta que guarda en una variable las alertas del estudiante student
-    return render_template('student_alert.html', alerts=alerts) 
+    cur.execute("""SELECT * from alertas
+                    where usuario=%s AND
+                    leido = '0';""",(user_name,))
+    unread_alerts = cur.fetchall()
+    cur.execute("""SELECT * from alertas
+                    where usuario=%s AND
+                    leido = '1';""",(user_name,))
+    read_alerts = cur.fetchall()
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	usuario = %s AND
+                    	leido = '0' """, (user_name,))
+    count = int(cur.fetchone()[0])
+    return render_template('/student/student_alert.html', unread_alerts=unread_alerts,
+                          nread_alerts=read_alerts, count=count, user_name=user_name) 
 
 @app.route("/student_alerts/", methods=['POST', 'GET'])
 def show_admin_alerts():
-    cur.execute("""SELECT * from alarmas""")
+    cur.execute("""SELECT * from alertas""")
     alerts = cur.fetchall()
-    return render_template('admin_alert.html', alerts=alerts) 
+    return render_template('/admin/admin_alert.html', alerts=alerts) 
 
 
 if __name__ == "__main__":

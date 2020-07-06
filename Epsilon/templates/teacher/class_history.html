@@ -40,14 +40,15 @@ a:active {
         </div>
         <div class="row">
             <div class="col-3 menu">
-            <ul>
-              <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px"></div></li>
+            <ul style="list-style-type:none">
+              <li><a href="{{url_for('main_teacher', user_name = user_name)}}">
+              <div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px"></div></a></li>
               <li style="background-color: #0099cc;">
                 <a href="{{url_for('class_history', user_name = user_name)}}"><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
             </ul>
             </div>
             <div class="col-9">
-            <ul>
+            <ul style="list-style-type:none">
                {% for period in periods %}
                <a href="{{url_for('classes', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>
                {% endfor %}

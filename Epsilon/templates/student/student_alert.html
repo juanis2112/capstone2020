@@ -9,7 +9,12 @@
   <div>
       <div class="header">
           <a href="{{url_for('show_alerts', user_name=user_name)}}" >
-          <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+          <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
           </a>
           <a href="{{ url_for('main_window') }}">
             <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
@@ -34,7 +39,16 @@
                 <th> Tipo </th>
                 <th>Alerta</th>
             </tr>
-            {% for alert in alerts%}
+            {% for alert in unread_alerts%}
+            <tr>
+                <td>{{alert.3}} </td>
+                <td>{{alert.6}} </td>
+                <td>{{alert.2}} </td>
+                <td>{{alert.1}} </td>
+            </tr>
+            {% endfor %}
+            </tr>
+            {% for alert in read_alerts%}
             <tr>
                 <td>{{alert.3}} </td>
                 <td>{{alert.6}} </td>

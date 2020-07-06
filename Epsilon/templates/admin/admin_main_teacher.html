@@ -87,7 +87,7 @@ a:active {
               <a href="{{url_for('load_teachers')}}" class="btn">
                   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
               </a>
-            <ul>
+            <ul style="list-style-type:none">
                <table class="center">
                      {% for period in periods %}
                      <a href="{{url_for('class_history', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>

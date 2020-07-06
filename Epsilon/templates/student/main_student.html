@@ -44,8 +44,7 @@ a:visited {
               <span>
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
               </span>
-              <!-- Cambien el 3 equipo de backend -->
-              <span class="badge">1</span>
+              <span class="badge">{{count}}</span>
             </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
@@ -60,9 +59,10 @@ a:visited {
             </div>
 
             <div class="col-9">
-              <a href="{{url_for('load_students')}}" class="btn">
+              <a href="{{url_for('main_window')}}" class="btn">
                 <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
               </a>
+              Listado de materias del periodo actual
               <table class="center" id="table">
                     <tr>
                         <th>Materias</th>
@@ -87,7 +87,7 @@ a:visited {
                 </table>
                 <br>
                 <br>
-                <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+                Promedio Semestre: {{promedio}} <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
             </div>
         </div>
     </div>

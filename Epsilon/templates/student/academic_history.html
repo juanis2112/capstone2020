@@ -24,7 +24,12 @@ a:visited {
 <body>
     <div>
         <div class="header">
-            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
             </a>
@@ -41,11 +46,11 @@ a:visited {
              <a href="{{url_for('main_student',user_name=user_name)}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
               <br>
-              <table class="center">
+              <ul style="list-style-type:none">
                      {% for period in periods %}
                      <a href="{{url_for('period_classes', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>
                      {% endfor %}
-                </table>
+                </ul>
                 <br>
                 <br>
                 <input type="button" onclick="habilitar()" value="Descargar">

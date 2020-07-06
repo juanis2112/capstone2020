@@ -42,7 +42,7 @@
               <div class="col-3 menu">
               <ul>
                 <a href="{{url_for('load_students')}}">
-                      <li style="background-color: #0099cc;">
+                      <li>
                         <div class="menu-box">
                           <div >
                             Estudiantes
@@ -62,7 +62,7 @@
                       </li>
                 </a>
                 <a href="{{url_for('load_classes')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
                           <div >
                             Materias
@@ -84,10 +84,10 @@
               </ul>
               </div>
         <div class="col-9">
-          <a href="{{url_for('load_students')}}" class="btn">
+          <a href="{{url_for('load_classes')}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
           </a>
-        <ul>
+        <ul style="list-style-type:none">
           <p>
           {% if image != None %}
           <div>

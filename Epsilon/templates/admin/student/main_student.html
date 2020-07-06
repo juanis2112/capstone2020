@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
+<html lang="en">
+<head>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="../lib/js-xlsx/xlsx.core.min.js"></script>
+  <script type="text/javascript" src="../lib/FileSaver/FileSaver.min.js"></script>
+  <script type="text/javascript" src="../lib/html2canvas/html2canvas.min.js"></script>
+  <script type="text/javascript" src="../tableExport.js"></script>
+  <script type="text/javaScript">
+      var sFileName = 'ngophi';
+      function ExportXLSX(){
+          $('mytable').tableExport({fileName: sFileName,
+                      type: 'xlsx'
+                     });
+      }
+  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
+</head>
+<style>
+
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+
+
+</style>
+
+<body>
+    <div>
+        <div class="header">
+            <a href="{{url_for('show_admin_alerts')}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <!-- Cambien el 3 equipo de backend -->
+              <span class="badge">{{count}}</span>
+            </a>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-3 menu">
+            <ul>
+                <li><a href="{{url_for('admin_personal_data', user_name = user_name)}}"><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></a></li>
+                <li><a href="{{url_for('admin_academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
+            </ul>
+            </div>
+
+            <div class="col-9">
+                <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+              </a>
+              <table class="center" id="table">
+                    <tr>
+                        <th>Materias</th>
+                        <th>Corte1</th>
+                        <th>Corte2</th>
+                        <th>Corte3</th>
+                        <th>Corte4</th>
+                        <th>Corte5</th>
+                        <th>Nota Final</th>
+                    </tr>
+                    {% for class in classes %}
+                    <tr>
+                        <td>{{class.0}} </td>
+                        <td>{{class.1}} </td>
+                        <td>{{class.2}} </td>
+                        <td>{{class.3}} </td>
+                        <td>{{class.4}} </td>
+                        <td>{{class.5}} </td>
+                        <td>{{class.6}} </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <br>
+                <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+            </div>
+        </div>
+    </div>
+    <script>
+    function habilitar(){
+        var casillas_notas=document.getElementsByClassName("table-toggle");
+        for(var i=0;i<casillas_notas.length;i++){
+            casillas_notas[i].readOnly=false;
+        }
+        document.getElementById("boton-editar").style.backgroundColor="#073D72";
+        document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+    }
+
+    function deshabilitar(){
+        var casillas_notas=document.getElementsByClassName("table-toggle");
+        for(var i=0;i<casillas_notas.length;i++){
+            casillas_notas[i].readOnly=true;
+        }
+        document.getElementById("boton-editar").style.backgroundColor="white";
+        document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+    }
+      var wb = XLSX.utils.table_to_book(document.getElementById('mytable'), {sheet:"Sheet JS"});
+        var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+        function s2ab(s) {
+                        var buf = new ArrayBuffer(s.length);
+                        var view = new Uint8Array(buf);
+                        for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+                        return buf;
+        }
+        $("#button-a").click(function(){
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
+        });
+
+    function exportReportToExcel() {
+      let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
+      TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
+        name: `export.xlsx`, // fileName you could use any name
+        sheet: {
+          name: 'Sheet 1' // sheetName
+        }
+      });
+    }
+
+      function exportF(elem) {
+        var table = document.getElementById("table");
+        var html = table.outerHTML;
+        var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "notas.xls"); // Choose the file name
+        return false;
+      }
+
+  var inputs = document.querySelectorAll( '.inputfile' );
+  Array.prototype.forEach.call( inputs, function( input )
+  {
+  	var label	 = input.nextElementSibling,
+  		labelVal = label.innerHTML;
+
+  	input.addEventListener( 'change', function( e )
+  	{
+  		var fileName = '';
+  		if( this.files && this.files.length > 1 )
+  			fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+  		else
+  			fileName = e.target.value.split( '\\' ).pop();
+
+  		if( fileName )
+  			label.innerHTML = fileName;
+  		else
+  			label.innerHTML = labelVal;
+          console.log("event listener");
+  	});
+      console.log("add event")
+  });
+  </script>
+</body>
+</html>
+</form>

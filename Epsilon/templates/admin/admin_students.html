@@ -1,29 +1,6 @@
 <form action="{{url_for('main_student', user_name = user_name)}}" method="POST">
   <!DOCTYPE html>
   <html lang="en">
-  <style>
-
-  a:link {
-    color: white;
-    background-color: transparent;
-    text-decoration: none;
-  }
-  a:visited {
-    color: white;
-    background-color: transparent;
-    text-decoration: none;
-  }
-  a:hover {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-  }
-  a:active {
-    color: green;
-    background-color: transparent;
-    text-decoration: underline;
-  }
-  </style>
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,9 +19,9 @@
               <div class="col-3 menu">
               <ul>
                 <a href="{{url_for('load_students')}}">
-                      <li>
+                      <li style="background-color: #0099cc;">
                         <div class="menu-box">
-                          <div >
+                          <div>
                             Estudiantes
                           </div>
                         <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
@@ -84,15 +61,21 @@
               </ul>
               </div>
         <div class="col-9">
-          <a href="{{url_for('load_teachers')}}" class="btn">
+          <a href="{{url_for('main_admin')}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
           </a>
-        <ul>
-          <p>
-          {% if image != None %}
-          <img src="data:image/png;base64,{{ image }}">
-          {% endif %}
-          </p>
+        <ul style="list-style-type:none">
+           {% for student in students %}
+           <a href="/admin_main_student/{{student.0}}">
+             <li>{{student.1}} {{student.2}} {{student.3}}
+               <a href="/student_report/{{student.0}}">
+                 <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+               </a>
+             <br>
+             Creditos: 20 Promedio: 4.5
+             {% endfor %}
+             </li>
+           </a>
         </ul>
         </div>
       </div>
