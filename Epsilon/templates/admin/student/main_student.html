@@ -44,7 +44,6 @@ a:visited {
               <span>
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
               </span>
-              <!-- Cambien el 3 equipo de backend -->
               <span class="badge">{{count}}</span>
             </a>
             <a href="{{ url_for('main_window') }}">
@@ -62,6 +61,7 @@ a:visited {
             <div class="col-9">
                 <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
               </a>
+              {{student.0}} {{student.1}} {{student.2}}
               <table class="center" id="table">
                     <tr>
                         <th>Materias</th>

@@ -33,7 +33,12 @@ a:active {
 <body>
     <div>
         <div class="header">
-            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <a href="{{url_for('show_admin_alerts')}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
             <a href="{{ url_for('main_window') }}">
               <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
             </a>
@@ -87,13 +92,29 @@ a:active {
               <a href="{{url_for('load_teachers')}}" class="btn">
                   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
               </a>
-            <ul style="list-style-type:none">
-               <table class="center">
-                     {% for period in periods %}
-                     <a href="{{url_for('class_history', user_name = user_name, year = period.0, period = period.1)}}"><li>{{period.0}}-{{period.1}}</li></a>
-                     {% endfor %}
-              </table>
-            </ul>
+            Listado de estudiantes del curso de {{class_name}} dictado por {{teacher.0}} {{teacher.1}} {{teacher.2}} en el periodo {{year}}-{{period}}
+                <table class="center">
+                      <tr>
+                          <th>Estudiantes</th>
+                          <th>Corte1</th>
+                          <th>Corte2</th>
+                          <th>Corte3</th>
+                          <th>Corte4</th>
+                          <th>Corte5</th>
+                          <th>Nota final</th>
+                      </tr>
+                      {% for student in students_class %}
+                      <tr>
+                          <td>{{student.1}} {{student.2}} {{student.3}}</td>
+                          <td><input type="text" style="border: 0px;" value={{student.4}} readonly size="5"></td>
+                          <td><input type="text" style="border: 0px;" value={{student.5}} readonly size="5"></td>
+                          <td><input type="text" style="border: 0px;" value={{student.6}} readonly size="5"></td>
+                          <td><input type="text" style="border: 0px;" value={{student.7}} readonly size="5"></td>
+                          <td><input type="text" style="border: 0px;" value={{student.8}} readonly size="5"></td>
+                          <td><input type="text" style="border: 0px;" value={{student.9}} readonly size="5"></td>
+                      </tr>
+                      {% endfor %}
+                  </table>
             </div>
         </div>
     </div>

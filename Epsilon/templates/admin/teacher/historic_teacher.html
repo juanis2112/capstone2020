@@ -1,0 +1,111 @@
+
+<form action="{{url_for('admin_main_teacher', user_name = user_name)}}" method="POST">
+<html lang="en">
+<style>
+
+a:link {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+a:hover {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+a:active {
+  color: green;
+  background-color: transparent;
+  text-decoration: underline;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
+</head>
+<body>
+    <div>
+        <div class="header">
+            <a href="{{url_for('show_admin_alerts')}}" class="notification" >
+              <span>
+              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
+            <a href="{{ url_for('main_window') }}">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            </a>
+        </div>
+        <div class="row">
+          <div class="col-3 menu">
+          <ul>
+            <a href="{{url_for('load_students')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Estudiantes
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_teachers')}}">
+                  <li style="background-color: #0099cc;">
+                    <div class="menu-box">
+                      <div >
+                        Profesores
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('load_classes')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Materias
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+            <a href="{{url_for('main_window')}}">
+                  <li>
+                    <div class="menu-box">
+                      <div >
+                        Alertas
+                      </div>
+                    <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+                    </div>
+                  </li>
+            </a>
+          </ul>
+          </div>
+            <div class="col-9">
+              <a href="{{url_for('load_teachers')}}" class="btn">
+                  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+              </a>            
+            Listado de clases del periodo {{year}}-{{period}} {{teacher.0}} {{teacher.1}} {{teacher.2}}
+            <ul style="list-style-type:none">
+               {% for class in classes %}
+               <a href="{{url_for('admin_show_class', user_name = user_name, class_name = class.0, year=year, period=period)}}"><li>{{class.0}}</a>
+               <a href="{{url_for('one_group_report', user_name = user_name, class_name = class.0, year=year, period=period)}}">
+                 <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+               </a>
+               </li>
+               {% endfor %}
+            </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+</form>

@@ -46,11 +46,15 @@ a:visited {
              <a href="{{url_for('admin_main_student',user_name=user_name)}}" class="btn">
               <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
               <br>
+              {{student.0}} {{student.1}} {{student.2}}
               <ul style="list-style-type:none">
                      {% for period in periods %}
                      <a href="{{url_for('admin_period_classes', user_name = user_name, year = period.0, period = period.1)}}">
                      <li>{{period.0}}-{{period.1}} <br>
-                      Creditos: 20 Promedio: 4.5
+                     <a href="{{url_for('student_report',user_name = user_name, year=period.0, period=period.1)}}">
+                     <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+                       </a>
+                      Creditos: {{period.3}} Promedio: {{period.2}}
                      </li></a>
                      {% endfor %}
                 </ul>
