@@ -89,10 +89,18 @@ a:active {
           </ul>
           </div>
             <div class="col-9">
-              <a href="{{url_for('load_teachers')}}" class="btn">
-                  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-              </a>
-            {{teacher.0}} {{teacher.1}} {{teacher.2}}
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('load_teachers')}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                {{teacher.0}} {{teacher.1}} {{teacher.2}}
+                  </span>
+                </div>
+              </div>
             <ul style="list-style-type:none">
                <table class="center">
                      {% for period in periods %}

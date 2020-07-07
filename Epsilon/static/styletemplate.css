@@ -48,6 +48,20 @@ html {
   text-align: right;
 }
 
+.mini-titulo{
+  font-size: large;
+  color: white;
+  margin-top: 0px;
+  background-color: #0099cc;
+  border-bottom-right-radius: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+}
+
+
 .menu ul {
   list-style-type: none;
   margin: 0;
@@ -63,6 +77,19 @@ html {
   height: 90px;
   border-radius: 30px;
   text-align: center;
+}
+
+
+.menu li:hover {
+  background-color: #0099cc;
+}
+
+.col-9 li:hover{
+  background-color: #0099cc;
+}
+
+.menu li:active{
+  background-color: #0099cc;
 }
 
 
@@ -135,18 +162,10 @@ a.special:hover {color:black;}
   border-left: 1px solid #CCCCCC;
 }
 
-.menu li:hover {
-  background-color: #0099cc;
-}
 
-.col-9 li:hover{
-  background-color: #0099cc;
+tr:nth-child(even) {
+  background-color: #D3D0D0;
 }
-
-.menu li:active{
-  background-color: #0099cc;
-}
-
 
 
 .notification {

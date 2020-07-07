@@ -59,35 +59,45 @@ a:visited {
             </div>
 
             <div class="col-9">
-              <a href="{{url_for('main_window')}}" class="btn">
-                <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-              </a>
-              Listado de materias del periodo actual
-              <table class="center" id="table">
-                    <tr>
-                        <th>Materias</th>
-                        <th>Corte1</th>
-                        <th>Corte2</th>
-                        <th>Corte3</th>
-                        <th>Corte4</th>
-                        <th>Corte5</th>
-                        <th>Nota Final</th>
-                    </tr>
-                    {% for class in classes %}
-                    <tr>
-                        <td>{{class.0}} </td>
-                        <td>{{class.1}} </td>
-                        <td>{{class.2}} </td>
-                        <td>{{class.3}} </td>
-                        <td>{{class.4}} </td>
-                        <td>{{class.5}} </td>
-                        <td>{{class.6}} </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <br>
-                <br>
-                Promedio Semestre: {{promedio}} <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('main_window')}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                    Listado de materias del periodo actual
+                  </span>
+                </div>
+              </div>
+              <div>
+                <table class="center" id="table">
+                      <tr>
+                          <th>Materias</th>
+                          <th>Corte1</th>
+                          <th>Corte2</th>
+                          <th>Corte3</th>
+                          <th>Corte4</th>
+                          <th>Corte5</th>
+                          <th>Nota Final</th>
+                      </tr>
+                      {% for class in classes %}
+                      <tr>
+                          <td>{{class.0}} </td>
+                          <td>{{class.1}} </td>
+                          <td>{{class.2}} </td>
+                          <td>{{class.3}} </td>
+                          <td>{{class.4}} </td>
+                          <td>{{class.5}} </td>
+                          <td>{{class.6}} </td>
+                      </tr>
+                      {% endfor %}
+                  </table>
+                  <br>
+                  <br>
+                  Promedio Semestre: {{promedio}} <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+              </div>
             </div>
         </div>
     </div>

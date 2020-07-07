@@ -89,10 +89,18 @@ a:active {
           </ul>
           </div>
             <div class="col-9">
-              <a href="{{url_for('load_teachers')}}" class="btn">
-                  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-              </a>            
-            Listado de clases del periodo {{year}}-{{period}} {{teacher.0}} {{teacher.1}} {{teacher.2}}
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('admin_main_teacher',user_name=user_name)}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                    Listado de clases del periodo {{year}}-{{period}} {{teacher.0}} {{teacher.1}} {{teacher.2}}
+                  </span>
+                </div>
+              </div>
             <ul style="list-style-type:none">
                {% for class in classes %}
                <a href="{{url_for('admin_show_class', user_name = user_name, class_name = class.0, year=year, period=period)}}"><li>{{class.0}}</a>
