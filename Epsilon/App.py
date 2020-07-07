@@ -17,7 +17,7 @@ import seaborn as sns
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
+                        password="test",
                         host="localhost",
                         port="5432",
                         database="Epsilon_6")
