@@ -66,9 +66,14 @@
               </ul>
               </div>
             <div class="col-9">
-              <a href={{url_for('load_classes')}} class="btn">
-                      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-              </a>
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('load_classes')}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+              </div>
+              <br>
               <table class="center">
                     <tr>
                         <th>Asignaturas</th>
@@ -94,6 +99,7 @@
                     </tr>
                     {% endfor %}
                 </table>
+                <br>
                 <button type="submit" class="btn">
                       Guardar
                 </button>

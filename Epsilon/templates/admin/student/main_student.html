@@ -59,9 +59,18 @@ a:visited {
             </div>
 
             <div class="col-9">
-                <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-              </a>
-              {{student.0}} {{student.1}} {{student.2}}
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('load_students')}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                    {{student.0}} {{student.1}} {{student.2}}
+                  </span>
+                </div>
+              </div>
               <table class="center" id="table">
                     <tr>
                         <th>Materias</th>

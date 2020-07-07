@@ -41,11 +41,20 @@ a:visited {
                 <li><a href="{{url_for('admin_academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
             </ul>
             </div>
-
             <div class="col-9">
-             <a href="{{url_for('admin_academic_history',user_name=user_name)}}" class="btn">
-              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
-                Listado de materias del periodo {{year}}-{{period}}
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('admin_academic_history',user_name=user_name)}}"class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                    Listado de materias del periodo {{year}}-{{period}}
+                  </span>
+                </div>
+              </div>
+
                 <table class="center" id="table">
                     <tr>
                         <th>Materias</th>
@@ -59,12 +68,12 @@ a:visited {
                     {% for class in classes %}
                     <tr>
                         <td>{{class.0}} </td>
-                        <td><input type="text" style="border: 0px;" value={{class.1}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.2}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.3}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.4}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.5}} readonly size="5"></td>
-                        <td><input type="text" style="border: 0px;" value={{class.6}} readonly size="5"></td>
+                        <td>{{class.1}} </td>
+                        <td>{{class.2}} </td>
+                        <td>{{class.3}} </td>
+                        <td>{{class.4}} </td>
+                        <td>{{class.5}} </td>
+                        <td>{{class.6}} </td>
                     </tr>
                     {% endfor %}
                 </table>

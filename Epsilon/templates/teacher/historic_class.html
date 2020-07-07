@@ -32,21 +32,26 @@
               </a>
           </div>
           <div class="row">
-              <div class="col-3 menu">
-              <ul>
-                <li><a href="{{url_for('main_teacher', user_name = user_name)}}">
-                <div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;"30px" width="30px"></div></a></li>
-                <li><a href="{{url_for('class_history', user_name = user_name)}}">
-                <div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
-              </ul>
-              </div>
-
-              <div class="col-9" method="POST">
-                <a href="{{url_for('main_teacher', user_name = user_name)}}" class="btn">
+            <div class="col-3 menu">
+            <ul>
+              <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px"></div></li>
+              <li style="background-color: #0099cc;"><a href="{{url_for('class_history', user_name = user_name)}}"><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
+            </ul>
+            </div>
+            <div class="col-9" method="POST">
+              <div style="display:block;">
+                <span style="margin-left:0px;">
+                  <a href="{{url_for('classes',user_name=user_name,year=year,period=period)}}" class="btn">
                     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                </a>
-                Listado de estudiantes del curso de {{class_name}} en el periodo {{year}}-{{period}}
-                <table class="center">
+                  </a>
+                </span>
+                <div style="diplay:inline-block; text-align:center; width:80%;">
+                  <span class="mini-titulo">
+                  Listado de estudiantes del curso de {{class_name}} en el periodo {{year}}-{{period}}
+                  </span>
+                </div>
+              </div>
+              <table class="center">
                       <tr>
                           <th>Estudiantes</th>
                           <th>Corte1</th>
@@ -59,12 +64,12 @@
                       {% for student in students_class %}
                       <tr>
                           <td>{{student.1}} {{student.2}} {{student.3}}</td>
-                          <td><input type="text" style="border: 0px;" value={{student.4}} readonly size="5"></td>
-                          <td><input type="text" style="border: 0px;" value={{student.5}} readonly size="5"></td>
-                          <td><input type="text" style="border: 0px;" value={{student.6}} readonly size="5"></td>
-                          <td><input type="text" style="border: 0px;" value={{student.7}} readonly size="5"></td>
-                          <td><input type="text" style="border: 0px;" value={{student.8}} readonly size="5"></td>
-                          <td><input type="text" style="border: 0px;" value={{student.9}} readonly size="5"></td>
+                          <td>{{student.4}}</td>
+                          <td>{{student.5}}</td>
+                          <td>{{student.6}}</td>
+                          <td>{{student.7}}</td>
+                          <td>{{student.8}}</td>
+                          <td>{{student.9}}</td>
                       </tr>
                       {% endfor %}
                   </table>
