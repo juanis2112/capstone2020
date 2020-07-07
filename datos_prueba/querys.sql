@@ -135,13 +135,13 @@ SELECT count(*)
 FROM alertas
 WHERE 
 	usuario = 'juanc.llanos' AND
-	leido = '0';
+	visto_estudiante = '0';
 
 -- Query consulta cantidad de alertas no leidas
 
 SELECT count(*)
 FROM alertas
-WHERE leido = '0';
+WHERE visto_admin = '0';
 
 -- Query promedio acumulado de un estudiante dado su usuario
 

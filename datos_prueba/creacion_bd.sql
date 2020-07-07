@@ -124,7 +124,10 @@ create table alertas (
 	periodo numeric NOT NULL,
 	anio numeric NOT NULL,
 	nombre_asignatura VARCHAR(100),
-	leido bool NOT NULL DEFAULT FALSE
+	visto_estudiante bool NOT NULL DEFAULT FALSE,
+	visto_admin bool NOT NULL DEFAULT FALSE,
+	oculto_estudiante bool NOT NULL DEFAULT FALSE,
+	oculto_admin bool NOT NULL DEFAULT FALSE
 );
 
 -- VISTA ayuda en consultas 
