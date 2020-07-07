@@ -10,7 +10,12 @@
   <body>
       <div>
           <div class="header">
+              <a href="{{url_for('show_admin_alerts')}}" class="notification" >
+              <span>
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
               <a href="{{ url_for('main_window') }}">
                 <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
               </a>

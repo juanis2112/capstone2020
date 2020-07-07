@@ -10,7 +10,12 @@
   <body>
       <div>
           <div class="header">
+              <a href="{{url_for('show_admin_alerts')}}" class="notification" >
+              <span>
               <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+              </span>
+              <span class="badge">{{count}}</span>
+            </a>
               <a href="{{ url_for('main_window') }}">
                 <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
               </a>
@@ -68,11 +73,11 @@
            {% for student in students %}
            <a href="/admin_main_student/{{student.0}}">
              <li>{{student.1}} {{student.2}} {{student.3}}
-               <a href="/student_report/{{student.0}}">
+               <a href="{{url_for('student_historic_report', user_name = student.0)}}">
                  <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
                </a>
              <br>
-             Creditos: 20 Promedio: 4.5
+             Creditos: {{student.4}} Promedio: {{student.5}}
              {% endfor %}
              </li>
            </a>
