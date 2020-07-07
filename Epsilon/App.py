@@ -17,7 +17,7 @@ import seaborn as sns
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
                         database="Epsilon_6")
@@ -556,6 +556,33 @@ def load_groups(class_name):
     count = int(cur.fetchone()[0]) 
     return render_template('/admin/admin_groups.html', groups=data, count=count)
 
+@app.route("/admin_show_group_class/<string:user_name>/<string:class_name>/grupo<string:group>/", methods=['POST', 'GET'])
+def admin_show_group_class(user_name, class_name, group):
+    cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,
+                nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+
+                                    porcentaje3*nota3+porcentaje4*nota4+
+                                    porcentaje5*nota5)/100,2)
+                FROM RESUMEN
+                WHERE
+                    prof_usr = %s AND
+                    nombre_asignatura = %s AND
+                    anio = (select max(anio) from RESUMEN) AND
+                    periodo = (select max(periodo) from RESUMEN where anio =
+                            (select max(anio) from RESUMEN))
+                ORDER BY(nombre_est)""", (user_name, class_name)
+                )
+    data = cur.fetchall()
+    cur.execute("""select nombre, apellido_1, apellido_2 from personas
+                where usuario = %s""",(user_name,))
+    teacher = cur.fetchone()
+    cur.execute("""SELECT count(*)
+                    FROM alertas
+                    WHERE 
+                    	leido = '0' """)
+    count = int(cur.fetchone()[0]) 
+    return render_template('/admin/admin_show_class.html', user_name=user_name,
+                           students_class=data, class_name=class_name, teacher=teacher,
+                           count=count, group=group)
 
 @app.route("/admin_classes_edit/", methods=['POST', 'GET'])
 def admin_edit_class():
