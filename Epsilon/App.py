@@ -228,16 +228,12 @@ def update_grade(class_name, user_name):
                 )
     students_class = cur.fetchall()
     for student in students_class:
-        grade1 = float(request.form['grade1_'+student[0]])
-        grade2 = float(request.form['grade2_'+student[0]])
-        grade3 = float(request.form['grade3_'+student[0]])
-        grade4 = float(request.form['grade4_'+student[0]])
-        grade5 = float(request.form['grade5_'+student[0]])
-        
-        grades = [grade1, grade2, grade3, grade4, grade5]
-        for grade in grades:
-             student_alerts(student[0], class_name, grade)          
-        
+        grades=list(student[4:-1])
+        for idx, grade in enumerate(grades):
+            new_grade = float(request.form['grade%s_%s' % (idx+1, student[0])])
+            if float(grade) != new_grade:
+                grades[idx]=new_grade
+                student_alerts(student[0], class_name, new_grade)
         cur.execute("""UPDATE toma
                     SET
                         nota1 = %s,
@@ -262,10 +258,10 @@ def update_grade(class_name, user_name):
                                     from RESUMEN
                                     where
                                         est_usr = %s)""",
-                    (grade1, grade2, grade3, grade4, grade5, user_name, class_name,
+                    (*grades, user_name, class_name,
                      student[0], student[0]))
         conn.commit()
-        return redirect(url_for('show_class', user_name=user_name,
+    return redirect(url_for('show_class', user_name=user_name,
                                 class_name=class_name))
 
 @app.route("/class_history/<string:user_name>", methods=['POST', 'GET'])
@@ -831,17 +827,19 @@ def student_alerts(student, class_name, grade):
                             '1', '2020', %s, '0' )""", (student, alert_student, alert_type, class_name))
         conn.commit()
 
+# ---- Admin: Alert -----------------------------------------------------------------------------
 @app.route("/student_alerts/<string:user_name>/", methods=['POST', 'GET'])
 def show_alerts(user_name):
     cur.execute("""SELECT * from alertas
                     where usuario=%s AND
-                    leido = '0';""",(user_name,))
+                    leido = '0'
+                    ORDER BY fecha DESC""",(user_name,))
     unread_alerts = cur.fetchall()
     cur.execute("""SELECT * from alertas
                     where usuario=%s AND
-                    leido = '1';""",(user_name,))
+                    leido = '1'
+                    ORDER BY fecha DESC;""",(user_name,))
     read_alerts = cur.fetchall()
-    
     cur.execute("""UPDATE alertas 
                     SET leido='1'
                     where usuario=%s""",(user_name,))
@@ -851,8 +849,10 @@ def show_alerts(user_name):
 
 @app.route("/student_alerts/", methods=['POST', 'GET'])
 def show_admin_alerts():
-    cur.execute("""SELECT * from alertas""")
+    cur.execute("""SELECT nombre,apellido_1,apellido_2,texto,alertas.tipo as alerta,fecha,periodo,anio,nombre_asignatura
+                FROM alertas join personas on alertas.usuario = personas.usuario""")
     alerts = cur.fetchall()
+    conn.commit()
     return render_template('/admin/admin_alert.html', alerts=alerts) 
 
 
