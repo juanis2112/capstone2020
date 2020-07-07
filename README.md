@@ -15,10 +15,10 @@ Primero debe acceder a la carpeta de su repositorio ejecutando:
 $ cd capstone
 ```
 
-Para acceder a la rama con el release 0.1 de la aplicación debe ejecutar:
+Para acceder a la rama con el release 0.2 de la aplicación debe ejecutar:
 
 ```bash
-$ git checkout v0.1
+$ git checkout v0.2
 ```
 
 ### Generando la base de datos
