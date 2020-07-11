@@ -149,3 +149,7 @@ FROM
 				semestre on B.sem_id = semestre.sem_id) as B2
 	on B1.sem_id = B2.sem_id) as Bd
 	on Bc.sem_id = Bd.sem_id;
+	
+
+INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin','admin','administrador');
+INSERT INTO Empleado VALUES (1,'1','1');
