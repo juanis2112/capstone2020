@@ -53,9 +53,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2018_1.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '{}' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -107,7 +107,7 @@ where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 /* Metiendo a la tabla de Semestre*/
 
 insert into semestre(periodo,anio,grupo)
-select 1 as periodo,2018 as anio,ga.grupo
+select {} as periodo,{} as anio,ga.grupo
 from (
 	select nombre_asignatura,grupo 
 	from personas join (
@@ -263,9 +263,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2018_2.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/juanis/capstone2020/datos_prueba/Datos_2018_2.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -474,9 +474,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2019_1.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/juanis/capstone2020/datos_prueba/Datos_2019_1.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -685,9 +685,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2019_2.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/juanis/capstone2020/datos_prueba/Datos_2019_2.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -896,9 +896,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2020_1.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/juanis/capstone2020/datos_prueba/Datos_2020_1.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -1107,9 +1107,9 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaEstudiante FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_2020_2.csv' DELIMITER ',' CSV HEADER ;
-COPY Public.tablaEmpleado FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
-COPY Public.tablaProfesores FROM '/home/felipe/Escritorio/F.G.S/CAPSTON/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEstudiante FROM '/Users/juanis/capstone2020/datos_prueba/Datos_2020_2.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEmpleado FROM '/Users/juanis/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '/Users/juanis/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 

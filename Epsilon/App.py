@@ -6,6 +6,8 @@ Webapp that allows browsing, modifying, analysing student data.
 # Standard library imports
 import base64
 from io import BytesIO
+from pathlib import Path
+import tempfile
 
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
@@ -20,7 +22,7 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_8")
+                        database="Epsilon_13")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -124,7 +126,16 @@ def generate_image():
 # --- Login Window --------------------------------------------------------------------------------
 
 @app.route("/")
-def main_window():
+def main_window(): 
+    try:
+        cur.execute("SELECT * from personas")
+        conn.commit()
+    except:
+        conn.rollback()
+        with open('../datos_prueba/creacion_bd.sql', 'r') as sqlFile:
+                print(sqlFile)
+                cur.execute(sqlFile.read())      
+                conn.commit()    
     return render_template('login.html')
 
 
@@ -153,7 +164,7 @@ def login():
             else:
                 return redirect(url_for('main_student', user_name=username_input))
 
-        except Exception as e:
+        except Exception:
             flash('El usuario no se encuentra registrado', 'error')
             return render_template('login.html')
     else:
@@ -587,6 +598,34 @@ def admin_update_class():
         conn.commit()
     return redirect(url_for('load_classes', classes=classes))
 
+
+@app.route("/admin_functions/",methods=['POST', 'GET'])
+def admin_functions():
+    count = count_admin_alerts()
+    return render_template('admin/admin_functions.html', count=count)
+    
+@app.route("/admin_functions/import_students",methods=['POST', 'GET'])
+def import_students():
+    count = count_admin_alerts()
+    return render_template('admin/import_students.html', count=count)
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    file = request.files['inputfile']
+    
+    csv_file_path = Path('../datos_prueba/temp_data.csv').resolve()
+    with open(csv_file_path, mode='wb') as csv_file:
+        csv_file.write(file.read())
+    csv_file_path.chmod(0o777) 
+    
+    with open('../datos_prueba/insercion_datos.sql', 'r', encoding='utf-8') as insercion_sql:
+        sqlFile = insercion_sql.read().format(str(csv_file_path), '1', '2018')
+        cur.execute(sqlFile)      
+        conn.commit()
+    count = count_admin_alerts()
+    return render_template('admin/import_success.html', count=count)
+    
 
 # ---- Admin: Reports -----------------------------------------------------------------------------
 @app.route("/class_report/<string:user_name>/<string:class_name>/<string:year><string:period>/", methods=['POST', 'GET'])
