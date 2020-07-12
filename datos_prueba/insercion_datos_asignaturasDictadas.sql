@@ -9,19 +9,6 @@ CREATE TABLE Public.tablaProfesores(
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 1 as periodo,2018 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
-
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
 select distinct asig.codigo,(
@@ -92,19 +79,6 @@ CREATE TABLE Public.tablaProfesores(
 );
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
-
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 2 as periodo,2018 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
 
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
@@ -177,19 +151,6 @@ CREATE TABLE Public.tablaProfesores(
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 1 as periodo,2019 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
-
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
 select distinct asig.codigo,(
@@ -260,19 +221,6 @@ CREATE TABLE Public.tablaProfesores(
 );
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
-
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 2 as periodo,2019 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
 
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
@@ -345,19 +293,6 @@ CREATE TABLE Public.tablaProfesores(
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
 
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 1 as periodo,2020 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
-
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
 select distinct asig.codigo,(
@@ -428,19 +363,6 @@ CREATE TABLE Public.tablaProfesores(
 );
 
 COPY Public.tablaProfesores FROM '/home/ubuntu/capstone2020/datos_prueba/Datos_profesores.csv' DELIMITER ',' CSV HEADER;
-
-/* Metiendo a la tabla de Semestre (asignaturas registradas por estudiantes)*/
-insert into semestre(periodo,anio,grupo)
-select 2 as periodo,2020 as anio,ga.grupo
-from (
-	select nombre_asignatura,grupo 
-	from personas join (
-		select codigo_asignatura,asignaturas.nombre_asignatura,grupo,usuario 
-		from asignaturas join tablaProfesores on asignaturas.nombre_asignatura = tablaProfesores.nombre_asignatura
-	)as B
-	on personas.usuario = B.usuario
-	order by(nombre_asignatura)
-)as ga;
 
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)

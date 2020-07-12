@@ -57,6 +57,15 @@ select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologi
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 1 as periodo,2018 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
+
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
 select distinct codigo,codigo_programa 
@@ -142,6 +151,15 @@ insert into Asignaturas(codigo_asignatura,nombre_asignatura,creditos_asignatura,
 select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,Corte_1p,Corte_2p,Corte_3p,Corte_4p,Corte_5p 
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
+
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 2 as periodo,2018 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
 
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
@@ -229,6 +247,15 @@ select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologi
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 1 as periodo,2019 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
+
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
 select distinct codigo,codigo_programa 
@@ -314,6 +341,15 @@ insert into Asignaturas(codigo_asignatura,nombre_asignatura,creditos_asignatura,
 select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,Corte_1p,Corte_2p,Corte_3p,Corte_4p,Corte_5p 
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
+
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 2 as periodo,2019 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
 
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
@@ -401,6 +437,15 @@ select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologi
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 1 as periodo,2020 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
+
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
 select distinct codigo,codigo_programa 
@@ -486,6 +531,15 @@ insert into Asignaturas(codigo_asignatura,nombre_asignatura,creditos_asignatura,
 select distinct codigo_asignatura,nombre_asignatura,creditos_asignatura,tipologia_asignatura,Corte_1p,Corte_2p,Corte_3p,Corte_4p,Corte_5p 
 from tablaEstudiante
 where codigo_asignatura not in (select codigo_asignatura from asignaturas);
+
+/* Metiendo a la tabla de Semestre */
+insert into semestre(periodo,anio,grupo)
+select 2 as periodo,2020 as anio,ga.grupo
+from (
+	select distinct nombre_asignatura, grupo_asignatura as grupo
+	from tablaEstudiante
+	order by(nombre_asignatura)
+)as ga;
 
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
