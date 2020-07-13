@@ -1,4 +1,5 @@
 -- INSERCION 2018_1
+
 CREATE TABLE Public.tablaEstudiante(
    Documento_Ingreso     INTEGER  NOT NULL
   ,Documento_Actual      INTEGER  NOT NULL
@@ -65,18 +66,18 @@ where 1 not in (select codigo_programa from programa);
 /* Metiendo a la tabla de Personas */
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(codigo as text) , gen_salt('xdes')), 'estudiante' from tablaEstudiante
-where codigo not in (select codigo from personas) group by(codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual);
+select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),(select substr(md5(random()::text),0,10)), 'estudiante' from tablaEstudiante
+where codigo not in (select codigo from personas);
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(Codigo_empleado as text) , gen_salt('xdes')), 'administrador' 
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'administrador', 'administrador' 
 from tablaEmpleado
 where 
 	esAdmin='1' and
 	Codigo_empleado not in (select codigo from personas);
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(Codigo_empleado as text) , gen_salt('xdes')), 'profesor' 
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'profesor', 'profesor' 
 from tablaEmpleado
 where 
 	esAdmin='0' and 
