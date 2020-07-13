@@ -159,6 +159,25 @@ FROM RESUMEN
 WHERE est_usr = 'juanita.gomez'
 GROUP BY(anio,periodo);
 
+-- Promedio general 
+select round(avg(promedios),2) from
+(select round((porcentaje1*nota1 +porcentaje2*nota2 + porcentaje3*nota3 + porcentaje4*nota4 + porcentaje5*nota5)/100,2) as promedios, est_usr
+from resumen 
+where nombre_asignatura = 'Precalculo') as B;
+
+-- Porcentaje reprobados
+select round(cast(count(promedios) as numeric)/cast((select count(*) from resumen where nombre_asignatura = 'Precalculo') as numeric),2) * 100 as porc_aprobados from
+(select round((porcentaje1*nota1 +porcentaje2*nota2 + porcentaje3*nota3 + porcentaje4*nota4 + porcentaje5*nota5)/100,2) as promedios, est_usr
+from resumen 
+where nombre_asignatura = 'Precalculo') as B
+where promedios<3;
+
+-- Nota minima y maxima
+select min(promedios) as minimo, max(promedios) as maximo from
+(select round((porcentaje1*nota1 +porcentaje2*nota2 + porcentaje3*nota3 + porcentaje4*nota4 + porcentaje5*nota5)/100,2) as promedios, est_usr
+from resumen 
+where nombre_asignatura = 'Precalculo') as B;
+
 
 
 	
