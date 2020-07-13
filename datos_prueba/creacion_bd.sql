@@ -1,3 +1,4 @@
+CREATE EXTENSION pgcrypto;
 
 /* Conjuntos de entidades */
 
@@ -151,5 +152,5 @@ FROM
 	on Bc.sem_id = Bd.sem_id;
 	
 
-INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin','admin','administrador');
+INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin',crypt('admin', gen_salt('xdes')),'administrador');
 INSERT INTO Empleado VALUES (1,'1','1');

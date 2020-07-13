@@ -16,13 +16,17 @@ import numpy as np
 import pandas as pd
 import psycopg2
 import seaborn as sns
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
+                        password="123",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_13")
+                        database="Epsilon")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -122,6 +126,56 @@ def generate_image():
     image = base64.b64encode(figfile.getvalue()).decode('utf-8')
     return image
 
+def send_email(username,email,codigo):
+    sender_email = "EpsilonAppUR@gmail.com"
+    receiver_email = email
+    password = "macc123*"
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Ingreso a la APP Epsilon"
+    message["From"] = sender_email
+    message["To"] = receiver_email
+
+    # Create the plain-text and HTML version of your message
+    HTML = """\
+                <html>
+                <body>
+                    <p>Bienvenido a la app Epsilon. Su usuario y contraseña son:<br>
+                    User: %s <br>
+                    Password: %s <br> 
+                    <a href="http://www.realpython.com">Epsilon </a> 
+                    para cambiar la contraseña.
+                    </p>
+                </body>
+                </html>
+                """%(username,codigo)
+
+    # Turn these into plain/html MIMEText objects
+    part2 = MIMEText(HTML, "html")
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part2) 
+
+    # Create secure connection with server and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(
+            sender_email, receiver_email, message.as_string()
+        )
+
+def render_main_windows(username_input):
+    cur.execute("SELECT tipo FROM personas WHERE usuario=%s", (username_input,))
+    usertype_input = str(cur.fetchone()[0])
+    print(usertype_input)
+
+    # Get user type to know what main_window to open
+    if usertype_input == 'administrador':
+        return redirect(url_for('main_admin'))
+    elif usertype_input == 'profesor':
+        return redirect(url_for('main_teacher', user_name=username_input))
+    else:
+        return redirect(url_for('main_student', user_name=username_input))
 
 # --- Login Window --------------------------------------------------------------------------------
 
@@ -147,22 +201,19 @@ def login():
         # Verify username is on the database
         try:
             cur.execute("SELECT usuario FROM personas WHERE usuario=%s", (username_input,))
-            cur.execute("SELECT contrasena FROM personas WHERE usuario=%s", (username_input,))
+            cur.execute("SELECT contrasena = crypt(%s, contrasena) FROM personas WHERE usuario = %s;", (password_input, username_input))
             passwd = str(cur.fetchone()[0])
-            if password_input != passwd:
+            if passwd == 'False':
                 flash('La contraseña es incorrecta', 'error')
                 return render_template('login.html')
 
-            cur.execute("SELECT tipo FROM personas WHERE usuario=%s", (username_input,))
-            usertype_input = str(cur.fetchone()[0])
-
-            # Get user type to know what main_window to open
-            if usertype_input == 'administrador':
-                return redirect(url_for('main_admin'))
-            elif usertype_input == 'profesor':
-                return redirect(url_for('main_teacher', user_name=username_input))
+            # Realizar consulta del login para saber si es la primera vez que se ingresa
+            first_time = True
+            if first_time:
+                return render_template('/change_passwd.html', user_name=username_input)
             else:
-                return redirect(url_for('main_student', user_name=username_input))
+                return render_main_windows(username_input)
+            
 
         except Exception:
             flash('El usuario no se encuentra registrado', 'error')
@@ -170,6 +221,21 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route("/change_passwd/<string:user_name>", methods=['POST','GET'])
+def change_passwd(user_name):
+    password_input = request.form['passwd']
+    password_input_conf = request.form['passwd_conf']
+    if password_input != password_input_conf:
+        flash('La contraseña no coinciden', 'error')
+        return render_template('change_passwd.html')
+    else:
+        cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
+                    where usuario = %s; """, (password_input_conf,user_name))
+        conn.commit()
+        flash('La contraseña fue cambiada', 'error')
+        return render_main_windows(user_name)
+
+        
 
 # --- Student Page --------------------------------------------------------------------------------
 
@@ -624,6 +690,11 @@ def upload_file():
         cur.execute(sqlFile)      
         conn.commit()
     count = count_admin_alerts()
+
+    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
+    users = cur.fetchall()
+    for user in users:
+        send_email(user[0],user[1],user[2])
     return render_template('admin/import_success.html', count=count)
     
 
