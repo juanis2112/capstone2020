@@ -153,4 +153,4 @@ FROM
 	
 
 INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin',crypt('admin', gen_salt('xdes')),'administrador');
-INSERT INTO Empleado VALUES (1,'1','0');
+INSERT INTO Empleado VALUES (1,'0','1');
