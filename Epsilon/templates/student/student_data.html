@@ -1,99 +1,49 @@
-<!DOCTYPE html>
-<form action="{{url_for('personal_data', user_name = user_name)}}" method="POST">
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
-</head>
-<style>
-
-a:link {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-}
-a:visited {
-  color: white;
-  background-color: transparent;
-  text-decoration: none;
-}
-</style>
-
-<body>
-    <div>
-        <div class="header">
-            <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
-              <span>
-              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              </span>
-              <span class="badge">{{count}}</span>
-            </a>
-            <a href="{{ url_for('main_window') }}">
-              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
-            </a>
+{% extends "layouts/estructura_estudiante.html" %}
+{% block lateral %}
+<ul>
+  <a href="{{url_for('admin_personal_data', user_name = user_name)}}">
+    <li style="background-color: #0099cc;">
+      <div class="menu-box">
+        <div >
+          Datos personales
         </div>
-        <div class="row">
-            <div class="col-3 menu">
-            <ul>
-                <li style="background-color: #0099cc;"><div class="menu-box"><p>Datos Personales</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></li>
-                <li><a href="{{url_for('academic_history', user_name = user_name)}}"><div class="menu-box"><p>Datos académicos</p><img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
-            </ul>
-            </div>
-
-            <div class="col-9">
-              <a href="{{url_for('main_student',user_name=user_name)}}" class="btn">
-              <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
-              <table class="center" id="table" cellspacing="0" cellpadding="0" style="border:none !important;">
-                <tr>
-                  <td>Nombre: {{student_data.1}}</td>
-                </tr>
-                <tr>
-                  <td>Apellidos: {{student_data.2}} {{student_data.3}} </td>
-                </tr>
-                <tr>
-                  <td>Código: {{student_data.0}} </td>
-                </tr>
-                <tr>
-                  <td>Correo: {{student_data.4}} </td>
-                </tr>
-                <tr>
-                  <td>Documento: {{student_data.5}} </td>
-                </tr>
-              </table>
-              <br>
-              <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
-            </div>
+        <img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('admin_academic_history', user_name = user_name)}}">
+    <li>
+      <div class="menu-box">
+        <div >
+          Datos académicos
         </div>
-    </div>
-<script>
-function habilitar(){
-    var casillas_notas=document.getElementsByClassName("table-toggle");
-    for(var i=0;i<casillas_notas.length;i++){
-        casillas_notas[i].readOnly=false;
-    }
-    document.getElementById("boton-editar").style.backgroundColor="#073D72";
-    document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
-}
+          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+        </div>
+    </li>
+  </a>
+</ul>
+{% endblock %}
+{% block tablas %}
+<a href="{{url_for('main_student',user_name=user_name)}}" class="btn">
+<img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
+<table class="center" id="table" cellspacing="0" cellpadding="0" style="border:none !important;">
+  <tr>
+    <td>Nombre: {{student_data.1}}</td>
+  </tr>
+  <tr>
+    <td>Apellidos: {{student_data.2}} {{student_data.3}} </td>
+  </tr>
+  <tr>
+    <td>Código: {{student_data.0}} </td>
+  </tr>
+  <tr>
+    <td>Correo: {{student_data.4}} </td>
+  </tr>
+  <tr>
+    <td>Documento: {{student_data.5}} </td>
+  </tr>
+</table>
+<br>
+<a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
 
-function deshabilitar(){
-    var casillas_notas=document.getElementsByClassName("table-toggle");
-    for(var i=0;i<casillas_notas.length;i++){
-        casillas_notas[i].readOnly=true;
-    }
-    document.getElementById("boton-editar").style.backgroundColor="white";
-    document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
-}
-function exportF(elem) {
-  var table = document.getElementById("table");
-  var html = table.outerHTML;
-  var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url
-  elem.setAttribute("href", url);
-  elem.setAttribute("download", "datos_personales.xls"); // Choose the file name
-  return false;
-}
-</script>
-</body>
-</html>
-</form>
+{% endblock %}

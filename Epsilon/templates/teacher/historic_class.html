@@ -1,102 +1,62 @@
-<form action="{{url_for('show_class', user_name = user_name, class_name = class_name)}}" method="POST">
-
-  <html lang="en">
-  <style>
-    a.btn {
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      border-radius: 4px;
-      border: solid 1px #20538D;
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
-      -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
-      background: #4479BA;
-      color: #FFF;
-      padding: 8px 12px;
-      text-decoration: none;
-  }
-  </style>
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
-  </head>
-  <body>
-      <div>
-          <div class="header">
-              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              <a href="{{ url_for('main_window') }}">
-                <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
-              </a>
-          </div>
-          <div class="row">
-            <div class="col-3 menu">
-            <ul>
-              <li><div class="menu-box"><p>Mis materias</p><img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px"></div></li>
-              <li style="background-color: #0099cc;"><a href="{{url_for('class_history', user_name = user_name)}}"><div class="menu-box"><p>Historial de materias</p><img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;"></div></a></li>
-            </ul>
-            </div>
-            <div class="col-9" method="POST">
-              <div style="display:block;">
-                <span style="margin-left:0px;">
-                  <a href="{{url_for('classes',user_name=user_name,year=year,period=period)}}" class="btn">
-                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                  </a>
-                </span>
-                <div style="diplay:inline-block; text-align:center; width:80%;">
-                  <span class="mini-titulo">
-                  Listado de estudiantes del curso de {{class_name}} en el periodo {{year}}-{{period}}
-                  </span>
-                </div>
-              </div>
-              <table class="center">
-                      <tr>
-                          <th>Estudiantes</th>
-                          <th>Corte1</th>
-                          <th>Corte2</th>
-                          <th>Corte3</th>
-                          <th>Corte4</th>
-                          <th>Corte5</th>
-                          <th>Nota final</th>
-                      </tr>
-                      {% for student in students_class %}
-                      <tr>
-                          <td>{{student.1}} {{student.2}} {{student.3}}</td>
-                          <td>{{student.4}}</td>
-                          <td>{{student.5}}</td>
-                          <td>{{student.6}}</td>
-                          <td>{{student.7}}</td>
-                          <td>{{student.8}}</td>
-                          <td>{{student.9}}</td>
-                      </tr>
-                      {% endfor %}
-                  </table>
-                  <br>
-                  <br>
-              </div>
-          </div>
-      </div>
-  <script>
-  function habilitar(){
-      var casillas_notas=document.getElementsByClassName("table-toggle");
-      for(var i=0;i<casillas_notas.length;i++){
-          casillas_notas[i].readOnly=false;
-      }
-      document.getElementById("boton-editar").style.backgroundColor="#073D72";
-      document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
-  }
-
-  function deshabilitar(){
-      var casillas_notas=document.getElementsByClassName("table-toggle");
-      for(var i=0;i<casillas_notas.length;i++){
-          casillas_notas[i].readOnly=true;
-      }
-      document.getElementById("boton-editar").style.backgroundColor="white";
-      document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
-  }
-  </script>
-  </body>
-  </html>
-  </form>
+{% extends "layouts/estructura_profesor.html" %}
+{% block lateral %}
+<ul>
+    <li >
+      <div class="menu-box">
+        <div >
+          Mis materias
+        </div>
+      <img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px">
+    </div>
+    </li>
+  <a href="{{url_for('class_history', user_name = user_name)}}">
+    <li style="background-color: #0099cc;">
+      <div class="menu-box">
+        <div >
+          Historial de materias
+        </div>
+        <img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;">
+    </div>
+    </li>
+  </a>
+</ul>
+{% endblock %}
+{% block tablas %}
+<div style="display:block;">
+  <span style="margin-left:0px;">
+    <a href="{{url_for('classes',user_name=user_name,year=year,period=period)}}" class="btn">
+      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+    </a>
+  </span>
+  <div style="diplay:inline-block; text-align:center; width:80%;">
+    <span class="mini-titulo">
+    Listado de estudiantes del curso de {{class_name}} en el periodo {{year}}-{{period}}
+    </span>
+  </div>
+</div>
+<table class="center">
+        <tr>
+            <th>Estudiantes</th>
+            <th>Corte1</th>
+            <th>Corte2</th>
+            <th>Corte3</th>
+            <th>Corte4</th>
+            <th>Corte5</th>
+            <th>Nota final</th>
+        </tr>
+        {% for student in students_class %}
+        <tr>
+            <td>{{student.1}} {{student.2}} {{student.3}}</td>
+            <td>{{student.4}}</td>
+            <td>{{student.5}}</td>
+            <td>{{student.6}}</td>
+            <td>{{student.7}}</td>
+            <td>{{student.8}}</td>
+            <td>{{student.9}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+</div>
+{% endblock %}
