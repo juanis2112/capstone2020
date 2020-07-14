@@ -7,6 +7,11 @@ body{
   background-size: 100%;
 }
 
+html {
+  font-family: "Candara", sans-serif;
+}
+
+
 .row::after {
   content: "";
   clear: both;
@@ -18,35 +23,92 @@ body{
   padding: 15px;
 }
 
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-3 {width: 25%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-9 {width: 75%;
-  height: 500px;
-  overflow: scroll;
-  }
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
+/* Estructura de los html*/
 
-html {
-  font-family: "Lucida Sans", sans-serif;
-}
+
+/* Barra superior que contiene la campana y el log out*/
 
 .header {
   background-color: #073D72;
   color: #ffffff;
   padding-top: 10px;
-  padding-right: 25px;
+  padding-right: 45px;
   padding-bottom: 5px;
   border-bottom-right-radius: 70px;
   text-align: right;
 }
+
+
+
+/* Barra lateral de cada uno de los usuarios esta sera llamada la clase col-3*/
+
+.col-3 {
+  width: 25%;
+  font-size: 20px;
+  font-family: Candara;
+}
+
+/* Para la imagen de cada cuadro*/
+
+.col-3 img{
+  height: 30px;
+  width: 30px;
+  background-color: white;
+  border-radius: 7px;
+  margin-top: 10px;
+}
+
+.menu-box p{
+  margin-bottom: 0px;
+}
+
+
+/* Parte derecha de cada uno de los html: donde van ubicadas las tablas, botones, etc. Será llamado col-9*/
+
+.col-9 {
+  width: 75%;
+  height: 500px;
+  overflow: auto;
+  font-family: Candara;
+}
+
+
+
+/* Administrador */
+
+.ul_bloques{
+  list-style-type: none;
+}
+
+.bloque_est{
+  font-size: 23px;
+  padding-top: 0px;
+  text-align:left;
+  text-size:70px;
+  display: inline-block;
+}
+
+.reporte-Estudiantes{
+  display: inline;
+  margin-right: 20px;
+  padding-right:2px;
+  float: right;
+  background-color: white;
+  border-radius: 10px;
+}
+
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
 
 .mini-titulo{
   font-size: large;
@@ -202,6 +264,9 @@ tr:nth-child(even) {
   background-color: red;
   color: white;
 }
+
+
+
 
 
 

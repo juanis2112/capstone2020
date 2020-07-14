@@ -1,130 +1,87 @@
-<form action="{{url_for('admin_update_class')}}" method="POST">
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Document</title>
-      <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
-  </head>
-  <body>
-      <div>
-          <div class="header">
-             <a href="{{url_for('show_admin_alerts')}}" class="notification" >
-              <span>
-              <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
-              </span>
-              <span class="badge">{{count}}</span>
-            </a>
-              <a href="{{ url_for('main_window') }}">
-                <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
-              </a>
+{% extends "layouts/estructura_administrador.html" %}
+
+{% block lateral %}
+  <ul>
+    <a href="{{url_for('load_students')}}">
+      <li>
+        <div class="menu-box">
+          <div >
+            Estudiantes
           </div>
-          <div class="row">
-              <div class="col-3 menu">
-              <ul>
-                <a href="{{url_for('load_students')}}">
-                      <li>
-                        <div class="menu-box">
-                          <div >
-                            Estudiantes
-                          </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
-                        </div>
-                      </li>
-                </a>
-                <a href="{{url_for('load_teachers')}}">
-                      <li>
-                        <div class="menu-box">
-                          <div >
-                            Profesores
-                          </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
-                        </div>
-                      </li>
-                </a>
-                <a href="{{url_for('load_classes')}}">
-                      <li style="background-color: #0099cc;">
-                        <div class="menu-box">
-                          <div >
-                            Materias
-                          </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
-                        </div>
-                      </li>
-                </a>
-                <a href="{{url_for('main_window')}}">
-                      <li>
-                        <div class="menu-box">
-                          <div >
-                            Alertas
-                          </div>
-                        <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
-                        </div>
-                      </li>
-                </a>
-              </ul>
+        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+        </div>
+      </li>
+    </a>
+    <a href="{{url_for('load_teachers')}}">
+      <li>
+        <div class="menu-box">
+          <div >
+            Profesores
+          </div>
+        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+        </div>
+      </li>
+    </a>
+    <a href="{{url_for('load_classes')}}">
+          <li style="background-color: #0099cc;">
+            <div class="menu-box">
+              <div >
+                Materias
               </div>
-            <div class="col-9">
-              <div style="display:block;">
-                <span style="margin-left:0px;">
-                  <a href="{{url_for('load_classes')}}" class="btn">
-                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                  </a>
-                </span>
+            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+            </div>
+          </li>
+    </a>
+    <a href="{{url_for('admin_functions')}}">
+          <li>
+            <div class="menu-box">
+              <div >
+                Administración
               </div>
-              <br>
-              <table class="center">
-                    <tr>
-                        <th>Asignaturas</th>
-                        <th>Código</th>
-                        <th>Créditos</th>
-                        <th>% Corte 1</th>
-                        <th>% Corte 2</th>
-                        <th>% Corte 3</th>
-                        <th>% Corte 4</th>
-                        <th>% Corte 5</th>
-                    </tr>
-                    {% for class_name in classes %}
-                    <tr>
-                        <td>{{class_name.0}} </td>
-                        <td>{{class_name.1}} </td>
-                        <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}" size="5"></td>
-                        <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}" size="5"></td>
-                        <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}" size="5"></td>
-                        <td><input type="text" name="term3_{{class_name.1}}" value="{{class_name.5}}" size="5"></td>
-                        <td><input type="text" name="term4_{{class_name.1}}" value="{{class_name.6}}" size="5"></td>
-                        <td><input type="text" name="term5_{{class_name.1}}" value="{{class_name.7}}" size="5"></td>
+            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+            </div>
+          </li>
+    </a>
+  </ul>
+{% endblock %}
+{% block tablas %}
+<div style="display:block;">
+<span style="margin-left:0px;">
+  <a href="{{url_for('load_classes')}}" class="btn">
+    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+  </a>
+</span>
+</div>
+<br>
+<table class="center">
+    <tr>
+        <th>Asignaturas</th>
+        <th>Código</th>
+        <th>Créditos</th>
+        <th>% Corte 1</th>
+        <th>% Corte 2</th>
+        <th>% Corte 3</th>
+        <th>% Corte 4</th>
+        <th>% Corte 5</th>
+    </tr>
+    {% for class_name in classes %}
+    <tr>
+        <td>{{class_name.0}} </td>
+        <td>{{class_name.1}} </td>
+        <td><input type="text" name="credit_{{class_name.1}}" value="{{class_name.2}}" size="5"></td>
+        <td><input type="text" name="term1_{{class_name.1}}" value="{{class_name.3}}" size="5"></td>
+        <td><input type="text" name="term2_{{class_name.1}}" value="{{class_name.4}}" size="5"></td>
+        <td><input type="text" name="term3_{{class_name.1}}" value="{{class_name.5}}" size="5"></td>
+        <td><input type="text" name="term4_{{class_name.1}}" value="{{class_name.6}}" size="5"></td>
+        <td><input type="text" name="term5_{{class_name.1}}" value="{{class_name.7}}" size="5"></td>
 
-                    </tr>
-                    {% endfor %}
-                </table>
-                <br>
-                <button type="submit" class="btn">
-                      Guardar
-                </button>
-              </div>
-      </div>
-    </div>
-  <script>
-  function habilitar(){
-      var casillas_notas=document.getElementsByClassName("table-toggle");
-      for(var i=0;i<casillas_notas.length;i++){
-          casillas_notas[i].readOnly=false;
-      }
-      document.getElementById("boton-editar").style.backgroundColor="#073D72";
-      document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
-  }
-
-  function deshabilitar(){
-      var casillas_notas=document.getElementsByClassName("table-toggle");
-      for(var i=0;i<casillas_notas.length;i++){
-          casillas_notas[i].readOnly=true;
-      }
-      document.getElementById("boton-editar").style.backgroundColor="white";
-      document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
-  }
-  </script>
-  </body>
-  </html>
-</form>
+    </tr>
+    {% endfor %}
+</table>
+<br>
+<button type="submit" class="btn">
+      Guardar
+</button>
+</div>
+{% endblock %}
+            

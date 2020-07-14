@@ -34,11 +34,17 @@
 	box-sizing: border-box;
 }
 
-body, html {
+
+body{
+  background-image: url("imagenes/fondo.jpg");
+  background-size: 100% 100%;
+}
+
+
+html {
 	height: 100%;
 	font-family: Poppins-Regular, sans-serif;
 }
-
 /*---------------------------------------------*/
 a {
 	font-family: Poppins-Regular;
@@ -169,7 +175,6 @@ iframe {
   align-items: center;
   padding: 15px;
   background-color: transparent;
-  background-image: url("imagenes/fondo.jpg");
 }
 .container-login100:before{
     content: '';
@@ -187,8 +192,7 @@ iframe {
   height: 440px;
   background-color: #073D72;
   border-radius: 10px;
-  overflow: hidden;
-
+  overflow: hidden;s
   display: -moz-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -196,7 +200,11 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 33px 33px 33px 82px;
+  padding-left: 33px;
+  padding-right: 33px;
+  padding-top: 70px;
+  padding-bottom: 33px;
+  /*padding: 33px 33px 33px 82px;*/
   opacity: 0.9;
 }
 
@@ -243,7 +251,6 @@ iframe {
   font-size: 15px;
   line-height: 1.5;
   color: #666666;
-
   display: block;
   width: 100%;
   background: #e6e6e6;
@@ -289,7 +296,6 @@ iframe {
 
 .symbol-input100 {
   font-size: 15px;
-
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -302,7 +308,7 @@ iframe {
   left: 0;
   width: 100%;
   height: 100%;
-  padding-left: 7.5%;
+  padding-left: 4.7%;
   padding-bottom: 2.5%;
   pointer-events: none;
   color: #666666;

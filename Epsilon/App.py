@@ -23,10 +23,10 @@ from email.mime.multipart import MIMEMultipart
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="123",
+                        password="test",
                         host="localhost",
                         port="5432",
-                        database="Epsilon")
+                        database="FINAL")
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
