@@ -33,22 +33,29 @@
     <th>Materia</th>
     <th> Tipo </th>
     <th>Alerta</th>
+    <th>Borrar Alerta</th>
 </tr>
 {% for alert in unread_alerts%}
-<tr>
+<tr style="text-align: center;" id="{{alert.0}}/{{alert.3}}">
     <td>{{alert.3}} </td>
     <td>{{alert.6}} </td>
     <td>{{alert.2}} </td>
     <td>{{alert.1}} </td>
+    <td><a href="{{url_for('delete_alerts', user_name = alert.0, date = alert.3, user_type='student')}}" class="btn">
+                      Borrar
+                  </a></td>
 </tr>
 {% endfor %}
 </tr>
 {% for alert in read_alerts%}
-<tr>
+<tr style="text-align: center;" id="{{alert.0}}/{{alert.3}}">
     <td>{{alert.3}} </td>
     <td>{{alert.6}} </td>
     <td>{{alert.2}} </td>
     <td>{{alert.1}} </td>
+    <td><a href="{{url_for('delete_alerts', user_name = alert.0, date = alert.3, user_type='student')}}" class="btn">
+                      Borrar
+                  </a></td>
 </tr>
 {% endfor %}
 </table>

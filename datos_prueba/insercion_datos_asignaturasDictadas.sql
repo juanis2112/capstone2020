@@ -7,7 +7,7 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaProfesores FROM '{}' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '{path}' DELIMITER ',' CSV HEADER;
 
 /* Metiendo a la tabla dicta */
 insert into dicta(codigo,sem_id)
@@ -43,5 +43,4 @@ where codigo not in (select codigo from pertenece);
 
 
 drop table tablaEstudiante;
-drop table tablaEmpleado;
 drop table tablaProfesores;

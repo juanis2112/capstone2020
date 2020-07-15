@@ -31,7 +31,7 @@ CREATE TABLE Public.tablaEstudiante(
 	, PRIMARY KEY(Documento_actual,Nombre_Asignatura)
 );
 
-COPY Public.tablaEstudiante FROM '{}' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEstudiante FROM '{path}' DELIMITER ',' CSV HEADER ;
 
 /* Metiendo a la tabla de Programa */
 insert into Programa(codigo_programa,programa,facultad_o_escuela) 
@@ -41,7 +41,7 @@ where 1 not in (select codigo_programa from programa);
 
 /* Metiendo a la tabla de Personas */
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),random(), 'estudiante' 
+select distinct codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(codigo as text) , gen_salt('xdes')), 'estudiante' 
 from tablaEstudiante
 where codigo not in (select codigo from personas)
 group by(codigo,nombres_estudiante,apellido_1_estudiante,apellido_2_estudiante,correo_institucional,sexo,documento_actual);
@@ -60,7 +60,7 @@ where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
 /* Metiendo a la tabla de Semestre */
 insert into semestre(periodo,anio,grupo)
-select {} as periodo,{} as anio,ga.grupo
+select {period} as periodo,{year} as anio,ga.grupo
 from (
 	select distinct nombre_asignatura, grupo_asignatura as grupo
 	from tablaEstudiante

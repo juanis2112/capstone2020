@@ -49,14 +49,19 @@
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <ul style="list-style-type:none">
- <a href="{{url_for('import_students')}}">
+ <a href="{{url_for('import_data_from_file', data_type='students')}}">
    <li style="font-size:30px;">
-   Importar estudiantes
+       Importar estudiantes
   </li>
   </a>
-  <a href="/main_admin">
+  <a href="{{url_for('import_data_from_file', data_type='teachers')}}">
      <li style="font-size:30px;">
        Importar profesores
+    </li>
+  </a>
+  <a href="{{url_for('import_data_from_file', data_type='classes')}}">
+     <li style="font-size:30px;">
+       Importar classes
     </li>
   </a>
   <a href="/main_admin">

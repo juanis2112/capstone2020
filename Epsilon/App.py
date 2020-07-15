@@ -23,10 +23,12 @@ from email.mime.multipart import MIMEMultipart
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="FINAL")
+                        database="Epsilon_24",)
+
+conn.set_session(autocommit=True)
 cur = conn.cursor()
 app = Flask(__name__)
 app.secret_key = 'mysecretkey'
@@ -164,18 +166,34 @@ def send_email(username,email,codigo):
             sender_email, receiver_email, message.as_string()
         )
 
-def render_main_windows(username_input):
-    cur.execute("SELECT tipo FROM personas WHERE usuario=%s", (username_input,))
-    usertype_input = str(cur.fetchone()[0])
-    print(usertype_input)
 
-    # Get user type to know what main_window to open
-    if usertype_input == 'administrador':
-        return redirect(url_for('main_admin'))
-    elif usertype_input == 'profesor':
-        return redirect(url_for('main_teacher', user_name=username_input))
+def render_main_windows(user_name):
+    cur.execute("SELECT esAdmin,esProfesor FROM personas JOIN empleado ON personas.codigo = empleado.codigo WHERE usuario= %s;", (user_name,))
+    aux = cur.fetchone()
+    if (None is aux):
+        return redirect(url_for('main_student', user_name=user_name))
     else:
-        return redirect(url_for('main_student', user_name=username_input))
+        aux = list(aux)
+        is_admin, is_teacher = aux
+
+        # Get user type to know what main_window to open
+        if is_admin and is_teacher:
+            return render_template('admin/admin_teacher.html', user_name= user_name)
+        elif is_admin:
+            return redirect(url_for('main_admin'))
+        else:
+            return redirect(url_for('main_teacher', user_name=user_name))
+      
+        
+def upload_file(file, path_to_file, data_insertion_path, **kwargs):    
+    csv_file_path = Path(path_to_file).resolve()
+    with open(csv_file_path, mode='wb') as csv_file:
+        csv_file.write(file.read())
+    csv_file_path.chmod(0o777) 
+    with open(data_insertion_path, 'r', encoding='utf-8') as insercion_sql:
+        sqlFile = insercion_sql.read().format(path=str(csv_file_path), **kwargs)
+        cur.execute(sqlFile)      
+         
 
 # --- Login Window --------------------------------------------------------------------------------
 
@@ -183,13 +201,12 @@ def render_main_windows(username_input):
 def main_window(): 
     try:
         cur.execute("SELECT * from personas")
-        conn.commit()
+         
     except:
         conn.rollback()
         with open('../datos_prueba/creacion_bd.sql', 'r') as sqlFile:
-                print(sqlFile)
                 cur.execute(sqlFile.read())      
-                conn.commit()    
+                     
     return render_template('login.html')
 
 
@@ -208,7 +225,7 @@ def login():
                 return render_template('login.html')
 
             # Realizar consulta del login para saber si es la primera vez que se ingresa
-            first_time = True
+            first_time = False
             if first_time:
                 return render_template('/change_passwd.html', user_name=username_input)
             else:
@@ -226,12 +243,11 @@ def change_passwd(user_name):
     password_input = request.form['passwd']
     password_input_conf = request.form['passwd_conf']
     if password_input != password_input_conf:
-        flash('La contraseña no coinciden', 'error')
+        flash('Las contraseña no coinciden', 'error')
         return render_template('change_passwd.html')
     else:
         cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
                     where usuario = %s; """, (password_input_conf,user_name))
-        conn.commit()
         flash('La contraseña fue cambiada', 'error')
         return render_main_windows(user_name)
 
@@ -242,7 +258,7 @@ def change_passwd(user_name):
 @app.route("/main_student/<string:user_name>", methods=['POST', 'GET'])
 def main_student(user_name):
     cur.execute("""SELECT
-                    nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
+                    nombre_asignatura, nota1,nota2,nota3,nota4,nota5,
                     round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
                     porcentaje4*nota4+porcentaje5*nota5)/100,2)
                 FROM RESUMEN
@@ -379,7 +395,7 @@ def update_grade(class_name, user_name):
                                         est_usr = %s)""",
                     (*grades, user_name, class_name,
                      student[0], student[0]))
-        conn.commit()
+         
     return redirect(url_for('show_class', user_name=user_name,
                                 class_name=class_name))
 
@@ -661,7 +677,7 @@ def admin_update_class():
                        (SELECT max(RESUMEN.anio) FROM RESUMEN)) AND
                     RESUMEN.nombre_asignatura = %s)""",
                     (credit, per1, per2, per3, per4, per5, class_name[0]))
-        conn.commit()
+         
     return redirect(url_for('load_classes', classes=classes))
 
 
@@ -670,33 +686,45 @@ def admin_functions():
     count = count_admin_alerts()
     return render_template('admin/admin_functions.html', count=count)
     
-@app.route("/admin_functions/import_students",methods=['POST', 'GET'])
-def import_students():
+
+@app.route("/admin_functions/import_data_from_file/<string:data_type>/",methods=['POST', 'GET'])
+def import_data_from_file(data_type):
+    
     count = count_admin_alerts()
-    return render_template('admin/import_students.html', count=count)
+    return render_template('admin/import_data_from_file.html', count=count, data_type=data_type)
 
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
+@app.route('/upload_students', methods=['POST'])
+def upload_students():
     file = request.files['inputfile']
-    
-    csv_file_path = Path('../datos_prueba/temp_data.csv').resolve()
-    with open(csv_file_path, mode='wb') as csv_file:
-        csv_file.write(file.read())
-    csv_file_path.chmod(0o777) 
-    
-    with open('../datos_prueba/insercion_datos.sql', 'r', encoding='utf-8') as insercion_sql:
-        sqlFile = insercion_sql.read().format(str(csv_file_path), '1', '2018')
-        cur.execute(sqlFile)      
-        conn.commit()
-    count = count_admin_alerts()
-
+    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_datos_estudiantes.sql', period='2', year='2018')
     cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
     users = cur.fetchall()
     for user in users:
         send_email(user[0],user[1],user[2])
+    count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
-    
+
+
+@app.route('/upload_teachers', methods=['POST'])
+def upload_teachers():
+    file = request.files['inputfile']
+    upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_datos_empleados.sql')
+    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
+    users = cur.fetchall()
+    for user in users:
+        send_email(user[0],user[1],user[2])
+    count = count_admin_alerts()
+    return render_template('admin/import_success.html', count=count)
+
+
+@app.route('/upload_classes', methods=['POST'])
+def upload_classes():
+    file = request.files['inputfile']
+    upload_file(file, '../datos_prueba/temp_data_classes.csv', '../datos_prueba/insercion_datos_asignaturasDictadas.sql')
+    count = count_admin_alerts()
+    return render_template('admin/import_success.html', count=count)
+
 
 # ---- Admin: Reports -----------------------------------------------------------------------------
 @app.route("/class_report/<string:user_name>/<string:class_name>/<string:year><string:period>/", methods=['POST', 'GET'])
@@ -830,13 +858,12 @@ def student_alerts(student, class_name, grade):
         if grade < 1:
             #Consulta que mete el string a la base de datos
             alert_student = "Tiene una alerta de nota muy baja en la materia "+class_name
-            alert_admin= "El Estudiante "+ student +  " tiene una alerta de nota muy baja, en la materia " +  class_name
             alert_type ='ALTA'
         cur.execute("""insert into alertas (usuario, texto, tipo, fecha, periodo,
-                    anio, nombre_asignatura, visto_estudiante)
+                    anio, nombre_asignatura, visto_estudiante, visto_admin)
                     values (%s,%s,%s, CURRENT_TIMESTAMP,
-                            '1', '2020', %s, '0' )""", (student, alert_student, alert_type, class_name))
-        conn.commit()
+                            '1', '2020', %s, '0', '0')""", (student, alert_student, alert_type, class_name))
+         
 
 
 # ---- Admin: Alert -----------------------------------------------------------------------------
@@ -844,28 +871,63 @@ def student_alerts(student, class_name, grade):
 def show_alerts(user_name):
     cur.execute("""SELECT * FROM alertas
                     WHERE usuario=%s AND
-                    visto_admin  = '0'
+                    visto_estudiante = '0' AND
+                    oculto_estudiante = '0'
                     ORDER BY fecha DESC""", (user_name,))
     unread_alerts = cur.fetchall()
     cur.execute("""SELECT * FROM alertas
                     WHERE usuario=%s AND
-                    visto_admin = '1'
+                    visto_estudiante = '1' AND
+                    oculto_estudiante = '0'
                     ORDER BY fecha DESC;""", (user_name,))
     read_alerts = cur.fetchall()
+    cur.execute("""UPDATE alertas
+                    set visto_estudiante = '1'
+                    WHERE usuario=%s AND
+                    oculto_estudiante = '0'""", (user_name,))
     return render_template('/student/student_alert.html', unread_alerts=unread_alerts,
-                           read_alerts=read_alerts, user_name=user_name)
+                           read_alerts=read_alerts, user_name=user_name, count='0')
 
 
-@app.route("/student_alerts/", methods=['POST', 'GET'])
+@app.route("/admin_alerts/", methods=['POST', 'GET'])
 def show_admin_alerts():
     cur.execute("""SELECT
                     nombre,apellido_1,apellido_2,texto,alertas.tipo
-                    as alerta,fecha,periodo,anio,nombre_asignatura
+                    as alerta,fecha,periodo,anio,nombre_asignatura, alertas.usuario
                     FROM alertas join personas
-                    on alertas.usuario = personas.usuario""")
-    alerts = cur.fetchall()
-    conn.commit()
-    return render_template('/admin/admin_alert.html', alerts=alerts)
+                    on alertas.usuario = personas.usuario
+                    WHERE
+                    visto_admin = '0' AND
+                    oculto_admin = '0'
+                    ORDER BY fecha DESC""")
+    unread_alerts = cur.fetchall()
+    cur.execute("""SELECT
+                    nombre,apellido_1,apellido_2,texto,alertas.tipo
+                    as alerta,fecha,periodo,anio,nombre_asignatura, alertas.usuario
+                    FROM alertas join personas
+                    on alertas.usuario = personas.usuario
+                    WHERE
+                    visto_admin = '1' AND
+                    oculto_admin = '0'
+                    ORDER BY fecha DESC;""")
+    read_alerts = cur.fetchall()
+    cur.execute("""UPDATE alertas
+                    set visto_admin = '1'
+                    WHERE oculto_admin = '0'""")
+    return render_template('/admin/admin_alert.html', unread_alerts=unread_alerts,
+                           read_alerts=read_alerts, count='0')
+
+@app.route("/delete_alerts/<string:user_name>/<string:date>//<string:user_type>/", methods=['POST', 'GET'])
+def delete_alerts(user_name, date, user_type):
+    if user_type=='admin':
+        print("Hola")
+        cur.execute(""" UPDATE alertas SET oculto_admin = '1' WHERE usuario = %s AND fecha = %s
+        """, (user_name, date))
+        return redirect(url_for('show_admin_alerts'))
+    else:
+        cur.execute(""" UPDATE alertas SET oculto_estudiante = '1' WHERE usuario = %s AND fecha = %s
+        """, (user_name, date))
+        return redirect(url_for('show_alerts', user_name = user_name))
 
 
 if __name__ == "__main__":

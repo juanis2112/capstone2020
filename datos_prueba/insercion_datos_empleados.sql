@@ -10,18 +10,18 @@ CREATE TABLE Public.tablaEmpleado(
 	esAdmin bool NOT NULL
 );
 
-COPY Public.tablaEmpleado FROM '{}' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEmpleado FROM '{path}' DELIMITER ',' CSV HEADER;
 
 -- Metiendo a la tabla Personas
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'administrador', 'administrador' 
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(Codigo_empleado as text) , gen_salt('xdes')), 'administrador' 
 from tablaEmpleado
 where 
 	esAdmin='1' and
 	Codigo_empleado not in (select codigo from personas);
 
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)
-select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),'profesor', 'profesor' 
+select distinct Codigo_empleado,Nombres_empleado,Apellido_1_empleado,Apellido_2_empleado,correo_institucional,sexo,Documento_actual, substring(correo_institucional from '(.*)@'),crypt(cast(Codigo_empleado as text) , gen_salt('xdes')), 'profesor' 
 from tablaEmpleado
 where 
 	esAdmin='0' and 
