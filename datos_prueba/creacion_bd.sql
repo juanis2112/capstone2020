@@ -98,11 +98,11 @@ create table dicta (
 create table toma (
 	codigo Integer not null,
 	sem_id serial not null,
-	nota1 numeric not null,
-	nota2 numeric not null,
-	nota3 numeric not null,
-	nota4 numeric not null,
-	nota5 numeric not null,
+	nota1 numeric ,
+	nota2 numeric ,
+	nota3 numeric ,
+	nota4 numeric ,
+	nota5 numeric ,
 	primary key(codigo,sem_id),
 	foreign key (codigo) references Estudiante,
 	foreign key (sem_id) references semestre
