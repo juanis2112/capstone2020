@@ -26,7 +26,7 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_24",)
+                        database="Epsilon_25",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -694,18 +694,6 @@ def import_data_from_file(data_type):
     return render_template('admin/import_data_from_file.html', count=count, data_type=data_type)
 
 
-@app.route('/upload_students', methods=['POST'])
-def upload_students():
-    file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_datos_estudiantes.sql', period='2', year='2018')
-    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
-    users = cur.fetchall()
-    for user in users:
-        send_email(user[0],user[1],user[2])
-    count = count_admin_alerts()
-    return render_template('admin/import_success.html', count=count)
-
-
 @app.route('/upload_teachers', methods=['POST'])
 def upload_teachers():
     file = request.files['inputfile']
@@ -717,6 +705,18 @@ def upload_teachers():
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
 
+@app.route('/upload_students', methods=['POST'])
+def upload_students():
+    period = request.form['period']
+    year = request.form['year']
+    file = request.files['inputfile']
+    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_datos_estudiantes.sql', period=period, year=year)
+    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
+    users = cur.fetchall()
+    for user in users:
+        send_email(user[0],user[1],user[2])
+    count = count_admin_alerts()
+    return redirect(url_for('import_data_from_file', data_type='classes'))
 
 @app.route('/upload_classes', methods=['POST'])
 def upload_classes():

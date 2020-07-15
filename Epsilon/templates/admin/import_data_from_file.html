@@ -49,8 +49,30 @@
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <ul style="list-style-type:none">
-  Seleccione a continuación el archivo que desea importar:
-  <form method= "POST" action="/upload_{{data_type}}" enctype=multipart/form-data>
+<form method= "POST" action="/upload_{{data_type}}" enctype=multipart/form-data>
+{% if data_type=='students' %}
+
+Seleccione el periodo académico para el cual desea cargar sus archivos:
+<br>
+Año: <input type="text" name="year" placeholder="Año">
+<br>
+Periodo: <input type="text" name="period" placeholder="Periodo">
+<br>
+Seleccione a continuación el archivo de estudiantes que desea importar:
+<br>
+{% endif %}
+
+{% if data_type=='classes' %}
+El archivo de estudiantes fue importado exitosamente.
+<br>
+Seleccione a continuación el archivo de asignaturas que desea importar:
+<br>
+{% endif %}
+
+{% if data_type=='teachers' %}
+
+Seleccione a continuación el archivo con los datos de profesores que desea importar:
+{% endif %}
           <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
           <label for="file" class="archivo">seleccionar archivo</label>
           <input type="submit" class="btn" value="subir" >
