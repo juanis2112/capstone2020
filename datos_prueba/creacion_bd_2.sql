@@ -148,7 +148,7 @@ select distinct est_cod,est_usr,nombre_est,ap1_est,ap2_est,B6.codigo_asignatura,
 (select * from asignaturas natural join curso_sem) as B natural join semestre) as B2
 on (B1.codigo_asignatura = B2.codigo_asignatura and B1.grupo = B2.grupo)) as B6
 join (select codigo as prof_cod,usuario as prof_usr,nombre_prof,ap1_prof,ap2_prof,codigo_asignatura,grupo from (select codigo,usuario,nombre as nombre_prof,apellido_1 as ap1_prof,apellido_2 as ap2_prof from empleado natural join personas) as B natural join dicta) as B7
-on (B6.codigo_asignatura = B7.codigo_asignatura and B6.grupo = B7.grupo)
+on (B6.codigo_asignatura = B7.codigo_asignatura and B6.grupo = B7.grupo);
 
 INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin',crypt('admin', gen_salt('xdes')),'administrador');
 INSERT INTO Empleado VALUES (1,'0','1');

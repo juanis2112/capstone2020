@@ -7,11 +7,11 @@ CREATE TABLE Public.tablaProfesores(
 	usuario VARCHAR(100) NOT NULL
 );
 
-COPY Public.tablaProfesores FROM '/home/juanc/GitHub/capstone2020/datos_prueba/datos_cursos_2018_1.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaProfesores FROM '{path}' DELIMITER ',' CSV HEADER;
 
 -- Metiendo a la tabla dicta.
 insert into dicta(codigo,codigo_asignatura,periodo,anio,grupo)
-select codigo,codigo_asignatura,1,2018,grupo from 
+select codigo,codigo_asignatura,{period},{year},grupo from 
 (select * from tablaProfesores join asignaturas on tablaProfesores.nombre_asignatura = asignaturas.nombre_asignatura) as B join personas
 on B.usuario = personas.usuario;
 -- Cambiar 1 & 2018 por el periodo y anio correspondiente.

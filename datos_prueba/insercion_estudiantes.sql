@@ -33,7 +33,7 @@ CREATE TABLE Public.tablaEstudiante(
 	, PRIMARY KEY(Documento_actual,Nombre_Asignatura)
 );
 
-COPY Public.tablaEstudiante FROM '/home/juanc/GitHub/capstone2020/datos_prueba/Datos_2018_1.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEstudiante FROM '{path}' DELIMITER ',' CSV HEADER ;
 
 --select * from tablaEstudiante
 
@@ -64,7 +64,7 @@ where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
 /* Metiendo a la tabla de Semestre */
 insert into semestre(codigo_asignatura,periodo,anio,grupo)
-select distinct codigo_asignatura,1,2018,Grupo_Asignatura from tablaEstudiante;
+select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante;
 
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
@@ -81,11 +81,11 @@ where codigo_asignatura not in (select codigo_asignatura from ofrece);
 
 /* Metiendo a la tabla curso_sem */
 insert into curso_sem(codigo_asignatura,periodo,anio,grupo)
-select distinct codigo_asignatura,1,2018,Grupo_Asignatura from tablaEstudiante;
+select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante;
 
 /* Metiendo a la tabla toma */
 insert into toma(codigo,codigo_asignatura,periodo,anio,grupo,nota1,nota2,nota3,nota4,nota5)
-select distinct codigo,codigo_asignatura,1,2018,Grupo_Asignatura,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
+select distinct codigo,codigo_asignatura,{period},{year},Grupo_Asignatura,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
 from tablaEstudiante;
 
 drop table tablaEstudiante;
