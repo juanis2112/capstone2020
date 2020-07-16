@@ -7,10 +7,11 @@ Webapp that allows browsing, modifying, analysing student data.
 import base64
 from io import BytesIO
 from pathlib import Path
-import tempfile
+import secrets
 
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
+import flask_login
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -26,14 +27,31 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_25",)
+                        database="Epsilon_28",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
 app = Flask(__name__)
-app.secret_key = 'mysecretkey'
+app.secret_key = secrets.token_bytes(nbytes=16)
 
+login_manager=flask_login.LoginManager()
+login_manager.init_app(app)
 
+class User(flask_login.UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
+        
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        cur.execute("SELECT usuario FROM personas WHERE usuario=%s", (user_id,))
+        return User(user_id)
+    except Exception:
+        return None     
+        
+        
+    
 # --- Util Functions --------------------------------------------------------------------------------
 def count_alerts(user_name):
     cur.execute("""SELECT count(*)
@@ -54,7 +72,7 @@ def count_admin_alerts():
     return count
 
 
-def get_student_grades(user_name, class_name):
+def get_student_grades(user_name, class_name, group):
     cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,
             nota4,nota5, round((porcentaje1*nota1+porcentaje2*nota2+
                                 porcentaje3*nota3+porcentaje4*nota4+
@@ -63,16 +81,17 @@ def get_student_grades(user_name, class_name):
             WHERE
                 prof_usr = %s AND
                 nombre_asignatura = %s AND
+                grupo = %s AND
                 anio = (SELECT max(anio) FROM RESUMEN) AND
                 periodo = (SELECT max(periodo) FROM RESUMEN WHERE anio =
                         (SELECT max(anio) FROM RESUMEN))
-            ORDER BY(nombre_est)""", (user_name, class_name)
+            ORDER BY(nombre_est)""", (user_name, class_name, group)
                 )
     grades = cur.fetchall()
     return grades
 
 
-def get_student_grades_period(user_name, class_name, year, period):
+def get_student_grades_period(user_name, class_name, year, period, group):
     cur.execute("""SELECT est_usr,nombre_est,ap1_est,ap2_est,nota1,nota2,nota3,
                 nota4,nota5,round((porcentaje1*nota1+porcentaje2*nota2+
                                    porcentaje3*nota3+porcentaje4*nota4+
@@ -82,8 +101,9 @@ def get_student_grades_period(user_name, class_name, year, period):
                 prof_usr = %s AND
                 nombre_asignatura = %s AND
                 anio = %s AND
-                periodo = %s
-            ORDER BY(nombre_est)""", (user_name, class_name, year, period)
+                periodo = %s AND
+                grupo = %s
+            ORDER BY(nombre_est)""", (user_name, class_name, year, period, group)
                 )
     grades = cur.fetchall()
     return grades
@@ -97,14 +117,14 @@ def get_name_from_user(user_name):
     return name
 
 
-def plot_groups(data, groups_data):
+def plot_groups(data, groups_data, class_name):
     N = 10
     width = 0.4
     ind = np.arange(N)
-    plt.figure(figsize=(12, 10))
+    plt.figure(figsize=(10, 6))
     sns.set(font_scale=0.8)
     ax = plt.subplot(111)
-    plot = []
+    plots = []
     color = ['r', 'b', 'g']
     for idx, data in enumerate(groups_data):
         df = pd.DataFrame(data, columns=['user', 'student', 'last_name1', 'last_name2', 'grade1',
@@ -112,12 +132,16 @@ def plot_groups(data, groups_data):
         df["grupo_promedio"] = pd.cut(df['grade_final'], bins=[n * 0.5 for n in range(11)])
         conteo_promedio = df['grupo_promedio'].groupby([df['grupo_promedio']]).count()
         y = [i for i in conteo_promedio]
-        plot.append(ax.bar(ind+idx*0.4, y, width=0.4, align='center', color=color[idx]))
+        plots.append(ax.bar(ind+idx*0.4, y, width=0.4, align='center', color=color[idx]))
     ax.set_ylabel('Numero de estudiantes')
+    ax.set_title("Nota final estudiantes curso %s" % class_name)
     ax.set_xticks(ind+width)
     ax.set_xticklabels(['(0, 0.5]', '(0.5, 1]', '(1, 1.5]', '(1.5, 2]', '(2, 2.5]', '(2.5, 3]',
                         '(3, 3.5]', '(3.5, 4]', '(4, 4.5]', '(4.5, 5]'])
-    ax.legend((plot[0][0], plot[1][0]), ('grupo1', 'grupo2'))
+
+    plot_legend = [plot[0] for plot in plots]
+    name_legend = ['Grupo %s' % str(i+1) for i in range(len(plots))]
+    ax.legend(plot_legend, name_legend)
     return ax
 
 
@@ -204,7 +228,7 @@ def main_window():
          
     except:
         conn.rollback()
-        with open('../datos_prueba/creacion_bd.sql', 'r') as sqlFile:
+        with open('../datos_prueba/creacion_bd_2.sql', 'r') as sqlFile:
                 cur.execute(sqlFile.read())      
                      
     return render_template('login.html')
@@ -216,29 +240,27 @@ def login():
         username_input = request.form['username']
         password_input = request.form['passwd']
         # Verify username is on the database
-        try:
-            cur.execute("SELECT usuario FROM personas WHERE usuario=%s", (username_input,))
-            cur.execute("SELECT contrasena = crypt(%s, contrasena) FROM personas WHERE usuario = %s;", (password_input, username_input))
-            passwd = str(cur.fetchone()[0])
-            if passwd == 'False':
-                flash('La contraseña es incorrecta', 'error')
-                return render_template('login.html')
-
-            # Realizar consulta del login para saber si es la primera vez que se ingresa
-            first_time = False
-            if first_time:
-                return render_template('/change_passwd.html', user_name=username_input)
-            else:
-                return render_main_windows(username_input)
-            
-
-        except Exception:
-            flash('El usuario no se encuentra registrado', 'error')
+        user = load_user(username_input)
+        if not user:
+            flash('El usuario no se encuentra registrado o la contraseña es incorrecta', 'error')
             return render_template('login.html')
+        cur.execute("SELECT contrasena = crypt(%s, contrasena) FROM personas WHERE usuario = %s;", (password_input, username_input))
+        passwd = str(cur.fetchone()[0])
+        if passwd == 'False':
+            flash('El usuario no se encuentra registrado o la contraseña es incorrecta', 'error')
+            return render_template('login.html')
+        flask_login.login_user(user)
+        # Realizar consulta del login para saber si es la primera vez que se ingresa
+        first_time = False
+        if first_time:
+            return render_template('/change_passwd.html', user_name=username_input)
+        else:
+            return render_main_windows(username_input)        
     else:
         return render_template('login.html')
 
 @app.route("/change_passwd/<string:user_name>", methods=['POST','GET'])
+@flask_login.login_required
 def change_passwd(user_name):
     password_input = request.form['passwd']
     password_input_conf = request.form['passwd_conf']
@@ -251,11 +273,18 @@ def change_passwd(user_name):
         flash('La contraseña fue cambiada', 'error')
         return render_main_windows(user_name)
 
+
+@app.route("/logout")
+@flask_login.login_required
+def logout():
+    flask_login.logout_user()
+    return redirect(url_for('login'))
         
 
 # --- Student Page --------------------------------------------------------------------------------
 
 @app.route("/main_student/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def main_student(user_name):
     cur.execute("""SELECT
                     nombre_asignatura, nota1,nota2,nota3,nota4,nota5,
@@ -288,6 +317,7 @@ def main_student(user_name):
 
 
 @app.route("/student_data/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def personal_data(user_name):
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
@@ -300,6 +330,7 @@ def personal_data(user_name):
 
 
 @app.route("/academic_history/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def academic_history(user_name):
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
                 FROM resumen
@@ -312,6 +343,7 @@ def academic_history(user_name):
 
 
 @app.route("/period_classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
 def period_classes(user_name, year, period):
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                     round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
@@ -331,8 +363,9 @@ def period_classes(user_name, year, period):
 
 # - Teacher Page ----------------------------------------------------------------------------------
 @app.route("/main_teacher/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def main_teacher(user_name):
-    cur.execute("""SELECT DISTINCT nombre_asignatura
+    cur.execute("""SELECT DISTINCT nombre_asignatura, grupo
                     FROM RESUMEN
                     WHERE
                         prof_usr = %s AND
@@ -344,24 +377,27 @@ def main_teacher(user_name):
     return render_template('/teacher/main_teacher.html', classes=data, user_name=user_name)
 
 
-@app.route("/class/<string:user_name>/<string:class_name>", methods=['POST', 'GET'])
-def show_class(user_name, class_name,):
-    data = get_student_grades(user_name, class_name)
+@app.route("/class/<string:user_name>/<string:class_name>/grupo:<string:group>", methods=['POST', 'GET'])
+@flask_login.login_required
+def show_class(user_name, class_name, group):
+    data = get_student_grades(user_name, class_name, group)
     return render_template('/teacher/class.html', user_name=user_name,
-                           students_class=data, class_name=class_name)
+                           students_class=data, class_name=class_name, group=group)
 
 
-@app.route("/class_edit/<string:user_name>/<string:class_name>", methods=['POST', 'GET'])
-def edit_grade(user_name, class_name):
-    students_class = get_student_grades(user_name, class_name)
+@app.route("/class_edit/<string:user_name>/<string:class_name>/grupo:<string:group>", methods=['POST', 'GET'])
+@flask_login.login_required
+def edit_grade(user_name, class_name, group):
+    students_class = get_student_grades(user_name, class_name, group)
     return render_template('/teacher/class_edit.html', user_name=user_name,
                            class_name=class_name,
-                           students_class=students_class)
+                           students_class=students_class, group=group)
 
 
-@app.route("/class_update/<string:user_name>/<string:class_name>", methods=['POST'])
-def update_grade(class_name, user_name):
-    students_class = get_student_grades(user_name, class_name)
+@app.route("/class_update/<string:user_name>/<string:class_name>/grupo:<string:group>", methods=['POST'])
+@flask_login.login_required
+def update_grade(class_name, user_name, group):
+    students_class = get_student_grades(user_name, class_name, group)
     for student in students_class:
         grades = list(student[4:-1])
         for idx, grade in enumerate(grades):
@@ -370,36 +406,32 @@ def update_grade(class_name, user_name):
                 grades[idx] = new_grade
                 student_alerts(student[0], class_name, new_grade)
         cur.execute("""UPDATE toma
-                    SET
-                        nota1 = %s,
-                        nota2 = %s,
-                        nota3 = %s,
-                        nota4 = %s,
-                        nota5 = %s
-                    WHERE
-                        toma.sem_id = (
-                            SELECT sem_id
-                            FROM RESUMEN
-                            WHERE
-                                prof_usr = %s AND
-                                nombre_asignatura = %s AND
-                                RESUMEN.est_usr = %s AND
-                                anio = (SELECT max(anio) FROM RESUMEN) AND
-                                periodo = (SELECT max(periodo) FROM RESUMEN
-                               WHERE anio = (SELECT max(anio) FROM RESUMEN))
-                                ) AND
-                                toma.codigo = (
-                                    SELECT distinct est_cod
-                                    FROM RESUMEN
-                                    WHERE
-                                        est_usr = %s)""",
-                    (*grades, user_name, class_name,
-                     student[0], student[0]))
-         
+                        SET -- Las 'nueva nota' se reemplazan por la nueva nota NUMERICA NO STRING
+                        	nota1 = %s,
+                        	nota2 = %s,
+                        	nota3 = %s,
+                        	nota4 = %s,
+                        	nota5 = %s
+                        WHERE	
+                        	codigo_asignatura = (select distinct codigo_asignatura from RESUMEN where nombre_asignatura = %s) AND
+                        	codigo = (select distinct est_cod from RESUMEN where est_usr = %s) AND 
+                        	grupo = (
+                        		select distinct grupo
+                        		from RESUMEN
+                        		where 
+                        			prof_usr = %s AND
+                        			nombre_asignatura = %s AND
+                        			anio = (select max(anio) from RESUMEN) AND
+                        			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                        	) AND
+                        	anio = (select max(anio) from RESUMEN) AND
+                        	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))""",
+                    (*grades, class_name, student[0], user_name, class_name))
     return redirect(url_for('show_class', user_name=user_name,
-                                class_name=class_name))
+                                class_name=class_name, group=group))
 
 @app.route("/class_history/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def class_history(user_name):
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
                 FROM resumen
@@ -408,9 +440,10 @@ def class_history(user_name):
     periods = cur.fetchall()
     return render_template('/teacher/class_history.html', user_name=user_name, periods = periods)
 
-@app.route("/classes/<string:user_name>/<string:year><string:period>", methods=['POST', 'GET'])
+@app.route("/classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
 def classes(user_name, year, period):
-    cur.execute("""SELECT DISTINCT nombre_asignatura
+    cur.execute("""SELECT DISTINCT nombre_asignatura, grupo
                     FROM RESUMEN
                     WHERE
                         prof_usr = %s AND
@@ -420,9 +453,10 @@ def classes(user_name, year, period):
     data = cur.fetchall()
     return render_template('/teacher/historic_teacher.html', classes=data, user_name=user_name, year=year, period=period)
 
-@app.route("/class/<string:user_name>/<string:class_name>/<string:year><string:period>", methods=['POST', 'GET'])
-def show__historic_class(user_name, class_name, year, period):
-    data = get_student_grades_period(user_name, class_name, year, period)
+@app.route("/class/<string:user_name>/<string:class_name>/grupo:<string:group>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
+def show__historic_class(user_name, class_name, year, period, group):
+    data = get_student_grades_period(user_name, class_name, year, period, group)
     return render_template('/teacher/historic_class.html', user_name=user_name,
                            students_class=data, class_name=class_name, year=year,
                            period=period)
@@ -430,6 +464,7 @@ def show__historic_class(user_name, class_name, year, period):
 
 # --- Admin Page ----------------------------------------------------------------------------------
 @app.route("/main_admin", methods=['POST', 'GET'])
+@flask_login.login_required
 def main_admin():
     count = count_admin_alerts()
     return render_template('/admin/main_admin.html', count=count)
@@ -437,6 +472,7 @@ def main_admin():
 
 # ---- Admin: Students Page -----------------------------------------------------------------------
 @app.route("/students", methods=['POST', 'GET'])
+@flask_login.login_required
 def load_students():
     cur.execute("""SELECT usuario, nombre, apellido_1, apellido_2 FROM personas
                 WHERE tipo='estudiante'""")
@@ -469,6 +505,7 @@ def load_students():
                            count=count)
 
 @app.route("/admin_main_student/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_main_student(user_name):
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                 round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
@@ -487,6 +524,7 @@ def admin_main_student(user_name):
                            user_name=user_name, count=count, student=student)
 
 @app.route("/admin_student_data/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_personal_data(user_name):
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
@@ -498,6 +536,7 @@ def admin_personal_data(user_name):
                            count=count)
 
 @app.route("/admin_academic_history/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_academic_history(user_name):
     cur.execute("""SELECT
                         distinct cast(anio as varchar),cast(periodo as varchar),
@@ -517,6 +556,7 @@ def admin_academic_history(user_name):
                            count=count, student=student)
 
 @app.route("/admin_period_classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_period_classes(user_name, year, period):
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                     round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
@@ -534,6 +574,7 @@ def admin_period_classes(user_name, year, period):
 
 # ---- Admin: Teachers Page -----------------------------------------------------------------------
 @app.route("/teachers", methods=['POST', 'GET'])
+@flask_login.login_required
 def load_teachers():
     cur.execute("""SELECT usuario, nombre, apellido_1, apellido_2 FROM personas
                 WHERE tipo='profesor' or tipo='administrador'""")
@@ -543,6 +584,7 @@ def load_teachers():
 
 
 @app.route("/admin_main_teacher/<string:user_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_main_teacher(user_name):
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
                 FROM resumen
@@ -554,9 +596,10 @@ def admin_main_teacher(user_name):
     return render_template('/admin/teacher/main_teacher.html', user_name=user_name,
                            periods=periods, teacher=teacher, count=count)
 
-@app.route("/admin_teacher_classes/<string:user_name>/<string:year><string:period>", methods=['POST', 'GET'])
+@app.route("/admin_teacher_classes/<string:user_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_teacher_classes(user_name, year, period):
-    cur.execute("""SELECT DISTINCT nombre_asignatura
+    cur.execute("""SELECT DISTINCT nombre_asignatura, grupo
                     FROM RESUMEN
                     WHERE
                         prof_usr = %s AND
@@ -570,18 +613,20 @@ def admin_teacher_classes(user_name, year, period):
                            teacher=teacher, year=year, period=period, count=count)
 
 
-@app.route("/admin_teacher_class/<string:user_name>/<string:class_name>/<string:year><string:period>", methods=['POST', 'GET'])
-def admin_show_class(user_name, class_name, year, period):
-    data = get_student_grades_period(user_name, class_name, year, period)
+@app.route("/admin_teacher_class/<string:user_name>/<string:class_name>/grupo:<string:group>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
+def admin_show_class(user_name, class_name, year, period, group):
+    data = get_student_grades_period(user_name, class_name, year, period, group)
     teacher = get_name_from_user(user_name)
     count = count_admin_alerts()
     return render_template('/admin/teacher/historic_class.html', user_name=user_name,
                            students_class=data, class_name=class_name, teacher=teacher,
-                           count=count)
+                           count=count, year=year, period=period)
 
 
 # ---- Admin: Classes Page ------------------------------------------------------------------------
 @app.route("/classes", methods=['POST', 'GET'])
+@flask_login.login_required
 def load_classes():
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
@@ -598,6 +643,7 @@ def load_classes():
 
 
 @app.route("/groups/<string:class_name>", methods=['POST', 'GET'])
+@flask_login.login_required
 def load_groups(class_name):
     cur.execute("""SELECT distinct nombre_asignatura,grupo,prof_usr,
                 nombre_prof,ap1_prof,ap2_prof
@@ -614,8 +660,9 @@ def load_groups(class_name):
 
 
 @app.route("/admin_show_group_class/<string:user_name>/<string:class_name>/grupo<string:group>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_show_group_class(user_name, class_name, group):
-    data = get_student_grades(user_name, class_name)
+    data = get_student_grades(user_name, class_name, group)
     teacher = get_name_from_user(user_name)
     count = count_admin_alerts()
     return render_template('/admin/admin_show_class.html', user_name=user_name,
@@ -624,6 +671,7 @@ def admin_show_group_class(user_name, class_name, group):
 
 
 @app.route("/admin_classes_edit/", methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_edit_class():
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
@@ -641,6 +689,7 @@ def admin_edit_class():
 
 
 @app.route("/admin_classes_update", methods=['POST'])
+@flask_login.login_required
 def admin_update_class():
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
@@ -682,54 +731,67 @@ def admin_update_class():
 
 
 @app.route("/admin_functions/",methods=['POST', 'GET'])
+@flask_login.login_required
 def admin_functions():
     count = count_admin_alerts()
     return render_template('admin/admin_functions.html', count=count)
     
 
 @app.route("/admin_functions/import_data_from_file/<string:data_type>/",methods=['POST', 'GET'])
+@flask_login.login_required
 def import_data_from_file(data_type):
     
     count = count_admin_alerts()
     return render_template('admin/import_data_from_file.html', count=count, data_type=data_type)
 
+@app.route("/admin_functions/import_data_from_file/<string:data_type>/<string:year>/<string:period>",methods=['POST', 'GET'])
+@flask_login.login_required
+def import_data_from_file_year(data_type, year, period):
+    
+    count = count_admin_alerts()
+    return render_template('admin/import_data_from_file.html', count=count, data_type=data_type, year=year, period=period)
+
 
 @app.route('/upload_teachers', methods=['POST'])
+@flask_login.login_required
 def upload_teachers():
     file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_datos_empleados.sql')
+    upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_empleados.sql')
     cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
     users = cur.fetchall()
-    for user in users:
-        send_email(user[0],user[1],user[2])
+    # for user in users:
+    #     send_email(user[0],user[1],user[2])
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
 
 @app.route('/upload_students', methods=['POST'])
+@flask_login.login_required
 def upload_students():
     period = request.form['period']
     year = request.form['year']
     file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_datos_estudiantes.sql', period=period, year=year)
+    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_estudiantes.sql', period=period, year=year)
     cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
     users = cur.fetchall()
-    for user in users:
-        send_email(user[0],user[1],user[2])
+    # for user in users:
+    #     send_email(user[0],user[1],user[2])
     count = count_admin_alerts()
-    return redirect(url_for('import_data_from_file', data_type='classes'))
+    return redirect(url_for('import_data_from_file_year', data_type='classes', year=year, period=period))
 
-@app.route('/upload_classes', methods=['POST'])
-def upload_classes():
+@app.route("/upload_classes/<string:year>/<string:period>", methods=['POST'])
+@flask_login.login_required
+def upload_classes(year, period):
     file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_classes.csv', '../datos_prueba/insercion_datos_asignaturasDictadas.sql')
+    upload_file(file, '../datos_prueba/temp_data_classes.csv', '../datos_prueba/insercion_cursos_periodos.sql',period=period, year=year)
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
 
 
 # ---- Admin: Reports -----------------------------------------------------------------------------
-@app.route("/class_report/<string:user_name>/<string:class_name>/<string:year><string:period>/", methods=['POST', 'GET'])
-def one_group_report(user_name, class_name,  year, period):
-    data = get_student_grades_period(user_name, class_name, year, period)
+@app.route("/class_report/<string:user_name>/<string:class_name>/grupo:<string:group>/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
+def one_group_report(user_name, class_name,  year, period, group):
+    data = get_student_grades_period(user_name, class_name, year, period, group)
     df = pd.DataFrame(data, columns=['user', 'student', 'last_name1',
                                      'last_name2', 'grade1', 'grade2',
                                      'grade3', 'grade4', 'grade5', 'grade_final'])
@@ -750,7 +812,8 @@ def one_group_report(user_name, class_name,  year, period):
     return render_template('admin/class_report.html', image=image, count=count)
 
 
-@app.route("/student_report/<string:user_name>/<string:year><string:period>/", methods=['POST', 'GET'])
+@app.route("/student_report/<string:user_name>/<string:year>/<string:period>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def student_report(user_name, year, period):
     cur.execute("""SELECT
                      round(sum(creditos_asignatura*nota1)/sum(creditos_asignatura),1)
@@ -788,6 +851,7 @@ def student_report(user_name, year, period):
 
 
 @app.route("/student_historic_report/<string:user_name>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def student_historic_report(user_name):
     cur.execute("""SELECT
                     distinct cast(anio as varchar),cast(periodo as varchar),
@@ -817,6 +881,7 @@ def student_historic_report(user_name):
                            image=historic_report, count=count)
 
 @app.route("/groups_report/<string:class_name>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def groups_report(class_name):
     cur.execute("""SELECT distinct nombre_asignatura,grupo
                 FROM RESUMEN
@@ -840,13 +905,14 @@ def groups_report(class_name):
                      ORDER BY(nombre_est)""", (class_name, group[1])
                     )
         groups_data.append(cur.fetchall())
-    plot_groups(data, groups_data)
+    plot_groups(data, groups_data, class_name)
     image = generate_image()
     plt.close()
     count = count_admin_alerts()
     return render_template('/admin/groups_report.html', image=image, count=count)
 
 
+@flask_login.login_required
 def student_alerts(student, class_name, grade):
     #Consulta de la nota final (grade_final)
     if grade < 2: #row[corte] es la nota de la materia del estudiante ne esa asignatura
@@ -868,6 +934,7 @@ def student_alerts(student, class_name, grade):
 
 # ---- Admin: Alert -----------------------------------------------------------------------------
 @app.route("/student_alerts/<string:user_name>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def show_alerts(user_name):
     cur.execute("""SELECT * FROM alertas
                     WHERE usuario=%s AND
@@ -890,6 +957,7 @@ def show_alerts(user_name):
 
 
 @app.route("/admin_alerts/", methods=['POST', 'GET'])
+@flask_login.login_required
 def show_admin_alerts():
     cur.execute("""SELECT
                     nombre,apellido_1,apellido_2,texto,alertas.tipo
@@ -918,6 +986,7 @@ def show_admin_alerts():
                            read_alerts=read_alerts, count='0')
 
 @app.route("/delete_alerts/<string:user_name>/<string:date>//<string:user_type>/", methods=['POST', 'GET'])
+@flask_login.login_required
 def delete_alerts(user_name, date, user_type):
     if user_type=='admin':
         print("Hola")

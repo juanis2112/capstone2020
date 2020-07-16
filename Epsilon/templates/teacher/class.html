@@ -58,7 +58,7 @@
   </table>
   <br>
   <br>
-  <a href="/class_edit/{{user_name}}/{{class_name}}" class="btn" style="color: black;">Editar</a>
+  <a href="{{url_for('edit_grade', user_name=user_name, class_name=class_name, group=group)}}" class="btn" style="color: black;">Editar</a>
   <a id="downloadLink" onclick="exportF(this)" class="btn" style="color: black;">Descargar</a>
   <form action="subir-archivo" enctype=multipart/form-data>
     <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>

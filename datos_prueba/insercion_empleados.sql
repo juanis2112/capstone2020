@@ -12,7 +12,7 @@ CREATE TABLE Public.tablaEmpleado(
 	esAdmin bool NOT NULL
 );
 
-COPY Public.tablaEmpleado FROM '/home/juanc/GitHub/capstone2020/datos_prueba/informacion_profesores.csv' DELIMITER ',' CSV HEADER;
+COPY Public.tablaEmpleado FROM '{path}' DELIMITER ',' CSV HEADER;
 
 -- Metiendo a la tabla Personas
 insert into Personas(codigo,nombre,apellido_1,apellido_2,correo_institucional,sexo,documento_actual,usuario,contrasena, tipo)

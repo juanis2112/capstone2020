@@ -24,13 +24,13 @@
 {% block tablas %}
 <div style="display:block;  width:80%;">
     <span style="margin-left:0px;">
-      <a href="{{url_for('show_class', user_name = user_name, class_name = class_name)}}" class="btn">
+      <a href="{{url_for('show_class', user_name = user_name, class_name = class_name, group=group)}}" class="btn">
           <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
       </a>
     </span>
 </div>
 <br>
-<form action="{{url_for('update_grade', user_name = user_name, class_name = class_name)}}" method="POST">
+<form action="{{url_for('update_grade', user_name = user_name, class_name = class_name, group=group)}}" method="POST">
 <table class="center table table-striped table-hover table-bordered table-sm bg-white">
           <thead>
           <tr>
