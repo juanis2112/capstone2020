@@ -24,7 +24,7 @@ from email.mime.multipart import MIMEMultipart
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="123",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
                         database="Epsilon",)
