@@ -24,10 +24,10 @@ from email.mime.multipart import MIMEMultipart
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
+                        password="123",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_28",)
+                        database="Epsilon",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -625,18 +625,28 @@ def admin_show_class(user_name, class_name, year, period, group):
 
 
 # ---- Admin: Classes Page ------------------------------------------------------------------------
-@app.route("/classes", methods=['POST', 'GET'])
+@app.route("/history_classes", methods=['POST', 'GET'])
 @flask_login.login_required
-def load_classes():
+def historic_class():
+    cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
+                FROM semestre
+                ORDER BY anio DESC, periodo DESC;""")
+    data = cur.fetchall()
+    print(data)
+    count = count_admin_alerts()
+    return render_template('/admin/historic_classes.html', periods=data, count=count)
+
+@app.route("/classes/<string:year>/<string:period>", methods=['POST', 'GET'])
+@flask_login.login_required
+def load_classes(year,period):
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
                 porcentaje2,porcentaje3,porcentaje4,porcentaje5
             FROM RESUMEN
             WHERE
-                anio = (SELECT max(anio) FROM RESUMEN) AND
-                periodo = (SELECT max(periodo) FROM RESUMEN WHERE anio =
-                        (SELECT max(anio) FROM RESUMEN))
-            ORDER BY(nombre_asignatura)""")
+                anio = %s AND
+                periodo = %s
+            ORDER BY(nombre_asignatura)""",(year,period))
     data = cur.fetchall()
     count = count_admin_alerts()
     return render_template('/admin/admin_classes.html', classes=data, count=count)

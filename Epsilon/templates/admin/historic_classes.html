@@ -23,7 +23,7 @@
       </li>
     </a>
     <a href="{{url_for('historic_class')}}">
-          <li>
+        <li style="background-color: #0099cc;">
             <div class="menu-box">
               <div >
                 Materias
@@ -33,7 +33,7 @@
           </li>
     </a>
     <a href="{{url_for('admin_functions')}}">
-          <li  style="background-color: #0099cc;">
+          <li>
             <div class="menu-box">
               <div >
                 Administración
@@ -44,16 +44,25 @@
     </a>
   </ul>
 {% endblock %}
+
 {% block tablas %}
-<a href="{{url_for('main_admin')}}" class="btn">
-    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-</a>
-<ul style="list-style-type:none">
-  Seleccione a continuación el archivo que desea importar:
-  <form method= "POST" action="/upload_{{data_type}}" enctype=multipart/form-data>
-          <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
-          <label for="file" class="archivo">seleccionar archivo</label>
-          <input type="submit" class="btn" value="subir" >
- </form>
-</ul>
+        <div style="display:block;">
+              <span style="margin-left:0px;">
+                  <a href="{{url_for('main_admin')}}" class="btn">
+                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+                  </a>
+                </span>
+              </div>
+            <ul style="list-style-type:none">
+               <table class="center">
+                     {% for period in periods %}
+                      <a href="{{url_for('load_classes', year = period.0, period = period.1)}}">
+                        <li style="font-size:30px;">
+                         {{period.0}}-{{period.1}}
+                        </li>
+                      </a>
+                     {% endfor %}
+              </table>
+            </ul>
+            </div>
 {% endblock %}

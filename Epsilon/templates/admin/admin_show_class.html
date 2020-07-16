@@ -22,7 +22,7 @@
         </div>
       </li>
     </a>
-    <a href="{{url_for('load_classes')}}">
+    <a href="{{url_for('historic_class')}}">
           <li style="background-color: #0099cc;">
             <div class="menu-box">
               <div >
@@ -51,7 +51,7 @@
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>
-  <div style="diplay:inline-block; text-align:center; width:80%;">
+  <div style="display:inline-block; text-align:center; width:80%;">
     <span class="mini-titulo">
      Listado de estudiantes del curso {{class_name}} grupo {{group}} por {{teacher.0}} {{teacher.1}}
     </span>
