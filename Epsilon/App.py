@@ -24,10 +24,10 @@ from email.mime.multipart import MIMEMultipart
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="postgres",
+                        password="123",
                         host="localhost",
                         port="5432",
-                        database="epsilon",)
+                        database="Epsilon",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
