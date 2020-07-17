@@ -47,7 +47,7 @@
 {% block tablas %}
 <div style="display:block;">
   <span style="margin-left:0px;">
-    <a href="{{url_for('load_groups',class_name=class_name)}}" class="btn">
+    <a href="{{url_for('load_groups',class_name=class_name.0, year=year, period=period)}}" class="btn">
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>

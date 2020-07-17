@@ -56,7 +56,7 @@
     {% for group in groups %}
     <tr>
         <td>{{group.1}}</td>
-        <td><a href="{{url_for('admin_show_group_class', user_name=group.2, class_name=group.0, group=group.1)}}" style="color: black;">{{group.3}}{{group.4}}{{group.5}}</a></td>
+        <td><a href="{{url_for('admin_show_group_class', user_name=group.2, class_name=group.0, group=group.1, year=year, period=period)}}" style="color: black;">{{group.3}}{{group.4}}{{group.5}}</a></td>
     </tr>
     {% endfor %}
 </table>

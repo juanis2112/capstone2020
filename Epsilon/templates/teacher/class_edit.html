@@ -1,3 +1,13 @@
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+{% if errors %}
+<div style="color:red;">
+{%- for msg in errors %}
+{{ msg }}
+{% endfor -%}
+</div>
+{% endif %}
+{% endwith %}
+
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
 <ul>
@@ -34,6 +44,7 @@
 <table class="center table table-striped table-hover table-bordered table-sm bg-white">
           <thead>
           <tr>
+              <th>Usuarios</th>
               <th>Estudiantes</th>
               <th>Corte1</th>
               <th>Corte2</th>
@@ -46,6 +57,7 @@
         <tbody>
         {% for student in students_class %}
           <tr>
+              <td>{{student.0}}</td>
               <td>{{student.1}} {{student.2}} {{student.3}}</td>
               <td><input type="text" name="grade1_{{student.0}}" value="{{student.4}}" size="5"></td>
               <td><input type="text" name="grade2_{{student.0}}" value="{{student.5}}" size="5"></td>

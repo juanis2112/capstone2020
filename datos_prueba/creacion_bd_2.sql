@@ -139,6 +139,13 @@ create table alertas (
 	oculto_admin bool NOT NULL DEFAULT FALSE
 );
 
+create table loggin(
+	usuario VARCHAR(100) NOT NULL,
+	accion VARCHAR(100) NOT NULL,
+	fecha VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL
+);
+
 -- VISTA ayuda en consultas 
 create view RESUMEN as
 select distinct est_cod,est_usr,nombre_est,ap1_est,ap2_est,B6.codigo_asignatura,creditos_asignatura,nombre_asignatura,B6.grupo,periodo,anio,porcentaje1,nota1,porcentaje2,nota2,porcentaje3,nota3,porcentaje4,nota4,porcentaje5,nota5,prof_cod,prof_usr,nombre_prof,ap1_prof,ap2_prof from

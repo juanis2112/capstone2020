@@ -36,6 +36,7 @@
 </div>
 <table class="center" id="table">
       <tr>
+          <th>Usuarios</th>
           <th>Estudiantes</th>
           <th>Corte1</th>
           <th>Corte2</th>
@@ -46,6 +47,7 @@
       </tr>
       {% for student in students_class %}
       <tr>
+          <th>{{student.0}}</th>
           <td>{{student.1}} {{student.2}} {{student.3}}</td>
           <td>{{student.4}}</td>
           <td>{{student.5}}</td>
@@ -60,8 +62,8 @@
   <br>
   <a href="{{url_for('edit_grade', user_name=user_name, class_name=class_name, group=group)}}" class="btn" style="color: black;">Editar</a>
   <a id="downloadLink" onclick="exportF(this)" class="btn" style="color: black;">Descargar</a>
-  <form action="subir-archivo" enctype=multipart/form-data>
-    <input type="file" name="file" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+  <form method= "POST" action="{{url_for('upload_grades_from_csv', class_name=class_name, user_name=user_name, group=group)}}" enctype=multipart/form-data>
+    <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
     <label for="file" class="archivo">seleccionar archivo</label>
     <input type="submit" class="btn" value="subir" >
   </form>

@@ -1,3 +1,12 @@
+{% with errors = get_flashed_messages(category_filter=["error"]) %}
+{% if errors %}
+<div style="color:red;">
+{%- for msg in errors %}
+{{ msg }}
+{% endfor -%}
+</div>
+{% endif %}
+{% endwith %}
 {% extends "layouts/estructura_administrador.html" %}
 
 {% block lateral %}
@@ -45,9 +54,10 @@
   </ul>
 {% endblock %}
 {% block tablas %}
+<form action="{{url_for('admin_update_class', year=year, period=period)}}" method="POST">
 <div style="display:block;">
 <span style="margin-left:0px;">
-  <a href="{{url_for('load_classes')}}" class="btn">
+  <a href="{{url_for('load_classes', year=year, period=period)}}" class="btn">
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
   </a>
 </span>
@@ -79,9 +89,11 @@
     {% endfor %}
 </table>
 <br>
+
 <button type="submit" class="btn">
       Guardar
 </button>
 </div>
+</form>
 {% endblock %}
             
