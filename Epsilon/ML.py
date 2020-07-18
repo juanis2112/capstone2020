@@ -153,11 +153,24 @@ def mejor_modelo_2(materia,modelo_general):
         mejor_modelo,F15_mejor_modelo = enssemble(mejor_modelo,mejor_seg_modelo,X_train,Y_train,X_test,Y_test)
         return mejor_modelo,F15_mejor_modelo
 #--------------------------------------------------------------------------------------------------------------------
-# Función que devuelve el segundo mejor modelo de la materia de primer y segundo corte
 def mejor_segundo_modelo_2(materia,mejor_modelo,indice,modelo_general):
-    #materia : dataframe,lista
-    #mejor_modelo : modelo
-    #indice : indice mejor modelo
+    """
+    # NOTA: que es el parametro, modelo_general
+    # NOTA: la funcion debe retornar algun indice ?
+    Función que devuelve el segundo mejor modelo de la materia de primer y segundo corte
+
+    PARAMETROS:
+        materia: dataframe,lista
+        indice: indice mejor modelo
+        mejor_modelo: modelo
+
+    RETORNA:
+        mejor_modelo: segundo mejor modelo
+        F_15_mejor_modelo: puntaje F15 asociado al modelo general
+    """
+    #
+    #
+    #
     #return: segundo mejor modelo,puntaje F_15,y su respectivo indice
     X = materia[["nota1","nota2"]]
     Y = materia[["Paso"]]
@@ -202,13 +215,23 @@ def mejor_segundo_modelo_2(materia,mejor_modelo,indice,modelo_general):
             #print(r"F_{1.5}$:" +str(F15))
         return mejor_modelo,F15_mejor_modelo
 #--------------------------------------------------------------------------------------------------------------------
-# Funciona que combina dos modelos de clasificacion,funciona tanto para primer corte y segundo corte
 def enssemble(modelo1,modelo2,X_train,Y_train,X_test,Y_test):
-    #modelo 1
-    #modelo 2
-    #X_train: dataframde de entrenamiento
-    #Y_train : variable independeinte de entrenamiento
-    #X_test,Y_test: dataframe para testeo de modelo para posterior elección del mejor modelo
+    """
+    # NOTA: revisar documentacion
+    Combina dos modelos de clasificacion,funciona tanto para primer corte y segundo corte
+
+    PARAMETROS:
+        modelo1: uno de los modelos que se combina
+        modelo2: uno de los modelos que se combina
+        X_train: dataframe de entrenamiento
+        Y_train: variable independeinte de entrenamiento
+        X_test: dataframe para testeo de modelo para posterior elección del mejor modelo
+        Y_test: variable independiente para hacer test
+
+    RETORNA:
+        vot: modelo clasificador de tipo VotingClassifier
+        F15: puntaje F15 del VotingClassifier asociado
+    """
     estimator = [('1',modelo1),('2',modelo2)]
     vot= VotingClassifier(estimators = estimator, voting = 'hard')
     vot.fit(X_train, Y_train)
@@ -258,6 +281,7 @@ def seleccionar_guardar_modelo_2(materia,nombre_materia):
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion para guardar el mejor modelo sobre una materia específica
+# NOTA: es la misma funcion que la de arriba? Con cual funcion estan trabajando Juanita y Daniel??
 def seleccionar_guardar_modelo_2_gen(materia,nombre_materia):
     # materia: dataframe de la materia especificada
     # nombre_materia: string para el nombre del archivo del modelo
@@ -329,7 +353,17 @@ def devolucion_estudiantes_riesgos_2(nombre_materia,materia):
 #====================================================================================================================
 # FUNCIONES DE MODELOS PARA SOLO EL PRIMER CORTE
 def mejor_modelo_general_1(materia):
-    # materia: dataframe con notas en todas las materias
+    """
+    Determina el mejor modelo (modelo general sobre todas las materias) sobre todos los datos.
+    El analisis es realizado con las notas del corte 1.
+
+    PARAMETROS:
+        materia: dataframe con notas en todas las materias
+
+    RETORNA:
+        mejor_modelo:  modelo correspondiente al modelo general
+        F15_mejor_modelo: el puntaje F15 asociado al modelo general
+    """
     X = materia[["nota1"]]
     Y = materia[["Paso"]]
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
@@ -357,10 +391,19 @@ def mejor_modelo_general_1(materia):
         print(r"F_{1.5}$:" +str(F15))
     return mejor_modelo,F15_mejor_modelo
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion que determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron
 def mejor_modelo_1(materia,modelo_general):
-    # materia: dataframe con los datos de una materia especifica
-    # modelo_genera: modelo general pre-establecido
+    """
+    Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
+    El analisis es realizado con las notas del corte 1 y 2.
+    
+    PARAMETROS:
+        materia: dataframe con los datos de una materia especifica
+        modelo_genera: modelo general pre-establecido
+     
+    RETORNA:
+        mejor_modelo: modelo correspondiente al modelo general
+        F_15_mejor_modelo: puntaje F15 asociado al modelo geenral
+    """
     indice = -1
     X = materia[["nota1"]]
     Y = materia[["Paso"]]
@@ -410,10 +453,20 @@ def mejor_modelo_1(materia,modelo_general):
 #--------------------------------------------------------------------------------------------------------------------
 # Función que devuelve el segundo mejor modelo de la materia de primer y segundo corte
 def mejor_segundo_modelo_1(materia,mejor_modelo,indice,modelo_general):
-    #materia : dataframe,lista
-    #mejor_modelo : modelo
-    #indice : indice mejor modelo
-    #return: segundo mejor modelo,puntaje F_15,y su respectivo indice
+    """
+    # NOTA: que es el parametro, modelo_general
+    # NOTA: la funcion debe retornar algun indice ?
+    Función que devuelve el segundo mejor modelo de la materia de primer y segundo corte
+
+    PARAMETROS:
+        materia: dataframe,lista
+        indice: indice mejor modelo
+        mejor_modelo: modelo
+
+    RETORNA:
+        mejor_modelo: segundo mejor modelo
+        F_15_mejor_modelo: puntaje F15 asociado al modelo general
+    """
     X = materia[["nota1"]]
     Y = materia[["Paso"]]
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
@@ -458,10 +511,16 @@ def mejor_segundo_modelo_1(materia,mejor_modelo,indice,modelo_general):
             #print(r"F_{1.5}$:" +str(F15))
         return mejor_modelo,F15_mejor_modelo
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion para guardar el mejor modelo, es decir el modelo general, sobre todas las materias
 def seleccionar_guardar_modelo_general_1(materia,nombre_materia):
-    # materia: dataframe con las notas de todos las materias de todos los estudiantes
-    #Guardar el modelo en disco
+    # NOTA: quitar los print?
+    """
+    Guarda el mejor modelo sobre una materia específica en disco.
+    El analisis es realizado con las notas del corte 1.
+    
+    PARAMETROS:
+        materia: dataframe de la materia especificada
+        nombre_materia: string para el nombre del archivo del modelo
+    """
     mejor_modelo1,F15 = mejor_modelo_general_1(materia)
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     print("Modelo General Corte 1 Guardado")
@@ -470,8 +529,14 @@ def seleccionar_guardar_modelo_general_1(materia,nombre_materia):
     
 #--------------------------------------------------------------------------------------------------------------------
 def seleccionar_guardar_modelo_1(materia,nombre_materia):
-    # materia: dataframe de la materia especificada
-    # nombre_materia: string para el nombre del archivo del modelo
+    """
+    Guarda el mejor modelo sobre una materia específica.
+    El analisis es realizado con las notas del corte 1.
+    
+    PARAMETROS:
+        materia: dataframe de la materia especificada
+        nombre_materia: string para el nombre del archivo del modelo
+    """
     modelo_general_nombre = "Modelo_General"
     filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1.sav"
     modelo_general = pickle.load(open(filename, 'rb'))
@@ -480,6 +545,7 @@ def seleccionar_guardar_modelo_1(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
+# NOTA: Misma funcion de arriba?
 def seleccionar_guardar_modelo_1_gen(materia,nombre_materia):
     # materia: dataframe de la materia especificada
     # nombre_materia: string para el nombre del archivo del modelo
@@ -490,8 +556,16 @@ def seleccionar_guardar_modelo_1_gen(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     pickle.dump(modelo_general, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion que carga un modelo que usa corte 1
 def cargar_modelo_1(nombre_materia):
+    """
+    Carga un modelo de prediccion que usa el corte 1.
+
+    PARAMETROS:
+        nombre_materia: string del nombre de la materia para cargar el modelo
+
+    RETORNA:
+        loaded_model: mejor modelo asociado a la materia elegida
+    """
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     loaded_model = pickle.load(open(filename, 'rb'))
     return loaded_model
@@ -499,7 +573,12 @@ def cargar_modelo_1(nombre_materia):
 # Funcion que guarda el mejor modelo para todas las materias analizando corte 1
 # NOTA: Probar funcion
 def guardar_mejor_modelo_todas_materias_1(df_completo):
-    # df_completo: dataframe con los datos de todos los estudiantes
+    """
+    Guarda el mejor modelo para todas las materias analizando el corte 1.
+
+    PARAMETROS:
+        df_completo: dataframe con los datos de todos los estudiantes
+    """
     seleccionar_guardar_modelo_general_1(df_completo,"Modelo_General")
     materias = pd.DataFrame(df_completo.groupby("nombre_asignatura")).reset_index()
     lista_materias = []
@@ -515,8 +594,16 @@ def guardar_mejor_modelo_todas_materias_1(df_completo):
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion que retorna dataframe de estudiantes que el modelo predijo que van a perder
 def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
-    # nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
-    # materia: dataframe con los datos de las notas de la materia especificada
+    """
+    Retorna dataframe de estudiantes que el modelo predijo que van a perder
+
+    PARAMETROS:
+        nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
+        materia: dataframe con los datos de las notas de la materia especificada
+
+    RETORNA:
+        estudiantes: dataframe con los estudiantes que se predijo que van a perder la materia
+    """
     # NOTA: Los datos en materia corresponden a la tabla de datos del semestre actual para sacar las alertas
     loaded_model = cargar_modelo_1(nombre_materia)
     X_test = materia[["nota1"]]
@@ -530,8 +617,10 @@ def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion Main
 #--------------------------------------------------------------------------------------------------------------------
-#Funcion de entrenamiento con csv de historico
 def main0():
+    """
+    Funcion de entrenamiento con csv de historico.
+    """
     #----------------------#
     filename = file+"/modelos/Información_antes_de_aplicación/datos_notas_macc_cortes_historico_20172_20201.csv"
     notas = pd.read_csv(filename,encoding='utf-8',header=0,sep=";")
@@ -547,8 +636,11 @@ def main0():
     guardar_mejor_modelo_todas_materias_1(notas)
 
 #---------------------------------------------------------------------------------------------------------------------
-#Funcion que se encarga de entrenar los modelos
+# NOTA: La funcion entrena los modelos con los datos históricos?
 def main1():
+    """
+    Funcion que se encarga de entrenar los modelos.
+    """
     #----------------------#
     df =  pd.read_sql("""select est_usr,nombre_asignatura,periodo,anio,nota1,nota2,round((nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100,2) as nota_final from resumen""",conn)
     df["Paso"] = df.apply(lambda row: funcion_paso(row["nota_final"]),axis=1 )
@@ -556,8 +648,14 @@ def main1():
     guardar_mejor_modelo_todas_materias_2(df)
     guardar_mejor_modelo_todas_materias_1(df)
 #---------------------------------------------------------------------------------------------------------------------
-# Funcion que se encarga de hacer la predicción de los estudiantes
+# NOTA: que es tipo de dato retorna y con qué informacion?
 def main2():
+    """
+    Funcion que se encarga de hacer la predicción de los estudiantes. 
+
+    RETORNA:
+        lista_estudiantes_alerta:
+    """
     #lista_estudiantes: dataframe
     columnas = ["est_usr","nombre_asignatura","nota1","nota2"]
     lista_estudiantes_alerta =pd.DataFrame(columns = columnas)
