@@ -614,7 +614,22 @@ def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
     idx = Prediccion.index[Prediccion["Pred"]==0]
     estudiantes = materia.loc[idx]
     return estudiantes
-#-------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------
+# Funcion de mover modelos de semestre actual a semestre anterior
+def mover_modelos(source,destination):
+    """
+    Mueve todos los archivos de la carpeta fuente a la carpeta destino.
+    Si las direcciones son relativas, las direcciones empiezan desde la carpeta donde se encuentra el archivo con esta funcion.
+
+    PARAMETROS:
+        source: direccion de la carpeta fuente
+        destination: direccion de la carpeta destino
+    """
+    files = os.listdir(source)
+    for file in files:
+        new_path = shutil.move(f"{source}/{file}", destination)
+
+#------------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion Main
 #--------------------------------------------------------------------------------------------------------------------
@@ -687,19 +702,6 @@ def main2():
 
 
     return lista_estudiantes_alerta
-#---------------------------------------------------------------------------------------------------------------
-def mover_modelos(source,destination):
-    """
-    Mueve todos los archivos de la carpeta fuente a la carpeta destino.
-    Si las direcciones son relativas, las direcciones empiezan desde la carpeta donde se encuentra el archivo con esta funcion.
-
-    PARAMETROS:
-        source: direccion de la carpeta fuente
-        destination: direccion de la carpeta destino
-    """
-    files = os.listdir(source)
-    for file in files:
-        new_path = shutil.move(f"{source}/{file}", destination)
 
 main0()
 #main1()
