@@ -134,11 +134,19 @@ create table alertas (
 	anio numeric NOT NULL,
 	nombre_asignatura VARCHAR(100),
 	visto_estudiante bool NOT NULL DEFAULT FALSE,
-	visto_admin bool NOT NULL DEFAULT FALSE,
 	oculto_estudiante bool NOT NULL DEFAULT FALSE,
-	oculto_admin bool NOT NULL DEFAULT FALSE
+	primary key(usuario,fecha)
 );
-
+create table notificacion(
+	usuario VARCHAR(100) NOT NULL,
+	fecha TIMESTAMP NOT NULL,
+	codigo Integer NOT NULL,
+	visto_admin bool NOT NULL DEFAULT FALSE,
+	oculto_admin bool NOT NULL DEFAULT FALSE,
+	foreign key(usuario,fecha) references alertas,
+	foreign key(codigo) references empleado,
+	primary key(codigo,usuario,fecha)
+);
 create table loggin(
 	usuario VARCHAR(100) NOT NULL,
 	accion VARCHAR(100) NOT NULL,
