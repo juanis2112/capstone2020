@@ -62,6 +62,28 @@ create table semestre (
     FOREIGN KEY(codigo_asignatura) REFERENCES Asignaturas
 );
 
+-- Creacion tabla para manejar las alertas
+create table alertas (
+	usuario VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL,
+	tipo VARCHAR(100) NOT NULL,
+	fecha TIMESTAMP NOT NULL,
+	periodo numeric NOT NULL,
+	anio numeric NOT NULL,
+	nombre_asignatura VARCHAR(100),
+	visto_estudiante bool NOT NULL DEFAULT FALSE,
+	oculto_estudiante bool NOT NULL DEFAULT FALSE,
+	primary key(usuario,fecha)
+);
+
+create table loggin(
+	usuario VARCHAR(100) NOT NULL,
+	nivel Integer NOT NULL,
+	accion VARCHAR(100) NOT NULL,
+	fecha VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL
+);
+
 /* Conjuntos de relaciones */
 
 create table ofrece(
@@ -124,27 +146,18 @@ create table curso_sem (
 	foreign key (codigo_asignatura) references Asignaturas
 );	
 
--- Creacion tabla para manejar las alertas
-create table alertas (
+
+create table notificacion(
 	usuario VARCHAR(100) NOT NULL,
-	texto TEXT NOT NULL,
-	tipo VARCHAR(100) NOT NULL,
 	fecha TIMESTAMP NOT NULL,
-	periodo numeric NOT NULL,
-	anio numeric NOT NULL,
-	nombre_asignatura VARCHAR(100),
-	visto_estudiante bool NOT NULL DEFAULT FALSE,
+	codigo Integer NOT NULL,
 	visto_admin bool NOT NULL DEFAULT FALSE,
-	oculto_estudiante bool NOT NULL DEFAULT FALSE,
-	oculto_admin bool NOT NULL DEFAULT FALSE
+	oculto_admin bool NOT NULL DEFAULT FALSE,
+	foreign key(usuario,fecha) references alertas,
+	foreign key(codigo) references empleado,
+	primary key(codigo,usuario,fecha)
 );
 
-create table loggin(
-	usuario VARCHAR(100) NOT NULL,
-	accion VARCHAR(100) NOT NULL,
-	fecha VARCHAR(100) NOT NULL,
-	texto TEXT NOT NULL
-);
 
 -- VISTA ayuda en consultas 
 create view RESUMEN as
