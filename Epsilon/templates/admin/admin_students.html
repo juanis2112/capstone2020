@@ -51,7 +51,7 @@
 </a>
 <ul class="ul_bloques">
    {% for student in students %}
-   <a href="/admin_main_student/{{student.0}}">
+   <a href="{{url_for('admin_main_student')}}">
      <li style="font-size:20px;">
        <!--<p class="bloque_est">-->
        {{student.1}} {{student.2}} {{student.3}}

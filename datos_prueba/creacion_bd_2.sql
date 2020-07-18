@@ -145,8 +145,6 @@ create table curso_sem (
     PRIMARY KEY (codigo_asignatura,periodo,anio,grupo),
 	foreign key (codigo_asignatura) references Asignaturas
 );	
-
-
 create table notificacion(
 	usuario VARCHAR(100) NOT NULL,
 	fecha TIMESTAMP NOT NULL,
@@ -157,7 +155,12 @@ create table notificacion(
 	foreign key(codigo) references empleado,
 	primary key(codigo,usuario,fecha)
 );
-
+create table loggin(
+	usuario VARCHAR(100) NOT NULL,
+	accion VARCHAR(100) NOT NULL,
+	fecha VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL
+);
 
 -- VISTA ayuda en consultas 
 create view RESUMEN as

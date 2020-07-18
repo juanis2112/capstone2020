@@ -23,14 +23,15 @@ import seaborn as sns
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import json
 
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
+                        password="123",
                         host="localhost",
                         port="5432",
-                        database="Epsilon28",)
+                        database="Epsilon",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -83,10 +84,10 @@ def count_alerts(user_name):
 
 
 def count_admin_alerts():
-    cur.execute("""SELECT count(*)
-                    FROM alertas
-                    WHERE
-                        visto_admin = '0' """)
+    user_name = flask_login.current_user.id
+    cur.execute("""SELECT count(*)  FROM (SELECT distinct usuario,fecha 
+                FROM notificacion WHERE visto_admin = '0' AND codigo = (select codigo from personas 
+                where usuario = %s)) as R;  """, (user_name,))
     count = int(cur.fetchone()[0])
     return count
 
@@ -259,11 +260,12 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
                     			prof_usr = %s AND
                     			nombre_asignatura = %s AND
                     			anio = (select max(anio) from RESUMEN) AND
-                    			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))
+                    			periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)) AND
+                                est_usr = %s
                     	) AND
                     	anio = (select max(anio) from RESUMEN) AND
                     	periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN))""",
-                (grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr, class_name))        
+                (grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr, class_name, user))        
         
 def logging(usuario,action,sobre_que = None,sobre_quien = None,asignatura = None,grupo = None,cuando = None,notas_antes = None,notas_despues = None):
     f = lambda word: "'"+word+"'"
@@ -569,8 +571,9 @@ def show__historic_class(class_name, year, period, group):
 @app.route("/main_admin", methods=['POST', 'GET'])
 @login_required(role='administrador')
 def main_admin():
+    user_name = flask_login.current_user.id
     count = count_admin_alerts()
-    return render_template('/admin/main_admin.html', count=count)
+    return render_template('/admin/main_admin.html', user_name = user_name, count=count)
 
 
 # ---- Admin: Students Page -----------------------------------------------------------------------
@@ -581,11 +584,7 @@ def load_students():
                 WHERE tipo='estudiante'""")
     data = cur.fetchall()
     data_complete = []
-    cur.execute("""SELECT count(*)
-                    FROM alertas
-                    WHERE
-                        visto_admin = '0' """)
-    count = int(cur.fetchone()[0])
+    count = count_admin_alerts()
     for user in data:
         user_info = list(user)
         cur.execute("""SELECT
@@ -607,9 +606,10 @@ def load_students():
     return render_template('/admin/admin_students.html', students=data_complete,
                            count=count)
 
-@app.route("/admin_main_student/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/admin_main_student", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_main_student(user_name):
+def admin_main_student():
+    user_name = flask_login.current_user.id
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                 round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
                        porcentaje4*nota4+porcentaje5*nota5)/100,2)
@@ -626,9 +626,10 @@ def admin_main_student(user_name):
     return render_template('/admin/student/main_student.html', classes=data,
                            user_name=user_name, count=count, student=student)
 
-@app.route("/admin_student_data/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/admin_student_data", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_personal_data(user_name):
+def admin_personal_data():
+    user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
                 WHERE
@@ -638,9 +639,10 @@ def admin_personal_data(user_name):
     return render_template('/admin/student/student_data.html', student_data=data, user_name=user_name,
                            count=count)
 
-@app.route("/admin_academic_history/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/admin_academic_history", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_academic_history(user_name):
+def admin_academic_history():
+    user_name = flask_login.current_user.id
     cur.execute("""SELECT
                         distinct cast(anio as varchar),cast(periodo as varchar),
                         round(sum(creditos_asignatura*(nota1*porcentaje1+nota2*
@@ -686,7 +688,7 @@ def load_teachers():
     return render_template('admin/admin_teachers.html', teachers=data, count=count)
 
 
-@app.route("/admin_main_teacher/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/admin_main_teacher", methods=['POST', 'GET'])
 @login_required(role='administrador')
 def admin_main_teacher():
     user_name = flask_login.current_user.id
@@ -869,7 +871,9 @@ def admin_update_class(year, period):
 def admin_functions():
     count = count_admin_alerts()
     return render_template('admin/admin_functions.html', count=count)
-    
+
+
+
 
 @app.route("/admin_functions/import_data_from_file/<string:data_type>/",methods=['POST', 'GET'])
 @login_required(role='administrador')
@@ -1061,17 +1065,20 @@ def student_alerts(student, class_name, grade):
             #Consulta que mete el string a la base de datos
             alert_student = "Tiene una alerta de nota muy baja en la materia "+class_name
             alert_type ='ALTA'
-        cur.execute("""insert into alertas (usuario, texto, tipo, fecha, periodo,
-                    anio, nombre_asignatura, visto_estudiante, visto_admin)
-                    values (%s,%s,%s, CURRENT_TIMESTAMP,
-                            '1', '2020', %s, '0', '0')""", (student, alert_student, alert_type, class_name))
+        date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+        cur.execute("""INSERT INTO alertas(usuario,texto,tipo,fecha,periodo,anio,nombre_asignatura)
+                    VALUES (%s,%s,%s,
+                    %s,'2', '2020', %s);""", (student, alert_student, alert_type,date, class_name))
+        cur.execute("""INSERT INTO notificacion select %s,%s,codigo 
+                    from empleado where esadmin='1';""", (student,date))
          
 
 
 # ---- Admin: Alert -----------------------------------------------------------------------------
-@app.route("/student_alerts/<string:user_name>/", methods=['POST', 'GET'])
+@app.route("/student_alerts", methods=['POST', 'GET'])
 @flask_login.login_required
 def show_alerts():
+    user_name = flask_login.current_user.id
     user_name = flask_login.current_user.id
     cur.execute("""SELECT * FROM alertas
                     WHERE usuario=%s AND
@@ -1093,32 +1100,31 @@ def show_alerts():
                            read_alerts=read_alerts, user_name=user_name, count='0')
 
 
-@app.route("/admin_alerts/", methods=['POST', 'GET'])
+@app.route("/admin_alerts", methods=['POST', 'GET'])
 @login_required(role='administrador')
 def show_admin_alerts():
-    cur.execute("""SELECT
-                    nombre,apellido_1,apellido_2,texto,alertas.tipo
-                    as alerta,fecha,periodo,anio,nombre_asignatura, alertas.usuario
-                    FROM alertas join personas
-                    on alertas.usuario = personas.usuario
-                    WHERE
-                    visto_admin = '0' AND
-                    oculto_admin = '0'
-                    ORDER BY fecha DESC""")
+    user_name = flask_login.current_user.id
+    cur.execute(""" SELECT nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,anio,nombre_asignatura,R.usuario
+                    from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo from 
+                    alertas join notificacion as noti on alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
+                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '0' AND oculto_admin = '0' AND R.codigo = (
+                    select codigo from personas where usuario = %s
+                    )order by (R.fecha) desc;
+                        """,(user_name,))
     unread_alerts = cur.fetchall()
-    cur.execute("""SELECT
-                    nombre,apellido_1,apellido_2,texto,alertas.tipo
-                    as alerta,fecha,periodo,anio,nombre_asignatura, alertas.usuario
-                    FROM alertas join personas
-                    on alertas.usuario = personas.usuario
-                    WHERE
-                    visto_admin = '1' AND
-                    oculto_admin = '0'
-                    ORDER BY fecha DESC;""")
+    cur.execute(""" SELECT nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,anio,nombre_asignatura,R.usuario 
+                    from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo from 
+                    alertas join notificacion as noti on alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
+                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '1' AND oculto_admin = '0' AND R.codigo = (
+                    select codigo from personas where usuario = %s
+                    )order by (R.fecha) desc;
+                        """,(user_name,))
     read_alerts = cur.fetchall()
-    cur.execute("""UPDATE alertas
-                    set visto_admin = '1'
-                    WHERE oculto_admin = '0'""")
+    cur.execute("""UPDATE notificacion SET visto_admin = '1'
+                    WHERE oculto_admin = '0' AND codigo = (
+                    select codigo from personas
+                    where usuario = %s AND
+                    tipo = 'administrador'); """,(user_name,))
     return render_template('/admin/admin_alert.html', unread_alerts=unread_alerts,
                            read_alerts=read_alerts, count='0')
 
@@ -1126,15 +1132,43 @@ def show_admin_alerts():
 @flask_login.login_required
 def delete_alerts(user_name, date, user_type):
     if user_type=='admin':
-        cur.execute(""" UPDATE alertas SET oculto_admin = '1' WHERE usuario = %s AND fecha = %s
-        """, (user_name, date))
+        cur.execute("""UPDATE notificacion SET oculto_admin = '1'
+                    WHERE usuario = %s AND fecha = %s AND
+                    codigo = (select codigo from personas where usuario = 'admin');  """, (user_name,date))
         return redirect(url_for('show_admin_alerts'))
     else:
-        cur.execute(""" UPDATE alertas SET oculto_estudiante = '1' WHERE usuario = %s AND fecha = %s
+        cur.execute("""UPDATE alertas SET oculto_estudiante = '1' WHERE usuario = %s AND fecha = %s
         """, (user_name, date))
         return redirect(url_for('show_alerts', user_name = user_name))
 
+@app.route("/create_alert/",methods=['POST', 'GET'])
+@login_required(role='administrador')
+def create_alert():
+    cur.execute("""SELECT usuario,nombre,apellido_1,apellido_2
+                    FROM personas
+                    ORDER BY(usuario);""")
+    data = cur.fetchall()
+    users = [" ".join(user[1:4]) + " (" + user[0] + ")" for user in data]
+    count = count_admin_alerts()
+    return render_template('admin/admin_create_alert.html', users = json.dumps(users), count=count)
 
+@app.route("/publish_alert/",methods=['POST', 'GET'])
+@login_required(role='administrador')
+def publish_alert():
+    inf_user = request.form["inf_users"]
+    print(inf_user)
+    user_name = inf_user.split(" ")[-1][1:-1]
+    tipo = request.form["tipo"]
+    description = request.form["descripcion"] 
+    date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+    cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
+                    from semestre) GROUP BY(anio);""") 
+    period,year = list(cur.fetchone())
+    cur.execute("""INSERT into alertas 
+                (usuario,texto,tipo,fecha,periodo,anio) values (%s,%s,%s,%s,%s,%s)""",
+                (user_name,description,tipo,date,period,year))
+    cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(user_name,date))
+    return redirect(url_for('create_alert'))
 
 
 
