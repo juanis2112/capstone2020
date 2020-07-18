@@ -18,6 +18,8 @@ from sklearn.ensemble import VotingClassifier
 import pickle
 import os
 from pathlib import Path
+import shutil
+
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
@@ -38,18 +40,33 @@ lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeig
 #=======================================================================================================================
 # FUNCIONES DE MODELOS PARA SOLO EL PRIMER CORTE
 
-# Funcion necesaria para crear la columna Paso en el dataframe
 def funcion_paso(x):
-    #x: nota final
-    #return si paso o perdio como etiquetas para modelos de predicción
+    """
+    Funcion necesaria para crear la columna Paso en el dataframe.
+    
+    PARAMETROS:
+        x: nota final
+
+    RETORNA: 
+        1 si el estudiante paso (x >= 3) o 0 si perdio (x < 3) como etiqueta para modelos de prediccion
+    """
     if(x >= 3):
         return 1
     elif(x <3):
         return 0
 #-----------------------------------------------------------------------------
-# Funcion que determina el mejor modelo (modelo general sobre todas las materias) sobre todos los datos a partir de las notas de los 2 primeros cortes
 def mejor_modelo_general_2(materia):
-    # materia: dataframe con notas en todas las materias
+    """
+    Determina el mejor modelo (modelo general sobre todas las materias) sobre todos los datos.
+    El analisis es realizado con las notas de los cortes 1 y 2.
+
+    PARAMETROS:
+        materia: dataframe con notas en todas las materias
+
+    RETORNA:
+        mejor_modelo:  modelo correspondiente al modelo general
+        F15_mejor_modelo: el puntaje F15 asociado al modelo general
+    """
     X = materia[["nota1","nota2"]]
     Y = materia[["Paso"]]
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
@@ -77,10 +94,20 @@ def mejor_modelo_general_2(materia):
         print(r"F_{1.5}$:" +str(F15))
     return mejor_modelo,F15_mejor_modelo
 #------------------------------------------------------------------------------
-# Funcion que determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron
 def mejor_modelo_2(materia,modelo_general):
-    # materia: dataframe con los datos de una materia especifica
-    # modelo_genera: modelo general pre-establecido
+    """
+    Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
+    El analisis es realizado con las notas de los cortes 1 y 2.
+    
+    PARAMETROS:
+        materia: dataframe con los datos de una materia especifica
+        modelo_genera: modelo general pre-establecido
+     
+    RETORNA:
+        mejor_modelo: modelo correspondiente al modelo general
+        F_15_mejor_modelo: puntaje F15 asociado al modelo general
+
+    """
     indice = -1
     X = materia[["nota1","nota2"]]
     Y = materia[["Paso"]]
@@ -198,19 +225,29 @@ def enssemble(modelo1,modelo2,X_train,Y_train,X_test,Y_test):
     F15=((1+1.5*1.5)*True_posit)/((1+1.5*1.5)*True_posit+(1.5*1.5)*False_neg+False_posit)
     return vot,F15
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion para guardar el mejor modelo, es decir el modelo general, sobre todas las materias
 def seleccionar_guardar_modelo_general_2(materia):
-    # materia: dataframe con las notas de todos las materias de todos los estudiantes
+    """
+    Guarda el mejor modelo, es decir el modelo general, sobre todas las materias.
+    El analisis es realizado con las notas de los cortes 1 y 2.
+
+    PARAMETROS:
+        materia: dataframe con las notas de todos las materias de todos los estudiantes
+    """    
     nombre_materia = "Modelo_General"
     mejor_modelo1,F15 = mejor_modelo_general_2(materia)
     #Guardar el modelo en disco
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion para guardar el mejor modelo sobre una materia específica
 def seleccionar_guardar_modelo_2(materia,nombre_materia):
-    # materia: dataframe de la materia especificada
-    # nombre_materia: string para el nombre del archivo del modelo
+    """
+    Guarda el mejor modelo sobre una materia específica.
+    El analisis es realizado con las notas de los cortes 1 y 2.
+    
+    PARAMETROS:
+        materia: dataframe de la materia especificada
+        nombre_materia: string para el nombre del archivo del modelo
+    """
     modelo_general_nombre = "Modelo_General"
     filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1,2.sav"
     modelo_general = pickle.load(open(filename, 'rb'))
@@ -219,15 +256,39 @@ def seleccionar_guardar_modelo_2(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion que carga un modelo que usa cortes 1 y 2
+#--------------------------------------------------------------------------------------------------------------------
+# Funcion para guardar el mejor modelo sobre una materia específica
+def seleccionar_guardar_modelo_2_gen(materia,nombre_materia):
+    # materia: dataframe de la materia especificada
+    # nombre_materia: string para el nombre del archivo del modelo
+    modelo_general_nombre = "Modelo_General"
+    filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1,2.sav"
+    modelo_general = pickle.load(open(filename, 'rb'))
+    #Guardar el modelo en disco
+    filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
+    pickle.dump(modelo_general , open(filename, 'wb'))
+#--------------------------------------------------------------------------------------------------------------------
 def cargar_modelo_2(nombre_materia):
+    """
+    Carga un modelo de prediccion que usa cortes 1 y 2
+
+    PARAMETROS:
+        nombre_materia: string del nombre de la materia para cargar el modelo
+
+    RETORNA:
+        loaded_model: mejor modelo asociado a la materia elegida
+    """
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
     loaded_model = pickle.load(open(filename, 'rb'))
     return loaded_model
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion que guarda el mejor modelo para todas las materias analizando cortes 1 y 2
 def guardar_mejor_modelo_todas_materias_2(df_completo):
-    # df_completo: dataframe con los datos de todos los estudiantes
+    """
+    Guarda el mejor modelo para todas las materias analizando cortes 1 y 2
+
+    PARAMETROS:
+        df_completo: dataframe con los datos de todos los estudiantes
+    """
     seleccionar_guardar_modelo_general_2(df_completo)
     materias = pd.DataFrame(df_completo.groupby("nombre_asignatura")).reset_index()
     lista_materias = []
@@ -235,14 +296,24 @@ def guardar_mejor_modelo_todas_materias_2(df_completo):
         lista_materias.append(row[0])
     for i in range(len(lista_materias)):
         nombre_materia = lista_materias[i]
+        print(nombre_materia)
         materia = df_completo[df_completo["nombre_asignatura"] == nombre_materia]
-        seleccionar_guardar_modelo_2(materia,nombre_materia)
+        if(len(materia.index)>=4):
+            seleccionar_guardar_modelo_2(materia,nombre_materia)
+        else:
+            seleccionar_guardar_modelo_2_gen(materia,nombre_materia)
 #--------------------------------------------------------------------------------------------------------------------
-# Funcion que retorna dataframe de estudiantes que el modelo predijo que van a perder
 def devolucion_estudiantes_riesgos_2(nombre_materia,materia):
-    # nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
-    # materia: dataframe con los datos de las notas de la materia especificada
-    # NOTA: Los datos en materia corresponden a la tabla de datos del semestre actual para sacar las alertas
+    """
+    Retorna dataframe de estudiantes que el modelo predijo que van a perder
+
+    PARAMETROS:
+        nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
+        materia: dataframe con los datos de las notas de la materia especificada
+
+    RETORNA:
+        estudiantes: dataframe con los estudiantes que se predijo que van a perder la materia
+    """
     loaded_model = cargar_modelo_2(nombre_materia)
     X_test = materia[["nota1","nota2"]]
     Y_pred = loaded_model.predict(X_test)
@@ -409,6 +480,16 @@ def seleccionar_guardar_modelo_1(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
+def seleccionar_guardar_modelo_1_gen(materia,nombre_materia):
+    # materia: dataframe de la materia especificada
+    # nombre_materia: string para el nombre del archivo del modelo
+    modelo_general_nombre = "Modelo_General"
+    filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1.sav"
+    modelo_general = pickle.load(open(filename, 'rb'))
+    #Guardar el modelo en disco
+    filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
+    pickle.dump(modelo_general, open(filename, 'wb'))
+#--------------------------------------------------------------------------------------------------------------------
 # Funcion que carga un modelo que usa corte 1
 def cargar_modelo_1(nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
@@ -427,7 +508,10 @@ def guardar_mejor_modelo_todas_materias_1(df_completo):
     for i in range(len(lista_materias)):
         nombre_materia = lista_materias[i]
         materia = df_completo[df_completo["nombre_asignatura"] == nombre_materia]
-        seleccionar_guardar_modelo_1(materia,nombre_materia)
+        if(len(materia.index)>=4):
+            seleccionar_guardar_modelo_1(materia,nombre_materia)
+        else:
+            seleccionar_guardar_modelo_1_gen(materia,nombre_materia)
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion que retorna dataframe de estudiantes que el modelo predijo que van a perder
 def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
@@ -446,28 +530,42 @@ def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion Main
 #--------------------------------------------------------------------------------------------------------------------
+#Funcion de entrenamiento con csv de historico
+def main0():
+    #----------------------#
+    filename = file+"/modelos/Información_antes_de_aplicación/datos_notas_macc_cortes_historico_20172_20201.csv"
+    notas = pd.read_csv(filename,encoding='utf-8',header=0,sep=";")
+    # Eliminar Nans
+    notas = notas.dropna()
+    #notas
+    #Agregando nota final para predicción:
+    notas["Nota_Final"]= notas.apply(lambda row: (row["Nota 1er Corte"]+row["Nota 2do Corte"]+row["Nota 3er Corte"]+row["Nota 4to Corte"]+row["Nota 5to Corte"])/5,axis=1)
+    notas["Paso"] = notas.apply(lambda row: funcion_paso(row["Nota_Final"]),axis=1 )
+    notas = notas.rename(columns={'Nombre Asignatura': 'nombre_asignatura','Nota 1er Corte':'nota1','Nota 2do Corte':'nota2'})
+    lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
+    guardar_mejor_modelo_todas_materias_2(notas)
+    guardar_mejor_modelo_todas_materias_1(notas)
+
+#---------------------------------------------------------------------------------------------------------------------
+#Funcion que se encarga de entrenar los modelos
 def main1():
     #----------------------#
     df =  pd.read_sql("""select est_usr,nombre_asignatura,periodo,anio,nota1,nota2,round((nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100,2) as nota_final from resumen""",conn)
     df["Paso"] = df.apply(lambda row: funcion_paso(row["nota_final"]),axis=1 )
     lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
-    if df["nota2"].count()==len(df.index) & df["nota_final"].count()==len(df.index):
-        guardar_mejor_modelo_todas_materias_2(df)
-    elif df["nota1"].count()==len(df.index) & df["nota_final"].count()==len(df.index):
-        guardar_mejor_modelo_todas_materias_1(df)
-
+    guardar_mejor_modelo_todas_materias_2(df)
+    guardar_mejor_modelo_todas_materias_1(df)
+#---------------------------------------------------------------------------------------------------------------------
+# Funcion que se encarga de hacer la predicción de los estudiantes
 def main2():
     #lista_estudiantes: dataframe
     columnas = ["est_usr","nombre_asignatura","nota1","nota2"]
     lista_estudiantes_alerta =pd.DataFrame(columns = columnas)
     #query obtencion de notas normal
-    query2="""select est_usr,nombre_asignatura,nota1,nota2
+    query1="""select est_usr,nombre_asignatura,nota1,nota2
     from resumen where periodo = (select max(periodo) from resumen where anio =(select max(anio) from resumen )) and anio = (select max(anio) from resumen)"""
     #query sin columna segundo corte
-    query1 = """update toma  set nota2 = NULL where anio = (select max(anio) from resumen) and periodo = (select max(periodo) from resumen where anio = (select max(anio) from resumen))"""
-    df =  pd.read_sql(query2,conn)
-    print(df.head())
-    print(lista_estudiantes_alerta.head())
+    df =  pd.read_sql(query1,conn)
     lista_materias = []
     materias = pd.DataFrame(df.groupby("nombre_asignatura")).reset_index()
     for index,row in materias.iterrows():
@@ -491,7 +589,21 @@ def main2():
 
 
     return lista_estudiantes_alerta
+#---------------------------------------------------------------------------------------------------------------
+def mover_modelos(source,destination):
+    """
+    Mueve todos los archivos de la carpeta fuente a la carpeta destino.
+    Si las direcciones son relativas, las direcciones empiezan desde la carpeta donde se encuentra el archivo con esta funcion.
 
+    PARAMETROS:
+        source: direccion de la carpeta fuente
+        destination: direccion de la carpeta destino
+    """
+    files = os.listdir(source)
+    for file in files:
+        new_path = shutil.move(f"{source}/{file}", destination)
+
+main0()
 #main1()
-lista_estudiantes_alerta = main2()
-print(lista_estudiantes_alerta.head())
+#lista_estudiantes_alerta = main2()
+#print(lista_estudiantes_alerta.head())

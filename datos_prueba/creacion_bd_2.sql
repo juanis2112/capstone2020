@@ -62,6 +62,28 @@ create table semestre (
     FOREIGN KEY(codigo_asignatura) REFERENCES Asignaturas
 );
 
+-- Creacion tabla para manejar las alertas
+create table alertas (
+	usuario VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL,
+	tipo VARCHAR(100) NOT NULL,
+	fecha TIMESTAMP NOT NULL,
+	periodo numeric NOT NULL,
+	anio numeric NOT NULL,
+	nombre_asignatura VARCHAR(100),
+	visto_estudiante bool NOT NULL DEFAULT FALSE,
+	oculto_estudiante bool NOT NULL DEFAULT FALSE,
+	primary key(usuario,fecha)
+);
+
+create table loggin(
+	usuario VARCHAR(100) NOT NULL,
+	nivel Integer NOT NULL,
+	accion VARCHAR(100) NOT NULL,
+	fecha VARCHAR(100) NOT NULL,
+	texto TEXT NOT NULL
+);
+
 /* Conjuntos de relaciones */
 
 create table ofrece(
@@ -123,20 +145,6 @@ create table curso_sem (
     PRIMARY KEY (codigo_asignatura,periodo,anio,grupo),
 	foreign key (codigo_asignatura) references Asignaturas
 );	
-
--- Creacion tabla para manejar las alertas
-create table alertas (
-	usuario VARCHAR(100) NOT NULL,
-	texto TEXT NOT NULL,
-	tipo VARCHAR(100) NOT NULL,
-	fecha TIMESTAMP NOT NULL,
-	periodo numeric NOT NULL,
-	anio numeric NOT NULL,
-	nombre_asignatura VARCHAR(100),
-	visto_estudiante bool NOT NULL DEFAULT FALSE,
-	oculto_estudiante bool NOT NULL DEFAULT FALSE,
-	primary key(usuario,fecha)
-);
 create table notificacion(
 	usuario VARCHAR(100) NOT NULL,
 	fecha TIMESTAMP NOT NULL,
