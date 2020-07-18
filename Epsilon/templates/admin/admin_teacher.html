@@ -23,12 +23,25 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/util.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/main.css') }}" />
 	<!--===============================================================================================-->
-    
-    <style> 
+
+    <style>
     .error {
     color: red;
-    opacity: 1; 
-    }
+    opacity: 1;
+	}
+
+	.wrap-login100{
+		padding: 30px;
+	}
+
+	.login100-form-title{
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+
+	p{
+		color: white;
+	}
     </style>
 	</head>
 	<body>
@@ -41,7 +54,7 @@
 					</div>-->
 					<form class="login100-form validate-form">
 						<span class="login100-form-title">
-							Ingreso al sistema de notas Epsilon
+							Desea ingresar como:
 							{% with errors = get_flashed_messages(category_filter=["error"]) %}
 							{% if errors %}
                             <div style="color:red;">
@@ -52,13 +65,23 @@
                             {% endif %}
                             {% endwith %}
 						</span>
-                        <div class="container-login100-form-btn">
-                            <a href="{{url_for('main_admin')}}"><div class="menu-box"><p>Administrador</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></a>
+
+						<div class="container-login100-form-btn">
+                            <a href="{{url_for('main_teacher', user_name = user_name)}}">
+								<div class="menu-box"><p>Profesor</p><img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" style="background-color: white; border-radius: 20px;" width="100px" width="100px"></div>
+							</a>
 						</div>
 						<div class="container-login100-form-btn">
-                            <a href="{{url_for('main_teacher', user_name = user_name)}}"><div class="menu-box"><p>Profesor</p><img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px"></div></a>
+                            <a href="{{url_for('main_admin')}}">
+								<div class="menu-box"><p>Administrador</p><img src="{{ url_for('static', filename='template_general/imagenes2/administration.png') }}" style="background-color: white; border-radius: 20px;" width="100px" width="100px"></div>
+							</a>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
+    <footer>
+		<div>Icons made by <a href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+		<br>
+		<div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+	</footer>

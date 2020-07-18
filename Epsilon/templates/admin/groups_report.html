@@ -45,11 +45,10 @@
   </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('historic_class')}}" class="btn">
+<a href="{{url_for('load_classes',year=year,period=period)}}" class="btn">
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <ul style="list-style-type:none">
-<p>
 {% if image != None %}
 <div>
   <img src="data:image/png;base64,{{ image }}">
@@ -58,6 +57,11 @@
   <a href="data:image/png;base64,{{ image }}" download class="btn" style="color: black;">Descargar</a>
 </div>
 {% endif %}
-</p>
 </ul>
+{% endblock %}
+
+{% block code %}
+<script>
+  var u={{period}};
+</script>
 {% endblock %}
