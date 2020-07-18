@@ -200,12 +200,14 @@ function azulfiltro(){
       if(i!=j+2)
       lista.childNodes[i].style.display="none";
       else
-      lista.childNodes[i].style.display="block";
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
     }
   }
   else{
     for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
     }
   }
 }
