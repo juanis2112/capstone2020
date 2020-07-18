@@ -219,6 +219,18 @@ def seleccionar_guardar_modelo_2(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+# Funcion para guardar el mejor modelo sobre una materia específica
+def seleccionar_guardar_modelo_2_gen(materia,nombre_materia):
+    # materia: dataframe de la materia especificada
+    # nombre_materia: string para el nombre del archivo del modelo
+    modelo_general_nombre = "Modelo_General"
+    filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1,2.sav"
+    modelo_general = pickle.load(open(filename, 'rb'))
+    #Guardar el modelo en disco
+    filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
+    pickle.dump(modelo_general , open(filename, 'wb'))
+#--------------------------------------------------------------------------------------------------------------------
 # Funcion que carga un modelo que usa cortes 1 y 2
 def cargar_modelo_2(nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1,2.sav"
@@ -235,8 +247,12 @@ def guardar_mejor_modelo_todas_materias_2(df_completo):
         lista_materias.append(row[0])
     for i in range(len(lista_materias)):
         nombre_materia = lista_materias[i]
+        print(nombre_materia)
         materia = df_completo[df_completo["nombre_asignatura"] == nombre_materia]
-        seleccionar_guardar_modelo_2(materia,nombre_materia)
+        if(len(materia.index)>=4):
+            seleccionar_guardar_modelo_2(materia,nombre_materia)
+        else:
+            seleccionar_guardar_modelo_2_gen(materia,nombre_materia)
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion que retorna dataframe de estudiantes que el modelo predijo que van a perder
 def devolucion_estudiantes_riesgos_2(nombre_materia,materia):
@@ -409,6 +425,16 @@ def seleccionar_guardar_modelo_1(materia,nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 #--------------------------------------------------------------------------------------------------------------------
+def seleccionar_guardar_modelo_1_gen(materia,nombre_materia):
+    # materia: dataframe de la materia especificada
+    # nombre_materia: string para el nombre del archivo del modelo
+    modelo_general_nombre = "Modelo_General"
+    filename = file+"/modelos/mejor_modelo_"+modelo_general_nombre+"1.sav"
+    modelo_general = pickle.load(open(filename, 'rb'))
+    #Guardar el modelo en disco
+    filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
+    pickle.dump(modelo_general, open(filename, 'wb'))
+#--------------------------------------------------------------------------------------------------------------------
 # Funcion que carga un modelo que usa corte 1
 def cargar_modelo_1(nombre_materia):
     filename = file+"/modelos/mejor_modelo_"+nombre_materia+"1.sav"
@@ -427,7 +453,10 @@ def guardar_mejor_modelo_todas_materias_1(df_completo):
     for i in range(len(lista_materias)):
         nombre_materia = lista_materias[i]
         materia = df_completo[df_completo["nombre_asignatura"] == nombre_materia]
-        seleccionar_guardar_modelo_1(materia,nombre_materia)
+        if(len(materia.index)>=4):
+            seleccionar_guardar_modelo_1(materia,nombre_materia)
+        else:
+            seleccionar_guardar_modelo_1_gen(materia,nombre_materia)
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion que retorna dataframe de estudiantes que el modelo predijo que van a perder
 def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
@@ -446,28 +475,42 @@ def devolucion_estudiantes_riesgos_1(nombre_materia,materia):
 #--------------------------------------------------------------------------------------------------------------------
 # Funcion Main
 #--------------------------------------------------------------------------------------------------------------------
+#Funcion de entrenamiento con csv de historico
+def main0():
+    #----------------------#
+    filename = file+"/modelos/Información_antes_de_aplicación/datos_notas_macc_cortes_historico_20172_20201.csv"
+    notas = pd.read_csv(filename,encoding='utf-8',header=0,sep=";")
+    # Eliminar Nans
+    notas = notas.dropna()
+    #notas
+    #Agregando nota final para predicción:
+    notas["Nota_Final"]= notas.apply(lambda row: (row["Nota 1er Corte"]+row["Nota 2do Corte"]+row["Nota 3er Corte"]+row["Nota 4to Corte"]+row["Nota 5to Corte"])/5,axis=1)
+    notas["Paso"] = notas.apply(lambda row: funcion_paso(row["Nota_Final"]),axis=1 )
+    notas = notas.rename(columns={'Nombre Asignatura': 'nombre_asignatura','Nota 1er Corte':'nota1','Nota 2do Corte':'nota2'})
+    lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
+    guardar_mejor_modelo_todas_materias_2(notas)
+    guardar_mejor_modelo_todas_materias_1(notas)
+
+#---------------------------------------------------------------------------------------------------------------------
+#Funcion que se encarga de entrenar los modelos
 def main1():
     #----------------------#
     df =  pd.read_sql("""select est_usr,nombre_asignatura,periodo,anio,nota1,nota2,round((nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100,2) as nota_final from resumen""",conn)
     df["Paso"] = df.apply(lambda row: funcion_paso(row["nota_final"]),axis=1 )
     lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
-    if df["nota2"].count()==len(df.index) & df["nota_final"].count()==len(df.index):
-        guardar_mejor_modelo_todas_materias_2(df)
-    elif df["nota1"].count()==len(df.index) & df["nota_final"].count()==len(df.index):
-        guardar_mejor_modelo_todas_materias_1(df)
-
+    guardar_mejor_modelo_todas_materias_2(df)
+    guardar_mejor_modelo_todas_materias_1(df)
+#---------------------------------------------------------------------------------------------------------------------
+# Funcion que se encarga de hacer la predicción de los estudiantes
 def main2():
     #lista_estudiantes: dataframe
     columnas = ["est_usr","nombre_asignatura","nota1","nota2"]
     lista_estudiantes_alerta =pd.DataFrame(columns = columnas)
     #query obtencion de notas normal
-    query2="""select est_usr,nombre_asignatura,nota1,nota2
+    query1="""select est_usr,nombre_asignatura,nota1,nota2
     from resumen where periodo = (select max(periodo) from resumen where anio =(select max(anio) from resumen )) and anio = (select max(anio) from resumen)"""
     #query sin columna segundo corte
-    query1 = """update toma  set nota2 = NULL where anio = (select max(anio) from resumen) and periodo = (select max(periodo) from resumen where anio = (select max(anio) from resumen))"""
-    df =  pd.read_sql(query2,conn)
-    print(df.head())
-    print(lista_estudiantes_alerta.head())
+    df =  pd.read_sql(query1,conn)
     lista_materias = []
     materias = pd.DataFrame(df.groupby("nombre_asignatura")).reset_index()
     for index,row in materias.iterrows():
@@ -492,6 +535,7 @@ def main2():
 
     return lista_estudiantes_alerta
 
+main0()
 #main1()
-lista_estudiantes_alerta = main2()
-print(lista_estudiantes_alerta.head())
+#lista_estudiantes_alerta = main2()
+#print(lista_estudiantes_alerta.head())
