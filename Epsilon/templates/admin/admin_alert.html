@@ -56,7 +56,7 @@
     <th> Tipo </th>
     <th>Alerta</th>
     <th>Borrar Alerta </th>
-    
+
 </tr>
 {% for alert in unread_alerts%}
 <tr style="text-align: center;" id="{{alert.9}}/{{alert.5}}">
@@ -85,5 +85,8 @@
 {% endfor %}
 </table>
 <br>
-<a href="{{url_for('create_alert')}}" class="btn">Alerta personalizada</a>
+<a href="{{url_for('create_alert')}}" class="btn" style="align-items:center;
+  justify-content: center; display:flex;">
+  Alerta personalizada
+</a>
 {% endblock %}

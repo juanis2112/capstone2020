@@ -1,6 +1,7 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
 <ul>
+  <a href="{{url_for('main_teacher')}}">
     <li>
       <div class="menu-box">
         <div >
@@ -9,6 +10,7 @@
       <img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px">
     </div>
     </li>
+  </a>
   <a href="{{url_for('class_history', user_name = user_name)}}">
     <li style="background-color: #0099cc;">
       <div class="menu-box">

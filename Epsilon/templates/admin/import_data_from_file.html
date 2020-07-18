@@ -45,41 +45,47 @@
   </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('main_admin')}}" class="btn">
+<a href="{{url_for('admin_functions')}}" class="btn">
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <ul style="list-style-type:none">
-{% if data_type=='students'%}
-<form method= "POST" action="{{url_for('upload_students')}}" enctype=multipart/form-data>
+  <div style="background-color: white; border: 1px solid black; padding: 10px;">
+    {% if data_type=='students'%}
+    <form method= "POST" action="{{url_for('upload_students')}}" enctype=multipart/form-data>
+    Seleccione el periodo académico para el cual desea cargar sus archivos:
+    <br>
+    Año: <input type="text" name="year" placeholder="Año">
+    <br>
+    Periodo: <input type="text" name="period" placeholder="Periodo">
+    <br>
+    Seleccione a continuación el archivo de estudiantes que desea importar:
+    <br>
+    {% endif %}
 
-Seleccione el periodo académico para el cual desea cargar sus archivos:
-<br>
-Año: <input type="text" name="year" placeholder="Año">
-<br>
-Periodo: <input type="text" name="period" placeholder="Periodo">
-<br>
-Seleccione a continuación el archivo de estudiantes que desea importar:
-<br>
-{% endif %}
+    {% if data_type=='classes'%}
+    <form method= "POST" action="{{url_for('upload_classes', year=year, period=period)}}" enctype=multipart/form-data>
 
-{% if data_type=='classes'%}
-<form method= "POST" action="{{url_for('upload_classes', year=year, period=period)}}" enctype=multipart/form-data>
-
-El archivo de estudiantes fue importado de manera exitosa. 
-<br>
-Seleccione a continuación el archivo de materias que desea importar:
-<br>
-{% endif %}
+    El archivo de estudiantes fue importado de manera exitosa.
+    <br>
+    Seleccione a continuación el archivo de materias que desea importar:
+    <br>
+    {% endif %}
 
 
-{% if data_type=='teachers' %}
-<form method= "POST" action="{{url_for('upload_teachers')}}" enctype=multipart/form-data>
+    {% if data_type=='teachers' %}
+    <form method= "POST" action="{{url_for('upload_teachers')}}" enctype=multipart/form-data>
 
-Seleccione a continuación el archivo con los datos de profesores que desea importar:
-{% endif %}
-          <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
-          <label for="file" class="archivo">seleccionar archivo</label>
-          <input type="submit" class="btn" value="subir" >
- </form>
+    Seleccione a continuación el archivo con los datos de profesores que desea importar:
+    {% endif %}
+
+
+      <div style="text-align: center;">
+        <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+        <label for="file" class="archivo">seleccionar archivo</label>
+        <input type="submit" class="btn" value="subir" >
+      </div>
+    </form>
+  </div>
+</div>
 </ul>
 {% endblock %}
