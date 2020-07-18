@@ -29,10 +29,10 @@ import json
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_100",)
+                        database="Epsilon_40",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -138,8 +138,7 @@ def get_student_grades_period(user_name, class_name, year, period, group):
     grades = cur.fetchall()
     return grades
 
-def get_name_from_user():
-    user_name = flask_login.current_user.id
+def get_name_from_user(user_name):
     cur.execute("""SELECT nombre, apellido_1, apellido_2
                     FROM personas
                     WHERE usuario = %s""", (user_name,))

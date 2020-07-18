@@ -77,7 +77,7 @@ create table alertas (
 	primary key(usuario,fecha)
 );
 
-create table loggin(
+create table logging(
 	usuario VARCHAR(100) NOT NULL,
 	nivel Integer NOT NULL,
 	accion VARCHAR(100) NOT NULL,
