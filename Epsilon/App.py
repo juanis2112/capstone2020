@@ -29,10 +29,10 @@ import json
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="123",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_100",)
+                        database="Epsilon",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -533,6 +533,7 @@ def update_grade(class_name, group):
                 if grade is not None: 
                     student_alerts(student[0], class_name, new_grade)
         update_grades(*grades, class_name, student[0], user_name)
+    course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group ))
 
@@ -554,6 +555,7 @@ def upload_grades_from_csv(class_name, group):
                         row[idx]= None
                 print(row)
                 update_grades(row[2], row[3], row[4], row[5], row[6], class_name, user, user_name)
+    course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                                 class_name=class_name, group=group))
 
@@ -1103,7 +1105,47 @@ def student_alerts(student, class_name, grade):
         cur.execute("""INSERT INTO notificacion select %s,%s,codigo 
                     from empleado where esadmin='1';""", (student,date))
          
-
+def course_alert(class_name,group):
+    cur.execute("""SELECT count(*)
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    total_estudent = cur.fetchone()[0]
+    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5) 
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
+    cortes = list(cur.fetchone())
+    corte = 0
+    for idx,element in enumerate(cortes):
+        if element == total_estudent:
+            corte = idx + 1
+        elif element != 0:
+            return
+        else:
+            corte = idx
+            break
+    corte_string = "nota" + str(corte)
+    cur.execute("""SELECT round(avg("""+corte_string+"""),3)
+                from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    mean_corte = cur.fetchone()[0]
+    if mean_corte  >= 2 and mean_corte < 3:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
+        Tipo = "BAJO"
+    elif mean_corte < 2:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
+        Tipo = "MUY BAJO"
+    else: 
+        return 
+    date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+    cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
+                    from semestre) GROUP BY(anio);""") 
+    period,year = list(cur.fetchone())
+    cur.execute("""INSERT INTO alertas VALUES(%s,%s,%s,%s,%s,%s);"""
+                ,(class_name,text_alert,Tipo,date,period,year))
+    cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
 
 # ---- Admin: Alert -----------------------------------------------------------------------------
 @app.route("/student_alerts", methods=['POST', 'GET'])
@@ -1135,21 +1177,17 @@ def show_alerts():
 @login_required(role='administrador')
 def show_admin_alerts():
     user_name = flask_login.current_user.id
-    cur.execute(""" SELECT nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,anio,nombre_asignatura,R.usuario
-                    from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo from 
-                    alertas join notificacion as noti on alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
-                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '0' AND oculto_admin = '0' AND R.codigo = (
-                    select codigo from personas where usuario = %s
-                    )order by (R.fecha) desc;
-                        """,(user_name,))
+    cur.execute("""SELECT distinct nombre,apellido_1,apellido_2,texto,R.tipo as alerta, R.fecha,periodo,anio,nombre_asignatura,R.usuario
+                from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo
+                from  alertas join notificacion as noti on  alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
+                ) as R left join personas on R.usuario = personas.usuario where visto_admin = '0' AND oculto_admin = '0' AND
+                R.codigo = (select codigo from personas where usuario = %s) order by (R.fecha) desc;""",(user_name,))
     unread_alerts = cur.fetchall()
-    cur.execute(""" SELECT nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,anio,nombre_asignatura,R.usuario 
-                    from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo from 
-                    alertas join notificacion as noti on alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
-                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '1' AND oculto_admin = '0' AND R.codigo = (
-                    select codigo from personas where usuario = %s
-                    )order by (R.fecha) desc;
-                        """,(user_name,))
+    cur.execute("""SELECT distinct nombre,apellido_1,apellido_2,texto,R.tipo as alerta, R.fecha,periodo,anio,nombre_asignatura,R.usuario
+                from (select distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,nombre_asignatura,visto_admin,oculto_admin,codigo
+                from  alertas join notificacion as noti on  alertas.usuario = noti.usuario and alertas.fecha = noti.fecha order by(codigo)
+                ) as R left join personas on R.usuario = personas.usuario where visto_admin = '1' AND oculto_admin = '0' AND
+                R.codigo = (select codigo from personas where usuario = %s) order by (R.fecha) desc;""",(user_name,))
     read_alerts = cur.fetchall()
     cur.execute("""UPDATE notificacion SET visto_admin = '1'
                     WHERE oculto_admin = '0' AND codigo = (
@@ -1162,10 +1200,11 @@ def show_admin_alerts():
 @app.route("/delete_alerts/<string:user_name>/<string:date>//<string:user_type>/", methods=['POST', 'GET'])
 @flask_login.login_required
 def delete_alerts(user_name, date, user_type):
+    user_name_admin = flask_login.current_user.id
     if user_type=='admin':
         cur.execute("""UPDATE notificacion SET oculto_admin = '1'
                     WHERE usuario = %s AND fecha = %s AND
-                    codigo = (select codigo from personas where usuario = 'admin');  """, (user_name,date))
+                    codigo = (select codigo from personas where usuario = %s);  """, (user_name,date,user_name_admin))
         return redirect(url_for('show_admin_alerts'))
     else:
         cur.execute("""UPDATE alertas SET oculto_estudiante = '1' WHERE usuario = %s AND fecha = %s
