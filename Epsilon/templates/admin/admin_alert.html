@@ -50,7 +50,7 @@
 </a>
 <table class="center" id="table">
 <tr>
-    <th>Estudiante</th>
+    <th>Estudiante/Materias</th>
     <th>Fecha</th>
     <th>Materia</th>
     <th> Tipo </th>
@@ -60,7 +60,11 @@
 </tr>
 {% for alert in unread_alerts%}
 <tr style="text-align: center;" id="{{alert.9}}/{{alert.5}}">
-    <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+      {% if alert.0 is not none%}
+      <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% else %}
+      <td>{{alert.9}}</td>
+    {% endif %}
     <td>{{alert.5}} </td>
     <td>{{alert.8}} </td>
     <td>{{alert.4}} </td>
@@ -73,7 +77,11 @@
 <br>
 {% for alert in read_alerts%}
 <tr style="text-align: center;" id="{{alert.9}}/{{alert.5}}">
-    <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% if alert.0 is not none%}
+      <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% else %}
+      <td>{{alert.9}}</td>
+    {% endif %}
     <td>{{alert.5}} </td>
     <td>{{alert.8}} </td>
     <td>{{alert.4}} </td>
