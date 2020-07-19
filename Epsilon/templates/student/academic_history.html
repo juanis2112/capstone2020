@@ -1,5 +1,7 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
+<!-- Agregamos los bloques de la columna izquierda de la ventana-->
+
 <ul>
   <a href="{{url_for('personal_data', user_name = user_name)}}">
     <li>
@@ -28,6 +30,7 @@
  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
  <br>
  <ul style="list-style-type:none">
+        <!-- Para enlistar todos los periodos academicos que ha tenido el estudiante -->
         {% for period in periods %}
         <a href="{{url_for('period_classes', year = period.0, period = period.1)}}">
           <li style="font-size:30px">

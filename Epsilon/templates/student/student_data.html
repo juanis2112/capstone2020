@@ -1,6 +1,7 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
 <ul>
+  <!-- Agregamos los bloques de la columna izquierda de la ventana-->
   <a href="{{url_for('personal_data')}}">
     <li style="background-color: #0099cc;">
       <div class="menu-box">
@@ -24,6 +25,8 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+
+<!-- Se crea una tabla con la informacion del estudiante -->
 <a href="{{url_for('main_student')}}" class="btn">
 <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
 <table class="center" id="table" cellspacing="0" cellpadding="0" style="border:none !important;">
@@ -44,6 +47,7 @@
   </tr>
 </table>
 <br>
+<!-- Boton para descargar -->
 <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
 
 {% endblock %}

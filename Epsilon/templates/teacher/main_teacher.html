@@ -1,5 +1,7 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
+
+<!-- Creacion de la barra izquierda de bloques -->
 <ul>
   <a href="{{url_for('main_teacher')}}">
     <li style="background-color: #0099cc;">
@@ -24,6 +26,8 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+
+<!-- Para enlistar las clases que actualmente esta dictando -->
 <ul style="list-style-type:none">
    {% for class in classes %}
    <a href="{{url_for('show_class', user_name=user_name, class_name=class.0, group=class.1)}}">

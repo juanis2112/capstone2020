@@ -1,5 +1,7 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
+
+<!-- Creacion de la barra izquierda de bloques -->
 <ul>
   <a href="{{url_for('main_teacher')}}">
     <li style="background-color: #0099cc;">
@@ -30,12 +32,14 @@
         <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>
+  <!-- Se agrega el titulo para saber que materia se esta analizando -->
   <div style="diplay:inline-block; text-align:center; width:80%;">
     <span class="mini-titulo">
       Listado de estudiantes del curso {{class_name}}
     </span>
   </div>
 </div>
+<!-- Tabla que enlista los estudiantes -->
 <table class="center" id="table">
       <tr>
           <th>Usuarios</th>

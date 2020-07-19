@@ -36,10 +36,10 @@ ROLES = [
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="123",
+                        password="test",
                         host="localhost",
                         port="5432",
-                        database="Epsilon",)
+                        database="Epsilon_200",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()

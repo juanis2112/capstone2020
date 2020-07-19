@@ -1,5 +1,7 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
+
+<!-- Creacion de la barra izquierda de bloques -->
 <ul>
   <a href="{{url_for('main_teacher')}}">
     <li >
@@ -30,12 +32,14 @@
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>
+  <!-- Para saber las materias de que periodo se estan enlistando-->
   <div style="diplay:inline-block; text-align:center; width:80%;">
     <span class="mini-titulo">
       Listado de clases del periodo {{year}}-{{period}}
     </span>
   </div>
 </div>
+<!-- Se crea la lista de las materias -->
 <ul style="list-style-type:none">
  {% for class in classes %}
  <a href="{{url_for('show__historic_class',user_name=user_name, class_name=class.0, year=year, period=period, group=class.1)}}">

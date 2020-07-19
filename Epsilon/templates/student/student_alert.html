@@ -1,5 +1,6 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
+<!-- Agregamos los bloques de la columna izquierda de la ventana-->
 <ul>
   <a href="{{url_for('personal_data')}}">
     <li>
@@ -24,6 +25,8 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+
+<!-- Se crea una tabla que enlista todas las alertas del estudiante-->
 <a href="{{url_for('main_student')}}" class="btn">
   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
@@ -46,13 +49,14 @@
                   </a></td>
 </tr>
 {% endfor %}
-</tr>
 {% for alert in read_alerts%}
 <tr style="text-align: center;" id="{{alert.0}}/{{alert.3}}">
     <td>{{alert.3}} </td>
     <td>{{alert.6}} </td>
     <td>{{alert.2}} </td>
     <td>{{alert.1}} </td>
+
+    <!-- Boton para borrar alerta de la tabla -->
     <td><a href="{{url_for('delete_alerts', user_name = alert.0, date = alert.3, user_type='student')}}" class="btn">
                       Borrar
                   </a></td>
