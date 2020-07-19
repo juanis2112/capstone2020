@@ -703,7 +703,7 @@ def main2():
 
     return lista_estudiantes_alerta
 
-main0()
+#main0()
 #main1()
 #lista_estudiantes_alerta = main2()
 #print(lista_estudiantes_alerta.head())

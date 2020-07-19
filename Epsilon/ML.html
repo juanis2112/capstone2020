@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module ML</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>ML</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjuank%5Cdocuments%5Cml.py">c:\users\juank\documents\ml.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="sklearn.metrics.html">sklearn.metrics</a><br>
+<a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+<a href="pickle.html">pickle</a><br>
+<a href="matplotlib.pyplot.html">matplotlib.pyplot</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+<a href="shutil.html">shutil</a><br>
+<a href="sqlalchemy.html">sqlalchemy</a><br>
+</td><td width="25%" valign=top><a href="sklearn.svm.html">sklearn.svm</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-cargar_modelo_1"><strong>cargar_modelo_1</strong></a>(nombre_materia)</dt><dd><tt>Carga&nbsp;un&nbsp;modelo&nbsp;de&nbsp;prediccion&nbsp;que&nbsp;usa&nbsp;el&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;del&nbsp;nombre&nbsp;de&nbsp;la&nbsp;materia&nbsp;para&nbsp;cargar&nbsp;el&nbsp;modelo<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;loaded_model:&nbsp;mejor&nbsp;modelo&nbsp;asociado&nbsp;a&nbsp;la&nbsp;materia&nbsp;elegida</tt></dd></dl>
+ <dl><dt><a name="-cargar_modelo_2"><strong>cargar_modelo_2</strong></a>(nombre_materia)</dt><dd><tt>Carga&nbsp;un&nbsp;modelo&nbsp;de&nbsp;prediccion&nbsp;que&nbsp;usa&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;del&nbsp;nombre&nbsp;de&nbsp;la&nbsp;materia&nbsp;para&nbsp;cargar&nbsp;el&nbsp;modelo<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;loaded_model:&nbsp;mejor&nbsp;modelo&nbsp;asociado&nbsp;a&nbsp;la&nbsp;materia&nbsp;elegida</tt></dd></dl>
+ <dl><dt><a name="-devolucion_estudiantes_riesgos_1"><strong>devolucion_estudiantes_riesgos_1</strong></a>(nombre_materia, materia)</dt><dd><tt>Retorna&nbsp;dataframe&nbsp;de&nbsp;estudiantes&nbsp;que&nbsp;el&nbsp;modelo&nbsp;predijo&nbsp;que&nbsp;van&nbsp;a&nbsp;perder<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;nombre&nbsp;de&nbsp;la&nbsp;materia&nbsp;que&nbsp;selecciona&nbsp;para&nbsp;cargar&nbsp;el&nbsp;modelo&nbsp;(puede&nbsp;ser&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;con&nbsp;el&nbsp;modelo&nbsp;general)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;las&nbsp;notas&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;estudiantes:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;estudiantes&nbsp;que&nbsp;se&nbsp;predijo&nbsp;que&nbsp;van&nbsp;a&nbsp;perder&nbsp;la&nbsp;materia</tt></dd></dl>
+ <dl><dt><a name="-devolucion_estudiantes_riesgos_2"><strong>devolucion_estudiantes_riesgos_2</strong></a>(nombre_materia, materia)</dt><dd><tt>Retorna&nbsp;dataframe&nbsp;de&nbsp;estudiantes&nbsp;que&nbsp;el&nbsp;modelo&nbsp;predijo&nbsp;que&nbsp;van&nbsp;a&nbsp;perder<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;nombre&nbsp;de&nbsp;la&nbsp;materia&nbsp;que&nbsp;selecciona&nbsp;para&nbsp;cargar&nbsp;el&nbsp;modelo&nbsp;(puede&nbsp;ser&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;con&nbsp;el&nbsp;modelo&nbsp;general)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;las&nbsp;notas&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;estudiantes:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;estudiantes&nbsp;que&nbsp;se&nbsp;predijo&nbsp;que&nbsp;van&nbsp;a&nbsp;perder&nbsp;la&nbsp;materia</tt></dd></dl>
+ <dl><dt><a name="-enssemble"><strong>enssemble</strong></a>(modelo1, modelo2, X_train, Y_train, X_test, Y_test)</dt><dd><tt>Combina&nbsp;dos&nbsp;modelos&nbsp;de&nbsp;clasificacion&nbsp;usando&nbsp;clasificador&nbsp;de&nbsp;votacion&nbsp;(Voting&nbsp;Classifier),funciona&nbsp;tanto&nbsp;para&nbsp;primer&nbsp;corte&nbsp;y&nbsp;segundo&nbsp;corte<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo1:&nbsp;uno&nbsp;de&nbsp;los&nbsp;modelos&nbsp;que&nbsp;se&nbsp;combina<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo2:&nbsp;uno&nbsp;de&nbsp;los&nbsp;modelos&nbsp;que&nbsp;se&nbsp;combina<br>
+&nbsp;&nbsp;&nbsp;&nbsp;X_train:&nbsp;dataframe&nbsp;de&nbsp;entrenamiento<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Y_train:&nbsp;variable&nbsp;independiente&nbsp;de&nbsp;entrenamiento<br>
+&nbsp;&nbsp;&nbsp;&nbsp;X_test:&nbsp;dataframe&nbsp;para&nbsp;testeo&nbsp;de&nbsp;modelo&nbsp;para&nbsp;posterior&nbsp;elección&nbsp;del&nbsp;mejor&nbsp;modelo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Y_test:&nbsp;variable&nbsp;independiente&nbsp;para&nbsp;hacer&nbsp;test<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;vot:&nbsp;modelo&nbsp;clasificador&nbsp;de&nbsp;tipo&nbsp;VotingClassifier<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F15:&nbsp;puntaje&nbsp;F15&nbsp;del&nbsp;VotingClassifier&nbsp;asociado</tt></dd></dl>
+ <dl><dt><a name="-funcion_paso"><strong>funcion_paso</strong></a>(x)</dt><dd><tt>Funcion&nbsp;necesaria&nbsp;para&nbsp;crear&nbsp;la&nbsp;columna&nbsp;Paso&nbsp;en&nbsp;el&nbsp;dataframe.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;x:&nbsp;nota&nbsp;final<br>
+&nbsp;<br>
+RETORNA:&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;si&nbsp;el&nbsp;estudiante&nbsp;paso&nbsp;(x&nbsp;&gt;=&nbsp;3)&nbsp;o&nbsp;0&nbsp;si&nbsp;perdio&nbsp;(x&nbsp;&lt;&nbsp;3)&nbsp;como&nbsp;etiqueta&nbsp;para&nbsp;modelos&nbsp;de&nbsp;prediccion</tt></dd></dl>
+ <dl><dt><a name="-guardar_mejor_modelo_todas_materias_1"><strong>guardar_mejor_modelo_todas_materias_1</strong></a>(df_completo)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;para&nbsp;todas&nbsp;las&nbsp;materias&nbsp;analizando&nbsp;el&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;df_completo:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;todos&nbsp;los&nbsp;estudiantes</tt></dd></dl>
+ <dl><dt><a name="-guardar_mejor_modelo_todas_materias_2"><strong>guardar_mejor_modelo_todas_materias_2</strong></a>(df_completo)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;para&nbsp;todas&nbsp;las&nbsp;materias&nbsp;analizando&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;df_completo:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;todos&nbsp;los&nbsp;estudiantes</tt></dd></dl>
+ <dl><dt><a name="-main0"><strong>main0</strong></a>()</dt><dd><tt>Funcion&nbsp;de&nbsp;entrenamiento&nbsp;con&nbsp;csv&nbsp;de&nbsp;historico.</tt></dd></dl>
+ <dl><dt><a name="-main1"><strong>main1</strong></a>()</dt><dd><tt>Funcion&nbsp;que&nbsp;se&nbsp;encarga&nbsp;de&nbsp;entrenar&nbsp;los&nbsp;modelos.</tt></dd></dl>
+ <dl><dt><a name="-main2"><strong>main2</strong></a>()</dt><dd><tt>Funcion&nbsp;que&nbsp;se&nbsp;encarga&nbsp;de&nbsp;hacer&nbsp;la&nbsp;predicción&nbsp;de&nbsp;los&nbsp;estudiantes.&nbsp;<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lista_estudiantes_alerta:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;estudiantes&nbsp;con&nbsp;riesgo&nbsp;de&nbsp;perder&nbsp;la&nbsp;materia</tt></dd></dl>
+ <dl><dt><a name="-mejor_modelo_1"><strong>mejor_modelo_1</strong></a>(materia, modelo_general)</dt><dd><tt>Determina&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;para&nbsp;una&nbsp;materia&nbsp;teniendo&nbsp;en&nbsp;cuenta&nbsp;las&nbsp;clases&nbsp;en&nbsp;las&nbsp;que&nbsp;todos&nbsp;pasaron.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;del&nbsp;corte&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;una&nbsp;materia&nbsp;especifica<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo_genera:&nbsp;modelo&nbsp;general&nbsp;pre-establecido<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;modelo&nbsp;correspondiente&nbsp;al&nbsp;modelo&nbsp;general<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F_15_mejor_modelo:&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;geenral</tt></dd></dl>
+ <dl><dt><a name="-mejor_modelo_2"><strong>mejor_modelo_2</strong></a>(materia, modelo_general)</dt><dd><tt>Determina&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;para&nbsp;una&nbsp;materia&nbsp;teniendo&nbsp;en&nbsp;cuenta&nbsp;las&nbsp;clases&nbsp;en&nbsp;las&nbsp;que&nbsp;todos&nbsp;pasaron.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;de&nbsp;los&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;los&nbsp;datos&nbsp;de&nbsp;una&nbsp;materia&nbsp;especifica<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo_genera:&nbsp;modelo&nbsp;general&nbsp;pre-establecido<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;modelo&nbsp;correspondiente&nbsp;al&nbsp;modelo&nbsp;general<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F_15_mejor_modelo:&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;general</tt></dd></dl>
+ <dl><dt><a name="-mejor_modelo_general_1"><strong>mejor_modelo_general_1</strong></a>(materia)</dt><dd><tt>Determina&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;(modelo&nbsp;general&nbsp;sobre&nbsp;todas&nbsp;las&nbsp;materias)&nbsp;sobre&nbsp;todos&nbsp;los&nbsp;datos.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;del&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;notas&nbsp;en&nbsp;todas&nbsp;las&nbsp;materias<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;&nbsp;modelo&nbsp;correspondiente&nbsp;al&nbsp;modelo&nbsp;general<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F15_mejor_modelo:&nbsp;el&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;general</tt></dd></dl>
+ <dl><dt><a name="-mejor_modelo_general_2"><strong>mejor_modelo_general_2</strong></a>(materia)</dt><dd><tt>Determina&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;(modelo&nbsp;general&nbsp;sobre&nbsp;todas&nbsp;las&nbsp;materias)&nbsp;sobre&nbsp;todos&nbsp;los&nbsp;datos.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;de&nbsp;los&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;notas&nbsp;en&nbsp;todas&nbsp;las&nbsp;materias<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;&nbsp;modelo&nbsp;correspondiente&nbsp;al&nbsp;modelo&nbsp;general<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F15_mejor_modelo:&nbsp;el&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;general</tt></dd></dl>
+ <dl><dt><a name="-mejor_segundo_modelo_1"><strong>mejor_segundo_modelo_1</strong></a>(materia, mejor_modelo, indice, modelo_general)</dt><dd><tt>Función&nbsp;que&nbsp;devuelve&nbsp;el&nbsp;segundo&nbsp;mejor&nbsp;modelo&nbsp;de&nbsp;la&nbsp;materia&nbsp;analizando&nbsp;primer&nbsp;corte.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe,lista<br>
+&nbsp;&nbsp;&nbsp;&nbsp;indice:&nbsp;indice&nbsp;mejor&nbsp;modelo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;mejor&nbsp;modelo&nbsp;estadistico&nbsp;para&nbsp;la&nbsp;materia<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo_general:&nbsp;modelo&nbsp;estadistico&nbsp;general&nbsp;para&nbsp;todas&nbsp;las&nbsp;materias<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;segundo&nbsp;mejor&nbsp;modelo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F_15_mejor_modelo:&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;general</tt></dd></dl>
+ <dl><dt><a name="-mejor_segundo_modelo_2"><strong>mejor_segundo_modelo_2</strong></a>(materia, mejor_modelo, indice, modelo_general)</dt><dd><tt>Función&nbsp;que&nbsp;devuelve&nbsp;el&nbsp;segundo&nbsp;mejor&nbsp;modelo&nbsp;de&nbsp;la&nbsp;materia&nbsp;analizando&nbsp;primer&nbsp;y&nbsp;segundo&nbsp;corte<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe,lista<br>
+&nbsp;&nbsp;&nbsp;&nbsp;indice:&nbsp;indice&nbsp;mejor&nbsp;modelo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;mejor&nbsp;modelo&nbsp;estadistico&nbsp;para&nbsp;la&nbsp;materia<br>
+&nbsp;&nbsp;&nbsp;&nbsp;modelo_general:&nbsp;modelo&nbsp;estadistico&nbsp;general&nbsp;para&nbsp;todas&nbsp;las&nbsp;materias<br>
+&nbsp;<br>
+RETORNA:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;mejor_modelo:&nbsp;segundo&nbsp;mejor&nbsp;modelo<br>
+&nbsp;&nbsp;&nbsp;&nbsp;F_15_mejor_modelo:&nbsp;puntaje&nbsp;F15&nbsp;asociado&nbsp;al&nbsp;modelo&nbsp;general</tt></dd></dl>
+ <dl><dt><a name="-mover_modelos"><strong>mover_modelos</strong></a>(source, destination)</dt><dd><tt>Mueve&nbsp;todos&nbsp;los&nbsp;archivos&nbsp;de&nbsp;la&nbsp;carpeta&nbsp;fuente&nbsp;a&nbsp;la&nbsp;carpeta&nbsp;destino.<br>
+Si&nbsp;las&nbsp;direcciones&nbsp;son&nbsp;relativas,&nbsp;las&nbsp;direcciones&nbsp;empiezan&nbsp;desde&nbsp;la&nbsp;carpeta&nbsp;donde&nbsp;se&nbsp;encuentra&nbsp;el&nbsp;archivo&nbsp;con&nbsp;esta&nbsp;funcion.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;source:&nbsp;direccion&nbsp;de&nbsp;la&nbsp;carpeta&nbsp;fuente<br>
+&nbsp;&nbsp;&nbsp;&nbsp;destination:&nbsp;direccion&nbsp;de&nbsp;la&nbsp;carpeta&nbsp;destino</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_1"><strong>seleccionar_guardar_modelo_1</strong></a>(materia, nombre_materia)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;sobre&nbsp;una&nbsp;materia&nbsp;específica.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;del&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;para&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;del&nbsp;modelo</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_1_gen"><strong>seleccionar_guardar_modelo_1_gen</strong></a>(materia, nombre_materia)</dt><dd><tt>Esta&nbsp;funcion&nbsp;selecciona&nbsp;el&nbsp;modelo&nbsp;general&nbsp;para&nbsp;esta&nbsp;materia&nbsp;en&nbsp;caso&nbsp;de&nbsp;que&nbsp;no&nbsp;se&nbsp;pueda&nbsp;seleccionar&nbsp;un&nbsp;modelo&nbsp;específico&nbsp;para&nbsp;la&nbsp;misma<br>
+El&nbsp;análisis&nbsp;de&nbsp;los&nbsp;modelos&nbsp;para&nbsp;esta&nbsp;funcion&nbsp;es&nbsp;sobre&nbsp;el&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;para&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;del&nbsp;modelo</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_2"><strong>seleccionar_guardar_modelo_2</strong></a>(materia, nombre_materia)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;sobre&nbsp;una&nbsp;materia&nbsp;específica.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;de&nbsp;los&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;para&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;del&nbsp;modelo</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_2_gen"><strong>seleccionar_guardar_modelo_2_gen</strong></a>(materia, nombre_materia)</dt><dd><tt>Esta&nbsp;funcion&nbsp;selecciona&nbsp;el&nbsp;modelo&nbsp;general&nbsp;para&nbsp;esta&nbsp;materia&nbsp;en&nbsp;caso&nbsp;de&nbsp;que&nbsp;no&nbsp;se&nbsp;pueda&nbsp;seleccionar&nbsp;un&nbsp;modelo&nbsp;específico&nbsp;para&nbsp;la&nbsp;misma<br>
+El&nbsp;análisis&nbsp;de&nbsp;los&nbsp;modelos&nbsp;para&nbsp;esta&nbsp;funcion&nbsp;es&nbsp;sobre&nbsp;los&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;para&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;del&nbsp;modelo</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_general_1"><strong>seleccionar_guardar_modelo_general_1</strong></a>(materia, nombre_materia)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo&nbsp;sobre&nbsp;una&nbsp;materia&nbsp;específica&nbsp;en&nbsp;disco.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;del&nbsp;corte&nbsp;1.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;de&nbsp;la&nbsp;materia&nbsp;especificada<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nombre_materia:&nbsp;string&nbsp;para&nbsp;el&nbsp;nombre&nbsp;del&nbsp;archivo&nbsp;del&nbsp;modelo</tt></dd></dl>
+ <dl><dt><a name="-seleccionar_guardar_modelo_general_2"><strong>seleccionar_guardar_modelo_general_2</strong></a>(materia)</dt><dd><tt>Guarda&nbsp;el&nbsp;mejor&nbsp;modelo,&nbsp;es&nbsp;decir&nbsp;el&nbsp;modelo&nbsp;general,&nbsp;sobre&nbsp;todas&nbsp;las&nbsp;materias.<br>
+El&nbsp;analisis&nbsp;es&nbsp;realizado&nbsp;con&nbsp;las&nbsp;notas&nbsp;de&nbsp;los&nbsp;cortes&nbsp;1&nbsp;y&nbsp;2.<br>
+&nbsp;<br>
+PARAMETROS:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;materia:&nbsp;dataframe&nbsp;con&nbsp;las&nbsp;notas&nbsp;de&nbsp;todos&nbsp;las&nbsp;materias&nbsp;de&nbsp;todos&nbsp;los&nbsp;estudiantes</tt></dd></dl>
+</td></tr></table>
+</body></html>
