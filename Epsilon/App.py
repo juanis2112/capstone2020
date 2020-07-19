@@ -444,7 +444,7 @@ def upload_data(role, send_email=False, period=None, year=None):
             send_email(user[0], user[1], user[2])
 
 
-def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr):
+def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr, group):
     """
     Actualiza las notas para un estudiante en una materia específica dictada
     por un profesor específico
@@ -456,6 +456,17 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
         teacher_usr: nombre del profesor de la materia para la cual se van a
         cambiar notas
     """
+    current_year, current_period = return_current_year_period()
+    period_year = f"{current_period}_{current_year}"
+    previous_grades = [u[4:9] for u in get_student_grades(teacher_usr, class_name, group)
+                       if u[0] == user][0]
+    previous_grades = [float(grade) for grade in previous_grades]
+    grades = [float(grade1), float(grade2), float(grade3), float(grade4), float(grade5)]
+    new_grades = [i for i in range(len(previous_grades)) if previous_grades[i] != grades[i]]
+    if(len(new_grades) != 0):
+        logging(teacher_usr, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user,
+                asignatura=class_name, grupo=group, cuando=period_year,
+                notas_antes=list(previous_grades), notas_despues=list(grades))
     cur.execute("""UPDATE toma
                     SET -- Las 'nueva nota' se reemplazan por la nueva nota NUMERICA NO STRING
                         nota1 = %s,
@@ -505,13 +516,15 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
     elif action == 'CONSULTA':
         text = ("El usuario " + usuario + " realizó una consulta en " + sobre_que
                 + (" acerca de  " + sobre_quien if sobre_quien is not None else "")
-                + (" para " + asignatura + " grupo " + grupo if grupo is not None else "")
+                + (" para " + asignatura if asignatura is not None else ""
+                + " grupo " + grupo if grupo is not None else "")
                 + (" en el periodo " + cuando if cuando is not None else ""))
         # Insercion en login.
     elif action == 'EDICION':
         text = ("El usuario " + usuario + " realizó una edicion sobre " + sobre_que
                 + (" a " + sobre_quien if sobre_quien is not None else "")
-                + (" en " + asignatura + " grupo " + grupo if grupo is not None else "")
+                + (" en " + asignatura if asignatura is not None else ""
+                + " grupo " + grupo if grupo is not None else "")
                 + ("en el periodo " + cuando if cuando is not None else "") + (
                     " se cambiaron "
                     + ("".join([str(n) + ',' if n is not None else "" for n in notas_antes]))
@@ -521,21 +534,23 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
     elif action == 'IMPORTAR':
         text = ("El usuario " + usuario + " importó un archivo sobre " + sobre_que + ", acerca de "
                 + (sobre_quien if sobre_quien is not None else "")
-                + (" grupo " + grupo if grupo is not None else "") + " para el periodo " + cuando)
+                + (" grupo " + grupo if grupo is not None else "") + " para el periodo "
+                + (cuando if cuando is not None else ""))
     elif action == 'EXPORTAR':
         text = ("El usuario " + usuario + " exportó un archivo sobre " + sobre_que + ", acerca de "
                 + (sobre_quien if sobre_quien is not None else "")
-                + ("en " + asignatura + " grupo " + grupo if grupo is not None else "")
-                + " para el periodo " + cuando)
+                + ("en " + asignatura if asignatura is not None else ""
+                + " grupo " + grupo if grupo is not None else "")
+                + " para el periodo " + (cuando if cuando is not None else ""))
     elif action == 'ALERTA':
         text == ("El usuario " + usuario + "generó una alerta sobre " + sobre_que + " acerca de "
                  + sobre_quien
-                 + (" en " + asignatura + " grupo " + grupo if grupo is not None else "")
-                 + " para el periodo " + cuando)
+                 + (" en " + asignatura if asignatura is not None else ""
+                 + " grupo " + grupo if grupo is not None else "")
+                 + " para el periodo " + (cuando if cuando is not None else ""))
     else:
         text = "El usuario " + usuario + " hizo halgo"
     cur.execute("INSERT INTO logging VALUES(%s,%s,%s,%s,%s)", (usuario, nivel, action, date, text))
-
 
 # --- Login Window --------------------------------------------------------------------------------
 
@@ -823,8 +838,8 @@ def show_class(class_name, group):
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
     period_year = f"{current_period}_{current_year}"
-    #logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS",
-            #sobre_quien=class_name, grupo=group, cuando=period_year)
+    logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS",
+            sobre_quien=class_name, grupo=group, cuando=period_year)
     data = get_student_grades(user_name, class_name, group)
     return render_template('/teacher/class.html', user_name=user_name,
                            students_class=data, class_name=class_name, group=group)
@@ -861,7 +876,6 @@ def update_grade(class_name, group):
     students_class = get_student_grades(user_name, class_name, group)
     for student in students_class:
         grades = list(student[4:9])
-        previous_grades = grades
         for idx, grade in enumerate(grades):
             cur_grade = request.form['grade%s_%s' % (idx+1, student[0])]
             if cur_grade is None or len(cur_grade) == 0:
@@ -885,12 +899,8 @@ def update_grade(class_name, group):
                 grades[idx] = new_grade
                 if grade is not None:
                     student_alerts(student[0], class_name, new_grade)
-        update_grades(*grades, class_name, student[0], user_name)
+        update_grades(*grades, class_name, student[0], user_name, group)
     current_year, current_period = return_current_year_period()
-    period_year = f"{current_period}_{current_year}"
-    # logging(user_name, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user_name_ESTUDIANTE,
-    #         asignatura=class_name,grupo=group,cuando=period_year,notas_antes=previous_grades,
-    #         notas_despues=grades)
     course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
@@ -921,10 +931,7 @@ def upload_grades_from_csv(class_name, group):
                     if len(col) == 0:
                         row[idx] = None
                 print(row)
-                update_grades(row[2], row[3], row[4], row[5], row[6], class_name, user, user_name)
-    # logging(user_name, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user_name_ESTUDIANTE,
-    #         asignatura=class_name, grupo=group, cuando=period_year, notas_antes=previous_grades,
-    #         notas_despues=grades)
+                update_grades(row[2], row[3], row[4], row[5], row[6], class_name, user, user_name, group)
     course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
@@ -987,8 +994,8 @@ def show__historic_class(class_name, year, period, group):
     """
     period_year = f"{period}_{year}"
     user_name = flask_login.current_user.id
-    #logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", sobre_quien=class_name,
-     #       grupo=group, cuando=period_year)
+    logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", sobre_quien=class_name,
+            grupo=group, cuando=period_year)
     data = get_student_grades_period(user_name, class_name, year, period, group)
     return render_template('/teacher/historic_class.html', user_name=user_name,
                            students_class=data, class_name=class_name, year=year,
@@ -1355,7 +1362,7 @@ def admin_show_group_class(user_name, class_name, group, year, period):
                            students_class=data, class_name=class_name,
                            count=count, group=group,year=year,period=period)
 
-  
+
 @app.route("/admin_classes_edit/<string:year>/<string:period>", methods=['POST', 'GET'])
 @login_required(role='administrador')
 def admin_edit_class(year, period):
@@ -1409,8 +1416,10 @@ def admin_update_class(year, period):
                 periodo = (SELECT max(periodo) FROM RESUMEN WHERE anio =
                         (SELECT max(anio) FROM RESUMEN))
             ORDER BY(nombre_asignatura)""")
+    user_name = flask_login.current_user.id
     classes = cur.fetchall()
     for class_name in classes:
+        old_per = [float(u) for u in class_name[3:]]
         credit = (request.form['credit_'+class_name[1]])
         pers = [request.form['term%s_%s' % (i + 1, class_name[1])] for i in range(5)]
         try:
@@ -1448,6 +1457,11 @@ def admin_update_class(year, period):
                        (SELECT max(RESUMEN.anio) FROM RESUMEN)) AND
                     RESUMEN.nombre_asignatura = %s)""",
                     (credit, *pers, class_name[0]))
+        new_per = [u for u in range(len(old_per)) if old_per[u] != pers[u]]
+        period_year = f"{period}_{year}"
+        if(len(new_per) != 0):
+            logging(user_name, '2', 'EDICION', sobre_que="PORCENTAJES", asignatura=class_name[0],
+                    cuando=period_year, notas_antes=list(old_per), notas_despues=list(pers))
 
     return redirect(url_for('load_classes', classes=classes, period=period, year=year))
 
@@ -1511,7 +1525,7 @@ def upload_teachers():
     upload_data(role='teacher', send_email=False)
     count = count_admin_alerts()
     user_name = flask_login.current_user.id
-    #logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='PROFESORES')
+    logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='PROFESORES')
     return render_template('admin/import_success.html', count=count)
 
 
@@ -1798,15 +1812,15 @@ def student_alerts(student, class_name, grade):
                      current_year, class_name))
         cur.execute("""INSERT INTO notificacion SELECT %s,%s,codigo
                     from empleado where esadmin='1';""", (student, date))
-         
-          
+
+
 def course_alert(class_name,group):
     cur.execute("""SELECT count(*)
                 FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
                 WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
                 periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
     total_estudent = cur.fetchone()[0]
-    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5) 
+    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5)
                 FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
                 WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
                 periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
@@ -1832,17 +1846,17 @@ def course_alert(class_name,group):
     elif mean_corte < 2:
         text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
         Tipo = "MUY BAJO"
-    else: 
-        return 
-    date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+    else:
+        return
+    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
     cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
-                    from semestre) GROUP BY(anio);""") 
+                    from semestre) GROUP BY(anio);""")
     period,year = list(cur.fetchone())
     cur.execute("""INSERT INTO alertas VALUES(%s,%s,%s,%s,%s,%s);"""
                 ,(class_name,text_alert,Tipo,date,period,year))
     cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
 
-    
+
 # ---- Admin: Alert -----------------------------------------------------------------------------
 
 @app.route("/student_alerts", methods=['POST', 'GET'])
