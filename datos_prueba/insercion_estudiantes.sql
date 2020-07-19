@@ -82,7 +82,7 @@ where codigo_asignatura not in (select codigo_asignatura from ofrece);
 
 /* Metiendo a la tabla curso_sem */
 insert into curso_sem(codigo_asignatura,periodo,anio,grupo)
-select distinct codigo_asignatura,1,2018,Grupo_Asignatura from tablaEstudiante
+select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante
 where (codigo_asignatura,{period},{year},Grupo_Asignatura) not in (select codigo_asignatura,{period},{year},grupo from curso_sem);
 
 /* Metiendo a la tabla toma */
