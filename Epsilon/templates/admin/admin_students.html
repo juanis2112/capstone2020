@@ -62,7 +62,7 @@
 </a>
 <ul class="ul_bloques" id="lista-estudiantes">
    {% for student in students %}
-   <a href="{{url_for('admin_main_student')}}">
+   <a href="{{url_for('admin_main_student', user_name = student.0)}}">
      <li style="font-size:20px;">
        <!--<p class="bloque_est">-->
        <div style="display:inline-block; font-size:28px">

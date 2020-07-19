@@ -1,7 +1,7 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
 <ul>
-  <a href="{{url_for('personal_data', user_name = user_name)}}">
+  <a href="{{url_for('personal_data')}}">
     <li>
       <div class="menu-box">
         <div >
@@ -11,7 +11,7 @@
       </div>
     </li>
   </a>
-  <a href="{{url_for('academic_history', user_name = user_name)}}">
+  <a href="{{url_for('academic_history')}}">
     <li>
       <div class="menu-box">
         <div >
@@ -24,7 +24,7 @@
 </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('main_student', user_name = user_name)}}" class="btn">
+<a href="{{url_for('main_student')}}" class="btn">
   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <table class="center" id="table">

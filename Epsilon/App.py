@@ -38,7 +38,7 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon51",)
+                        database="Epsilon52",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -232,7 +232,7 @@ def render_main_windows(user_name):
     cur.execute("SELECT esAdmin,esProfesor FROM personas JOIN empleado ON personas.codigo = empleado.codigo WHERE usuario= %s;", (user_name,))
     aux = cur.fetchone()
     if (None is aux):
-        return redirect(url_for('main_student', user_name=user_name))
+        return redirect(url_for('main_student'))
     else:
         aux = list(aux)
         is_admin, is_teacher = aux
@@ -651,10 +651,9 @@ def load_students():
     return render_template('/admin/admin_students.html', students=data_complete,
                            count=count)
 
-@app.route("/admin_main_student", methods=['POST', 'GET'])
+@app.route("/admin_main_student/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_main_student():
-    user_name = flask_login.current_user.id
+def admin_main_student(user_name):
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                 round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
                        porcentaje4*nota4+porcentaje5*nota5)/100,2)
@@ -671,9 +670,9 @@ def admin_main_student():
     return render_template('/admin/student/main_student.html', classes=data,
                            user_name=user_name, count=count, student=student)
 
-@app.route("/admin_student_data", methods=['POST', 'GET'])
+@app.route("/admin_student_data/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_personal_data():
+def admin_personal_data(user_name):
     user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
@@ -684,10 +683,9 @@ def admin_personal_data():
     return render_template('/admin/student/student_data.html', student_data=data, user_name=user_name,
                            count=count)
 
-@app.route("/admin_academic_history", methods=['POST', 'GET'])
+@app.route("/admin_academic_history/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_academic_history():
-    user_name = flask_login.current_user.id
+def admin_academic_history(user_name):
     cur.execute("""SELECT
                         distinct cast(anio as varchar),cast(periodo as varchar),
                         round(sum(creditos_asignatura*(nota1*porcentaje1+nota2*
@@ -984,7 +982,7 @@ def upload_new_user():
         upload_data(role='profesor', send_email=False)
     else:
         flash('Error', 'error')
-    return render_template('user_upload_success')
+    return render_template('admin/user_upload_success.html')
     
 
 
@@ -1236,7 +1234,7 @@ def publish_alert():
                 (usuario,texto,tipo,fecha,periodo,anio) values (%s,%s,%s,%s,%s,%s)""",
                 (user_name,description,tipo,date,period,year))
     cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(user_name,date))
-    return render_template('alert_success.html')
+    return render_template('admin/alert_success.html')
 
 
 
