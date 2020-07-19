@@ -20,15 +20,15 @@ CREATE TABLE Public.tablaEstudiante(
   ,Creditos_Asignatura   INTEGER  NOT NULL
   ,Grupo_Asignatura      INTEGER  NOT NULL
   ,Tipologia_Asignatura  VARCHAR(100) NOT NULL
-  ,Nota_1er_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_1er_Corte        NUMERIC(3,1) 
   ,Corte_1p              INTEGER  NOT NULL
-  ,Nota_2do_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_2do_Corte        NUMERIC(3,1) 
   ,Corte_2p              INTEGER  NOT NULL
-  ,Nota_3er_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_3er_Corte        NUMERIC(3,1) 
   ,Corte_3p              INTEGER  NOT NULL
-  ,Nota_4to_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_4to_Corte        NUMERIC(3,1) 
   ,Corte_4p              INTEGER  NOT NULL
-  ,Nota_5to_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_5to_Corte        NUMERIC(3,1) 
   ,Corte_5p              INTEGER  NOT NULL
 	, PRIMARY KEY(Documento_actual,Nombre_Asignatura)
 );
@@ -64,7 +64,8 @@ where codigo_asignatura not in (select codigo_asignatura from asignaturas);
 
 /* Metiendo a la tabla de Semestre */
 insert into semestre(codigo_asignatura,periodo,anio,grupo)
-select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante;
+select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante
+where (codigo_asignatura,{period},{year},Grupo_Asignatura) not in (select codigo_asignatura,{period},{year},grupo from semestre);
 
 /* Metiendo a la tabla inscrito */
 insert into inscrito(codigo,codigo_programa)
@@ -81,11 +82,13 @@ where codigo_asignatura not in (select codigo_asignatura from ofrece);
 
 /* Metiendo a la tabla curso_sem */
 insert into curso_sem(codigo_asignatura,periodo,anio,grupo)
-select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante;
+select distinct codigo_asignatura,{period},{year},Grupo_Asignatura from tablaEstudiante
+where (codigo_asignatura,{period},{year},Grupo_Asignatura) not in (select codigo_asignatura,{period},{year},grupo from curso_sem);
 
 /* Metiendo a la tabla toma */
 insert into toma(codigo,codigo_asignatura,periodo,anio,grupo,nota1,nota2,nota3,nota4,nota5)
 select distinct codigo,codigo_asignatura,{period},{year},Grupo_Asignatura,Nota_1er_Corte,Nota_2do_Corte,Nota_3er_Corte,Nota_4to_Corte,Nota_5to_Corte
-from tablaEstudiante;
+from tablaEstudiante
+where (codigo,codigo_asignatura,{period},{year},Grupo_Asignatura) not in (select codigo,codigo_asignatura,{period},{year},grupo from toma);
 
 drop table tablaEstudiante;
