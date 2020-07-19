@@ -26,6 +26,12 @@ from email.mime.multipart import MIMEMultipart
 import json
 
 
+# General constants
+ROLES = [
+    "estudiante",
+    "profesor",
+    "administrador",
+    ]
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
@@ -59,7 +65,8 @@ def load_user(user_id):
         return User(user_id, user_type)
     except Exception:
         return None     
-        
+
+    
 def login_required(role="ANY"):
     def wrapper(fn):
         @wraps(fn)
@@ -67,7 +74,7 @@ def login_required(role="ANY"):
             if not flask_login.current_user.is_authenticated:
                return app.login_manager.unauthorized()
             urole = flask_login.current_user.get_urole()
-            if ( (urole != role) and (role != "ANY")):
+            if role != "ANY" and ROLES.index(urole) < ROLES.index(role):
                 return app.login_manager.unauthorized()      
             return fn(*args, **kwargs)
         return decorated_view
@@ -247,6 +254,20 @@ def upload_file(file, path_to_file, data_insertion_path, **kwargs):
     with open(data_insertion_path, 'r', encoding='utf-8') as insercion_sql:
         sqlFile = insercion_sql.read().format(path=str(csv_file_path), **kwargs)
         cur.execute(sqlFile)      
+        
+def upload_data(role, send_email=False, period=None, year=None):      
+    file = request.files['inputfile']
+    if role == 'estudiante':
+        upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_estudiantes.sql', period=period, year=year)
+        cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
+        users = cur.fetchall()
+    else:
+        upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_empleados.sql')
+        cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
+        users = cur.fetchall()
+    if send_email:        
+        for user in users:
+            send_email(user[0],user[1],user[2])
 
 def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr):
     cur.execute("""UPDATE toma
@@ -918,12 +939,7 @@ def import_data_from_file_year(data_type, year, period):
 @app.route('/upload_teachers', methods=['POST'])
 @login_required(role='administrador')
 def upload_teachers():
-    file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_empleados.sql')
-    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
-    users = cur.fetchall()
-    # for user in users:
-    #     send_email(user[0],user[1],user[2])
+    upload_data(role='teacher', send_email=False)
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
 
@@ -932,12 +948,7 @@ def upload_teachers():
 def upload_students():
     period = request.form['period']
     year = request.form['year']
-    file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_estudiantes.sql', period=period, year=year)
-    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
-    users = cur.fetchall()
-    # for user in users:
-    #     send_email(user[0],user[1],user[2])
+    upload_data(role='estudiante', send_email=False, period=period, year=year)
     count = count_admin_alerts()
     return redirect(url_for('import_data_from_file_year', data_type='classes', year=year, period=period))
 
@@ -948,6 +959,33 @@ def upload_classes(year, period):
     upload_file(file, '../datos_prueba/temp_data_classes.csv', '../datos_prueba/insercion_cursos_periodos.sql',period=period, year=year)
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
+
+
+@app.route("/create_user/", methods=['POST', 'GET'])
+@login_required(role='administrador')
+def create_user():
+     count = count_admin_alerts()
+     return render_template('admin/create_user.html', count=count)
+    
+
+@app.route("/upload_new_/", methods=['POST'])
+@login_required(role='administrador')
+def upload_new_user():
+    file = request.files['inputfile']
+    user_role = request.form['user_role']
+    if user_role=='estudiante':
+        cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
+        year = int(cur.fetchone()[0])
+        cur.execute( """(SELECT max(periodo) FROM RESUMEN WHERE anio =
+                            (SELECT max(anio) FROM RESUMEN))""")
+        period = int(cur.fetchone()[0])    
+        upload_data(role='estudiante', send_email=False, period=period, year=year)
+    elif user_role=='profesor':
+        upload_data(role='profesor', send_email=False)
+    else:
+        flash('Error', 'error')
+    return render_template('user_upload_success')
+    
 
 
 # ---- Admin: Reports -----------------------------------------------------------------------------

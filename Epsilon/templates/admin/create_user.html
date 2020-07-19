@@ -45,24 +45,31 @@
   </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('main_admin')}}" class="btn">
+<a href="{{url_for('admin_functions')}}" class="btn">
     <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <ul style="list-style-type:none">
-  <a href="{{url_for('import_data_from_file', data_type='teachers')}}">
-     <li style="font-size:25px;">
-       Importar profesores
-    </li>
-  </a>
-  <a href="{{url_for('import_data_from_file', data_type='students')}}">
-     <li style="font-size:25px;">
-       Importar información periodo académico
-    </li>
-  </a>
-  <a href="{{url_for('create_user')}}">
-  <li style="font-size:25px;">
-   Crear usuario nuevo
-   </li>
-  </a>
+  <div style="background-color: white; border: 1px solid black; padding: 10px;">
+  
+   <form method= "POST" action="{{url_for('upload_new_user')}}" id="user_upload" enctype=multipart/form-data>
+   Seleccione el(los) tipo de usuario que va a crear
+   
+   <label for="user_role"></label>
+       <select name="user_role" id="role" form="user_upload">
+         <option value="Estudiante">Estudiante</option>
+         <option value="Profesor">Profesor</option>
+         <option value="Administrador">Administrador</option>
+       </select>
+    <br>
+    Seleccione a continuación el archivo con los datos de los nuevos usuarios que desea crear:
+
+      <div style="text-align: center;">
+        <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+        <label for="file" class="archivo">seleccionar archivo</label>
+        <input type="submit" class="btn" value="subir" >
+      </div>
+    </form>
+  </div>
+</div>
 </ul>
 {% endblock %}
