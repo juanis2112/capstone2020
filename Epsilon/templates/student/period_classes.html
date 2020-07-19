@@ -7,17 +7,17 @@
         <div >
           Datos personales
         </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/user.png') }}" width="30px" width="30px">
       </div>
     </li>
   </a>
-  <a href="{{url_for('academic_history', user_name = user_name)}}">
+  <a href="{{url_for('academic_history')}}">
     <li  style="background-color: #0099cc;">
       <div class="menu-box">
         <div >
           Datos académicos
         </div>
-          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
     </li>
   </a>
@@ -26,7 +26,7 @@
 {% block tablas %}
 <div style="display:block;">
   <span style="margin-left:0px;">
-    <a href="{{url_for('academic_history',user_name=user_name)}}" class="btn">
+    <a href="{{url_for('academic_history')}}" class="btn">
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>

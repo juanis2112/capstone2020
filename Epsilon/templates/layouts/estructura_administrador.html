@@ -3,30 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Importamos el css para la creacion de html -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styletemplate.css') }}" />
 </head>
 <body>
   <div>
       <div class="header">
+        <!--Espacio donde segun se encuentre el ususario busque estudiantes, profesores o materias -->
         {% block busqueda %}
         {% endblock %}
+        <!-- Campana y logout-->
         <div style="float: right; position:relative;">
           <a href="{{url_for('show_admin_alerts')}}" class="notification">
               <span>
-                <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+                <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes2/camp.png') }}">
               </span>
               <span class="badge">{{count}}</span>
           </a>
           <a href="{{ url_for('logout') }}">
-              <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+              <img type="image" src="{{ url_for('static', filename='template_general/imagenes2/logou.png') }}" class="top-logo">
           </a>
         </div>
       </div>
+      <!-- Espacio para warnings -->
       <div class="row">
+        {% block war %}
+        {% endblock %}
+      <!-- Bloques de la parte izquierda de la pagina -->
         <div class="col-3 menu">
       {% block lateral %}
       {% endblock %}
       </div>
+      <!-- contenido de la pagina -->
       <div class="col-9">
         {% block tablas %}
         {% endblock %}
@@ -35,6 +43,9 @@
     </div>
 </body>
 <script>
+/*Funciones de javascript*/
+
+/* Para botones*/
 function habilitar(){
     var casillas_notas=document.getElementsByClassName("table-toggle");
     for(var i=0;i<casillas_notas.length;i++){
@@ -64,6 +75,7 @@ function deshabilitar(){
     saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
     });
 
+
 function exportReportToExcel() {
   let table = document.getElementsByTagName("table"); // you can use document.getElementById('tableId') as well by providing id to the table tag
   TableToExcel.convert(table[0], { // html code may contain multiple tables so here we are refering to 1st table tag
@@ -74,6 +86,7 @@ function exportReportToExcel() {
   });
 }
 
+/* Para exportar excel desde algun html */
   function exportF(elem) {
     var table = document.getElementById("table");
     var html = table.outerHTML;
@@ -106,7 +119,22 @@ input.addEventListener( 'change', function( e )
   console.log("add event")
 });
 </script>
+
+<!-- Espacio en dado caso que se agregue alguna funcion de javascript-->
+
 {% block code %}
 {% endblock %}
+
+
+<!-- Atribuciones imagenes -->
+
+<footer style="color:black; font-size:9px;">
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>&nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+</footer>
+
 
 </html>

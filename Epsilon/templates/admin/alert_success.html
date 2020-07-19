@@ -13,7 +13,7 @@
     </li>
   </a>
   <a href="{{url_for('load_teachers')}}">
-    <li style="background-color: #0099cc;">
+    <li>
       <div class="menu-box">
         <div >
           Profesores
@@ -44,30 +44,12 @@
   </a>
 </ul>
 {% endblock %}
-
 {% block tablas %}
-        <div style="display:block;">
-              <span style="margin-left:0px;">
-                  <a href="{{url_for('load_teachers')}}" class="btn">
-                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                  </a>
-                </span>
-                <div style="diplay:inline-block; text-align:center; width:80%;">
-                  <span class="mini-titulo">
-                {{teacher.0}} {{teacher.1}} {{teacher.2}}
-                  </span>
-                </div>
-              </div>
-            <ul style="list-style-type:none">
-               <table class="center">
-                     {% for period in periods %}
-                     <a href="{{url_for('admin_teacher_classes', user_name = user_name, year = period.0, period = period.1)}}">
-                       <li style="font-size:30px;">
-                         {{period.0}}-{{period.1}}
-                     </li>
-                   </a>
-                     {% endfor %}
-              </table>
-            </ul>
-            </div>
+<a href="{{url_for('show_admin_alerts')}}" class="btn">
+      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+  </a>
+<ul style="list-style-type:none; border: 1px solid black; padding: 10px; font-size: xx-large;">
+
+  La alerta fue generada exitosamente !!!
+</ul>
 {% endblock %}

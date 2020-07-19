@@ -1,48 +1,48 @@
 {% extends "layouts/estructura_administrador.html" %}
 
 {% block lateral %}
-  <ul>
-    <a href="{{url_for('load_students')}}">
-      <li>
-        <div class="menu-box">
-          <div >
-            Estudiantes
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+<ul>
+  <a href="{{url_for('load_students')}}">
+    <li>
+      <div class="menu-box">
+        <div >
+          Estudiantes
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('load_teachers')}}">
-      <li  style="background-color: #0099cc;">
-        <div class="menu-box">
-          <div >
-            Profesores
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/teacher.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('load_teachers')}}">
+    <li style="background-color: #0099cc;">
+      <div class="menu-box">
+        <div >
+          Profesores
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('historic_class')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Materias
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('historic_class')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Materias
             </div>
-          </li>
-    </a>
-    <a href="{{url_for('admin_functions')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Administración
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/keys.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+  <a href="{{url_for('admin_functions')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Administración
             </div>
-          </li>
-    </a>
-  </ul>
+          <img src="{{ url_for('static', filename='template_general/imagenes2/search.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+</ul>
 {% endblock %}
 
 {% block tablas %}
@@ -65,7 +65,7 @@
    {{class.0}} G. {{class.1}}
  </a>
  <a href="{{url_for('one_group_report', user_name = user_name, class_name = class.0, year=year, period = period, group = class.1)}}">
-   <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+   <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes2/scatter.png') }}">
  </a>
  </li>
  {% endfor %}

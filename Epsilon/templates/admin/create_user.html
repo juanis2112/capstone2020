@@ -13,7 +13,7 @@
     </li>
   </a>
   <a href="{{url_for('load_teachers')}}">
-    <li style="background-color: #0099cc;">
+    <li>
       <div class="menu-box">
         <div >
           Profesores
@@ -33,7 +33,7 @@
         </li>
   </a>
   <a href="{{url_for('admin_functions')}}">
-        <li>
+        <li style="background-color: #0099cc;">
           <div class="menu-box">
             <div >
               Administración
@@ -44,30 +44,32 @@
   </a>
 </ul>
 {% endblock %}
-
 {% block tablas %}
-        <div style="display:block;">
-              <span style="margin-left:0px;">
-                  <a href="{{url_for('load_teachers')}}" class="btn">
-                    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
-                  </a>
-                </span>
-                <div style="diplay:inline-block; text-align:center; width:80%;">
-                  <span class="mini-titulo">
-                {{teacher.0}} {{teacher.1}} {{teacher.2}}
-                  </span>
-                </div>
-              </div>
-            <ul style="list-style-type:none">
-               <table class="center">
-                     {% for period in periods %}
-                     <a href="{{url_for('admin_teacher_classes', user_name = user_name, year = period.0, period = period.1)}}">
-                       <li style="font-size:30px;">
-                         {{period.0}}-{{period.1}}
-                     </li>
-                   </a>
-                     {% endfor %}
-              </table>
-            </ul>
-            </div>
+<a href="{{url_for('admin_functions')}}" class="btn">
+    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+</a>
+<ul style="list-style-type:none">
+  <div style="background-color: white; border: 1px solid black; padding: 10px;">
+
+   <form method= "POST" action="{{url_for('upload_new_user')}}" id="user_upload" enctype=multipart/form-data>
+   Seleccione el(los) tipo de usuario que va a crear
+
+   <label for="user_role"></label>
+       <select name="user_role" id="role" form="user_upload">
+         <option value="Estudiante">Estudiante</option>
+         <option value="Profesor">Profesor</option>
+         <option value="Administrador">Administrador</option>
+       </select>
+    <br>
+    Seleccione a continuación el archivo con los datos de los nuevos usuarios que desea crear:
+
+      <div style="text-align: center;">
+        <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+        <label for="file" class="archivo">seleccionar archivo</label>
+        <input type="submit" class="btn" value="subir" >
+      </div>
+    </form>
+  </div>
+</div>
+</ul>
 {% endblock %}

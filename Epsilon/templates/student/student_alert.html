@@ -1,30 +1,30 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
 <ul>
-  <a href="{{url_for('personal_data', user_name = user_name)}}">
+  <a href="{{url_for('personal_data')}}">
     <li>
       <div class="menu-box">
         <div >
           Datos personales
         </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/user.png') }}" width="30px" width="30px">
       </div>
     </li>
   </a>
-  <a href="{{url_for('academic_history', user_name = user_name)}}">
+  <a href="{{url_for('academic_history')}}">
     <li>
       <div class="menu-box">
         <div >
           Datos académicos
         </div>
-          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
     </li>
   </a>
 </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('main_student', user_name = user_name)}}" class="btn">
+<a href="{{url_for('main_student')}}" class="btn">
   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <table class="center" id="table">

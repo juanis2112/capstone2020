@@ -4,7 +4,7 @@
 <div class="barra-busqueda">
   <form autocomplete="off" class="barra-form">
     <div class="autocomplete" style="width:300px;">
-      <input id="myInput" type="text" name="myCountry" placeholder="Estudiante" autocomplete="off">
+      <input id="myInput" type="text" placeholder="Estudiante" autocomplete="off">
     </div>
     <input class="boton-busqueda" type="button" value="buscar" onclick="azulfiltro()">
   </form>
@@ -12,48 +12,48 @@
 {% endblock %}
 
 {% block lateral %}
-  <ul>
-    <a href="{{url_for('load_students')}}">
-      <li style="background-color: #0099cc;">
-        <div class="menu-box">
-          <div >
-            Estudiantes
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+<ul>
+  <a href="{{url_for('load_students')}}">
+    <li style="background-color: #0099cc;">
+      <div class="menu-box">
+        <div >
+          Estudiantes
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('load_teachers')}}">
-      <li>
-        <div class="menu-box">
-          <div >
-            Profesores
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/teacher.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('load_teachers')}}">
+    <li>
+      <div class="menu-box">
+        <div >
+          Profesores
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('historic_class')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Materias
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('historic_class')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Materias
             </div>
-          </li>
-    </a>
-    <a href="{{url_for('admin_functions')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Administración
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/keys.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+  <a href="{{url_for('admin_functions')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Administración
             </div>
-          </li>
-    </a>
-  </ul>
+          <img src="{{ url_for('static', filename='template_general/imagenes2/search.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+</ul>
 {% endblock %}
 
 {% block tablas %}
@@ -62,7 +62,7 @@
 </a>
 <ul class="ul_bloques" id="lista-estudiantes">
    {% for student in students %}
-   <a href="{{url_for('admin_main_student')}}">
+   <a href="{{url_for('admin_main_student', user_name = student.0)}}">
      <li style="font-size:20px;">
        <!--<p class="bloque_est">-->
        <div style="display:inline-block; font-size:28px">
@@ -70,7 +70,7 @@
        </div>
        <!--</p>-->
        <a href="{{url_for('student_historic_report', user_name = student.0)}}">
-         <img class="reporte-Estudiantes" width="50" height="50" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
+         <img class="reporte-Estudiantes" width="50" height="50" src="{{ url_for('static', filename='template_general/imagenes2/scatter.png') }}">
        </a>
        <br>
       Creditos: {{student.4}} Promedio: {{student.5}}
@@ -181,31 +181,25 @@
   });
 }
 
-/*An array containing all the country names in the world:*/
 var estudiantes={{students | tojson}};
 var nombres=new Array(estudiantes.length);
 for(var i=0;i<estudiantes.length;i++){
   nombres[i]=estudiantes[i][1]+" "+estudiantes[i][2]+" "+estudiantes[i][3];
 }
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), nombres);
 
 function azulfiltro(){
   var nombre=document.getElementById("myInput").value;
-  var j=nombres.indexOf(nombre);
-  console.log(j);
-  var lista=document.getElementById("lista-estudiantes");
-  if(j!=-1){
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      if(i!=j+2)
-      lista.childNodes[i].style.display="none";
-      else
-      lista.childNodes[i].style.display="block";
+  var lista=document.getElementById("lista-estudiantes")
+  for(var i=0;i<lista.childNodes.length;i++){
+    if (lista.childNodes[i].nodeName != "LI") {
+        continue;
     }
-  }
-  else{
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
+    if(lista.childNodes[i].childNodes[0].text.toLowerCase().includes(nombre.toLowerCase()))  {
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
+    } else {
+      lista.childNodes[i].style.display="none";
     }
   }
 }

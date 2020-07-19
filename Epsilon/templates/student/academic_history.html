@@ -7,29 +7,29 @@
         <div >
           Datos personales
         </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/user.png') }}" width="30px" width="30px">
       </div>
     </li>
   </a>
-  <a href="{{url_for('academic_history', user_name = user_name)}}">
+  <a href="{{url_for('academic_history')}}">
     <li  style="background-color: #0099cc;">
       <div class="menu-box">
         <div >
           Datos académicos
         </div>
-          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
     </li>
   </a>
 </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('main_student',user_name=user_name)}}" class="btn">
+<a href="{{url_for('main_student')}}" class="btn">
  <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px"></a>
  <br>
  <ul style="list-style-type:none">
         {% for period in periods %}
-        <a href="{{url_for('period_classes', user_name = user_name, year = period.0, period = period.1)}}">
+        <a href="{{url_for('period_classes', year = period.0, period = period.1)}}">
           <li style="font-size:30px">
             {{period.0}}-{{period.1}}
           </li>
