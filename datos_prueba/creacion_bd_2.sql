@@ -20,6 +20,7 @@ create table Personas(
 	usuario VARCHAR(100) NOT NULL,
 	contrasena VARCHAR(100) NOT NULL,
 	tipo VARCHAR(50) NOT NULL,
+	estado_cuenta BOOL NOT NULL DEFAULT TRUE,
 	primary key(codigo)
 );
 
@@ -154,12 +155,6 @@ create table notificacion(
 	foreign key(usuario,fecha) references alertas,
 	foreign key(codigo) references empleado,
 	primary key(codigo,usuario,fecha)
-);
-create table loggin(
-	usuario VARCHAR(100) NOT NULL,
-	accion VARCHAR(100) NOT NULL,
-	fecha VARCHAR(100) NOT NULL,
-	texto TEXT NOT NULL
 );
 
 -- VISTA ayuda en consultas 
