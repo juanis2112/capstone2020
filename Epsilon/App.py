@@ -36,10 +36,10 @@ ROLES = [
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
+                        password="test",
                         host="localhost",
                         port="5432",
-                        database="Epsilon52",)
+                        database="Epsilon_200",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -525,7 +525,7 @@ def show_class(class_name, group):
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()   
     period_year =str(current_period)+'_'+str(current_year)
-    logging(user_name,'1','CONSULTA',sobre_que="ASIGNATURAS",sobre_quien=class_name,grupo=group,cuando=period_year)
+    #logging(user_name,'1','CONSULTA',sobre_que="ASIGNATURAS",sobre_quien=class_name,grupo=group,cuando=period_year)
     data = get_student_grades(user_name, class_name, group)
     return render_template('/teacher/class.html', user_name=user_name,
                            students_class=data, class_name=class_name, group=group)
@@ -634,7 +634,7 @@ def classes(user_name, year, period):
 def show__historic_class(class_name, year, period, group):
     period_year =str(period)+'_'+str(year)
     user_name = flask_login.current_user.id
-    logging(user_name,'1','CONSULTA',sobre_que="ASIGNATURAS",sobre_quien=class_name,grupo=group,cuando=period_year)
+    #logging(user_name,'1','CONSULTA',sobre_que="ASIGNATURAS",sobre_quien=class_name,grupo=group,cuando=period_year)
     data = get_student_grades_period(user_name, class_name, year, period, group)
     return render_template('/teacher/historic_class.html', user_name=user_name,
                            students_class=data, class_name=class_name, year=year,
@@ -879,8 +879,8 @@ def admin_show_group_class(user_name, class_name, group, year, period):
     data = get_student_grades_period(user_name, class_name, year, period, group)
     count = count_admin_alerts()
     return render_template('/admin/admin_show_class.html', user_name=user_name,
-                           students_class=data, class_name=class_name, teacher=teacher,
-                           count=count, group=group)
+                           students_class=data, class_name=class_name,
+                           count=count, group=group,year=year,period=period)
 
 
 @app.route("/admin_classes_edit/<string:year>/<string:period>", methods=['POST', 'GET'])
@@ -1049,7 +1049,6 @@ def upload_new_user():
         logging(user_name,'3','IMPORTAR',sobre_que='DATOS',sobre_quien='PROFESORES',cuando=period_year)
     else:
         flash('Error', 'error')
-    
     return render_template('admin/user_upload_success.html', count=count)
     
 
@@ -1077,7 +1076,7 @@ def one_group_report(user_name, class_name,  year, period, group):
     image = generate_image()
     plt.close()
     count = count_admin_alerts()
-    return render_template('admin/class_report.html', image=image, count=count)
+    return render_template('admin/class_report.html', image=image, count=count,year=year,period=period,user_name=user_name,class_name=class_name)
 
 
 @app.route("/student_report/<string:user_name>/<string:year>/<string:period>/", methods=['POST', 'GET'])

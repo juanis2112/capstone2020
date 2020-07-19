@@ -7,7 +7,7 @@
         <div >
           Mis materias
         </div>
-      <img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" style="background-color: white;" width="30px" width="30px">
     </div>
     </li>
   </a>
@@ -17,7 +17,7 @@
         <div >
           Historial de materias
         </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/history.png') }}" width="30px" width="30px" style="background-color:white ;">
     </div>
     </li>
   </a>
@@ -64,10 +64,14 @@
   <br>
   <a href="{{url_for('edit_grade', user_name=user_name, class_name=class_name, group=group)}}" class="btn" style="color: black;">Editar</a>
   <a id="downloadLink" onclick="exportF(this)" class="btn" style="color: black;">Descargar</a>
-  <form method= "POST" action="{{url_for('upload_grades_from_csv', class_name=class_name, user_name=user_name, group=group)}}" enctype=multipart/form-data>
-    <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
-    <label for="file" class="archivo">seleccionar archivo</label>
-    <input type="submit" class="btn" value="subir" >
-  </form>
+  <br>
+  <div style="text-align:center;">
+    <form method= "POST" action="{{url_for('upload_grades_from_csv', class_name=class_name, user_name=user_name, group=group)}}" enctype=multipart/form-data>
+      <input type="file" name="inputfile" id="file" class="inputfile" data-multiple-caption="{count} files selected" multiple/>
+      <label for="file" class="archivo">seleccionar archivo</label>
+      <input type="submit" class="btn" value="subir" >
+    </form>
+  </div>
+
 </div>
 {% endblock %}
