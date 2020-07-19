@@ -72,7 +72,7 @@
   </a>
 </div>
 <div>
-<ul style="list-style-type:none" id="lista-estudiantes">
+<ul style="list-style-type:none" id="lista-clases">
   {% for class_name in classes %}
   <a href="{{url_for('load_groups',class_name=class_name.0, year=year, period=period)}}">
     <li style="font-size:18px;">
@@ -204,25 +204,21 @@
   /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
   autocomplete(document.getElementById("myInput"), nombres);
 
-  function azulfiltro(){
+function azulfiltro(){
   var nombre=document.getElementById("myInput").value;
-  var j=nombres.indexOf(nombre);
-  console.log(j);
-  var lista=document.getElementById("lista-estudiantes");
-  if(j!=-1){
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      if(i!=j+2)
+  var lista=document.getElementById("lista-clases")
+  for(var i=0;i<lista.childNodes.length;i++){
+    if (lista.childNodes[i].nodeName != "LI") {
+        continue;
+    }
+    if(lista.childNodes[i].childNodes[1].childNodes[0].text.toLowerCase().includes(nombre.toLowerCase()))  {
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
+    } else {
       lista.childNodes[i].style.display="none";
-      else
-      lista.childNodes[i].style.display="block";
     }
   }
-  else{
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
-    }
-  }
-  }
+}
 
 
 </script>

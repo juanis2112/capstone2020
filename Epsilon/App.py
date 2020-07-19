@@ -12,6 +12,7 @@ import secrets
 import time
 from functools import wraps
 from random import choice
+
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
 import flask_login
@@ -26,13 +27,19 @@ from email.mime.multipart import MIMEMultipart
 import json
 
 
+# General constants
+ROLES = [
+    "estudiante",
+    "profesor",
+    "administrador",
+    ]
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="test",
+                        password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_100",)
+                        database="Epsilon52",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -59,7 +66,8 @@ def load_user(user_id):
         return User(user_id, user_type)
     except Exception:
         return None     
-        
+
+    
 def login_required(role="ANY"):
     def wrapper(fn):
         @wraps(fn)
@@ -67,7 +75,7 @@ def login_required(role="ANY"):
             if not flask_login.current_user.is_authenticated:
                return app.login_manager.unauthorized()
             urole = flask_login.current_user.get_urole()
-            if ( (urole != role) and (role != "ANY")):
+            if role != "ANY" and ROLES.index(urole) < ROLES.index(role):
                 return app.login_manager.unauthorized()      
             return fn(*args, **kwargs)
         return decorated_view
@@ -138,8 +146,7 @@ def get_student_grades_period(user_name, class_name, year, period, group):
     grades = cur.fetchall()
     return grades
 
-def get_name_from_user():
-    user_name = flask_login.current_user.id
+def get_name_from_user(user_name):
     cur.execute("""SELECT nombre, apellido_1, apellido_2
                     FROM personas
                     WHERE usuario = %s""", (user_name,))
@@ -226,7 +233,7 @@ def render_main_windows(user_name):
     cur.execute("SELECT esAdmin,esProfesor FROM personas JOIN empleado ON personas.codigo = empleado.codigo WHERE usuario= %s;", (user_name,))
     aux = cur.fetchone()
     if (None is aux):
-        return redirect(url_for('main_student', user_name=user_name))
+        return redirect(url_for('main_student'))
     else:
         aux = list(aux)
         is_admin, is_teacher = aux
@@ -248,6 +255,20 @@ def upload_file(file, path_to_file, data_insertion_path, **kwargs):
     with open(data_insertion_path, 'r', encoding='utf-8') as insercion_sql:
         sqlFile = insercion_sql.read().format(path=str(csv_file_path), **kwargs)
         cur.execute(sqlFile)      
+        
+def upload_data(role, send_email=False, period=None, year=None):      
+    file = request.files['inputfile']
+    if role == 'estudiante':
+        upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_estudiantes.sql', period=period, year=year)
+        cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
+        users = cur.fetchall()
+    else:
+        upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_empleados.sql')
+        cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
+        users = cur.fetchall()
+    if send_email:        
+        for user in users:
+            send_email(user[0],user[1],user[2])
 
 def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr):
     cur.execute("""UPDATE toma
@@ -367,7 +388,6 @@ def send_forget_passwd():
                 WHERE usuario = %s """, (user,))
     email = cur.fetchone()[0]
     passwd = generate_passwd()
-    print(passwd)
     cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
                     where usuario = %s; """, (passwd,user))
     cur.execute("""UPDATE personas set estado_cuenta = '1' WHERE usuario = %s""",(user,))
@@ -385,7 +405,7 @@ def logout():
 # --- Student Page --------------------------------------------------------------------------------
 
 @app.route("/main_student", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def main_student():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT
@@ -419,7 +439,7 @@ def main_student():
 
 
 @app.route("/student_data/", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def personal_data():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
@@ -433,7 +453,7 @@ def personal_data():
 
 
 @app.route("/academic_history/", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def academic_history():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
@@ -447,7 +467,7 @@ def academic_history():
 
 
 @app.route("/period_classes/<string:year>/<string:period>", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def period_classes(year, period):
     user_name = flask_login.current_user.id
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
@@ -631,10 +651,9 @@ def load_students():
     return render_template('/admin/admin_students.html', students=data_complete,
                            count=count)
 
-@app.route("/admin_main_student", methods=['POST', 'GET'])
+@app.route("/admin_main_student/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_main_student():
-    user_name = flask_login.current_user.id
+def admin_main_student(user_name):
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
                 round((porcentaje1*nota1+porcentaje2*nota2+porcentaje3*nota3+
                        porcentaje4*nota4+porcentaje5*nota5)/100,2)
@@ -651,9 +670,9 @@ def admin_main_student():
     return render_template('/admin/student/main_student.html', classes=data,
                            user_name=user_name, count=count, student=student)
 
-@app.route("/admin_student_data", methods=['POST', 'GET'])
+@app.route("/admin_student_data/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_personal_data():
+def admin_personal_data(user_name):
     user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
@@ -664,10 +683,9 @@ def admin_personal_data():
     return render_template('/admin/student/student_data.html', student_data=data, user_name=user_name,
                            count=count)
 
-@app.route("/admin_academic_history", methods=['POST', 'GET'])
+@app.route("/admin_academic_history/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_academic_history():
-    user_name = flask_login.current_user.id
+def admin_academic_history(user_name):
     cur.execute("""SELECT
                         distinct cast(anio as varchar),cast(periodo as varchar),
                         round(sum(creditos_asignatura*(nota1*porcentaje1+nota2*
@@ -707,16 +725,15 @@ def admin_period_classes(user_name, year, period):
 @login_required(role='administrador')
 def load_teachers():
     cur.execute("""SELECT usuario, nombre, apellido_1, apellido_2 FROM personas
-                WHERE tipo='profesor' or tipo='administrador'""")
+                WHERE tipo='profesor'""")
     data = cur.fetchall()
     count = count_admin_alerts()
     return render_template('admin/admin_teachers.html', teachers=data, count=count)
 
 
-@app.route("/admin_main_teacher", methods=['POST', 'GET'])
+@app.route("/admin_main_teacher/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_main_teacher():
-    user_name = flask_login.current_user.id
+def admin_main_teacher(user_name):
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
                 FROM resumen
                 WHERE prof_usr = %s
@@ -919,12 +936,7 @@ def import_data_from_file_year(data_type, year, period):
 @app.route('/upload_teachers', methods=['POST'])
 @login_required(role='administrador')
 def upload_teachers():
-    file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_teachers.csv', '../datos_prueba/insercion_empleados.sql')
-    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'profesor' """)
-    users = cur.fetchall()
-    # for user in users:
-    #     send_email(user[0],user[1],user[2])
+    upload_data(role='teacher', send_email=False)
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
 
@@ -933,12 +945,7 @@ def upload_teachers():
 def upload_students():
     period = request.form['period']
     year = request.form['year']
-    file = request.files['inputfile']
-    upload_file(file, '../datos_prueba/temp_data_students.csv', '../datos_prueba/insercion_estudiantes.sql', period=period, year=year)
-    cur.execute("""select usuario,correo_institucional,codigo from personas where tipo = 'estudiante' """)
-    users = cur.fetchall()
-    # for user in users:
-    #     send_email(user[0],user[1],user[2])
+    upload_data(role='estudiante', send_email=False, period=period, year=year)
     count = count_admin_alerts()
     return redirect(url_for('import_data_from_file_year', data_type='classes', year=year, period=period))
 
@@ -949,6 +956,33 @@ def upload_classes(year, period):
     upload_file(file, '../datos_prueba/temp_data_classes.csv', '../datos_prueba/insercion_cursos_periodos.sql',period=period, year=year)
     count = count_admin_alerts()
     return render_template('admin/import_success.html', count=count)
+
+
+@app.route("/create_user/", methods=['POST', 'GET'])
+@login_required(role='administrador')
+def create_user():
+     count = count_admin_alerts()
+     return render_template('admin/create_user.html', count=count)
+    
+
+@app.route("/upload_new_/", methods=['POST'])
+@login_required(role='administrador')
+def upload_new_user():
+    file = request.files['inputfile']
+    user_role = request.form['user_role']
+    if user_role=='Estudiante':
+        cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
+        year = int(cur.fetchone()[0])
+        cur.execute( """(SELECT max(periodo) FROM RESUMEN WHERE anio =
+                            (SELECT max(anio) FROM RESUMEN))""")
+        period = int(cur.fetchone()[0])    
+        upload_data(role='estudiante', send_email=False, period=period, year=year)
+    elif user_role=='Profesor' or user_role=='Administrador':
+        upload_data(role='profesor', send_email=False)
+    else:
+        flash('Error', 'error')
+    return render_template('admin/user_upload_success.html')
+    
 
 
 # ---- Admin: Reports -----------------------------------------------------------------------------
@@ -1199,7 +1233,7 @@ def publish_alert():
                 (usuario,texto,tipo,fecha,periodo,anio) values (%s,%s,%s,%s,%s,%s)""",
                 (user_name,description,tipo,date,period,year))
     cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(user_name,date))
-    return redirect(url_for('create_alert'))
+    return render_template('admin/alert_success.html')
 
 
 

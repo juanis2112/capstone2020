@@ -50,7 +50,7 @@
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
   </a>
 </div>
-
+<form method= "POST" action="{{url_for('publish_alert')}}" id="Gravity" enctype=multipart/form-data>
 <div style="text-align: center;">
     <div class="autocomplete" style="width:300px; display:inline-block">
         <p style="display:inline-block">
@@ -60,7 +60,7 @@
     </div>
     <div>
        <label for="cars">Gravedad:</label>
-       <select name="tipo" id="cars">
+       <select name="tipo" id="Gravity">
          <option value="Leve">Leve</option>
          <option value="Media">Media</option>
          <option value="Grave">Grave</option>

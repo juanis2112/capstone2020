@@ -62,7 +62,7 @@
 </a>
 <ul class="ul_bloques" id="lista-estudiantes">
    {% for student in students %}
-   <a href="{{url_for('admin_main_student')}}">
+   <a href="{{url_for('admin_main_student', user_name = student.0)}}">
      <li style="font-size:20px;">
        <!--<p class="bloque_est">-->
        <div style="display:inline-block; font-size:28px">
@@ -181,31 +181,25 @@
   });
 }
 
-/*An array containing all the country names in the world:*/
 var estudiantes={{students | tojson}};
 var nombres=new Array(estudiantes.length);
 for(var i=0;i<estudiantes.length;i++){
   nombres[i]=estudiantes[i][1]+" "+estudiantes[i][2]+" "+estudiantes[i][3];
 }
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), nombres);
 
 function azulfiltro(){
   var nombre=document.getElementById("myInput").value;
-  var j=nombres.indexOf(nombre);
-  console.log(j);
-  var lista=document.getElementById("lista-estudiantes");
-  if(j!=-1){
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      if(i!=j+2)
-      lista.childNodes[i].style.display="none";
-      else
-      lista.childNodes[i].style.display="block";
+  var lista=document.getElementById("lista-estudiantes")
+  for(var i=0;i<lista.childNodes.length;i++){
+    if (lista.childNodes[i].nodeName != "LI") {
+        continue;
     }
-  }
-  else{
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
+    if(lista.childNodes[i].childNodes[0].text.toLowerCase().includes(nombre.toLowerCase()))  {
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
+    } else {
+      lista.childNodes[i].style.display="none";
     }
   }
 }

@@ -186,20 +186,16 @@ autocomplete(document.getElementById("myInput2"), nombres);
 
 function azulfiltro(){
   var nombre=document.getElementById("myInput2").value;
-  var j=nombres.indexOf(nombre);
-  console.log(j);
-  var lista=document.getElementById("lista-profesores");
-  if(j!=-1){
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      if(i!=j+2)
-      lista.childNodes[i].style.display="none";
-      else
-      lista.childNodes[i].style.display="block";
+  var lista=document.getElementById("lista-profesores")
+  for(var i=0;i<lista.childNodes.length;i++){
+    if (lista.childNodes[i].nodeName != "LI") {
+        continue;
     }
-  }
-  else{
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
+    if(lista.childNodes[i].childNodes[0].text.toLowerCase().includes(nombre.toLowerCase()))  {
+      lista.childNodes[i].style.display="list-item";
+      lista.childNodes[i].style.transform="translate3d(0,0,0)";
+    } else {
+      lista.childNodes[i].style.display="none";
     }
   }
 }
