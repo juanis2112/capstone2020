@@ -38,7 +38,7 @@ conn = psycopg2.connect(user="postgres",
                         password="Jgrccgv",
                         host="localhost",
                         port="5432",
-                        database="Epsilon_40",)
+                        database="Epsilon51",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -973,14 +973,14 @@ def create_user():
 def upload_new_user():
     file = request.files['inputfile']
     user_role = request.form['user_role']
-    if user_role=='estudiante':
+    if user_role=='Estudiante':
         cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
         year = int(cur.fetchone()[0])
         cur.execute( """(SELECT max(periodo) FROM RESUMEN WHERE anio =
                             (SELECT max(anio) FROM RESUMEN))""")
         period = int(cur.fetchone()[0])    
         upload_data(role='estudiante', send_email=False, period=period, year=year)
-    elif user_role=='profesor':
+    elif user_role=='Profesor' or user_role=='Administrador':
         upload_data(role='profesor', send_email=False)
     else:
         flash('Error', 'error')
@@ -1236,7 +1236,7 @@ def publish_alert():
                 (usuario,texto,tipo,fecha,periodo,anio) values (%s,%s,%s,%s,%s,%s)""",
                 (user_name,description,tipo,date,period,year))
     cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(user_name,date))
-    return redirect(url_for('create_alert'))
+    return render_template('alert_success.html')
 
 
 

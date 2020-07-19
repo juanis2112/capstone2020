@@ -1,0 +1,55 @@
+{% extends "layouts/estructura_administrador.html" %}
+
+{% block lateral %}
+  <ul>
+    <a href="{{url_for('load_students')}}">
+      <li>
+        <div class="menu-box">
+          <div >
+            Estudiantes
+          </div>
+        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+        </div>
+      </li>
+    </a>
+    <a href="{{url_for('load_teachers')}}">
+      <li>
+        <div class="menu-box">
+          <div >
+            Profesores
+          </div>
+        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+        </div>
+      </li>
+    </a>
+    <a href="{{url_for('historic_class')}}">
+          <li>
+            <div class="menu-box">
+              <div >
+                Materias
+              </div>
+            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+            </div>
+          </li>
+    </a>
+    <a href="{{url_for('admin_functions')}}">
+          <li  style="background-color: #0099cc;">
+            <div class="menu-box">
+              <div >
+                Administración
+              </div>
+            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+            </div>
+          </li>
+    </a>
+  </ul>
+{% endblock %}
+{% block tablas %}
+<a href="{{url_for('main_admin')}}" class="btn">
+    <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+</a>
+<ul style="list-style-type:none; border: 1px solid black; padding: 10px; font-size: xx-large;">
+
+  La alerta fue generada exitosamente !!!
+</ul>
+{% endblock %}
