@@ -276,7 +276,6 @@ def mejor_modelo_1(materia,modelo_general):
     RETORNA:
         mejor_modelo: modelo correspondiente al modelo general
         F_15_mejor_modelo: puntaje F15 asociado al modelo geenral
-
     """
     X = materia[["Nota_1er_Corte"]]
     Y = materia[["Paso"]]
@@ -321,7 +320,7 @@ def mejor_modelo_1(materia,modelo_general):
 #--------------------------------------------------------------------------------------------------------------------
 def seleccionar_guardar_modelo_general_1(materia,nombre_materia):
     """
-    Guarda el mejor modelo sobre una materia específica.
+    Guarda el mejor modelo sobre una materia específica en disco.
     El analisis es realizado con las notas del corte 1.
     
     PARAMETROS:
@@ -364,7 +363,6 @@ def cargar_modelo_1(nombre_materia):
     loaded_model = pickle.load(open(filename, 'rb'))
     return loadel_model
 #--------------------------------------------------------------------------------------------------------------------
-# NOTA: Probar funcion
 def guardar_mejor_modelo_todas_materias_1(df_completo):
     """
     Guarda el mejor modelo para todas las materias analizando el corte 1.

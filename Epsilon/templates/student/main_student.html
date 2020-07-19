@@ -1,7 +1,7 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
 <ul>
-  <a href="{{url_for('personal_data', user_name = user_name)}}">
+  <a href="{{url_for('personal_data')}}">
     <li>
       <div class="menu-box">
         <div >
@@ -11,7 +11,7 @@
       </div>
     </li>
   </a>
-  <a href="{{url_for('academic_history', user_name = user_name)}}">
+  <a href="{{url_for('academic_history')}}">
     <li>
       <div class="menu-box">
         <div >

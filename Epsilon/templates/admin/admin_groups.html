@@ -45,7 +45,7 @@
   </ul>
 {% endblock %}
 {% block tablas %}
-<a href="{{url_for('historic_class')}}" class="btn">
+<a href="{{url_for('load_classes',year=year,period=period)}}" class="btn">
   <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
 </a>
 <table class="center">

@@ -1,25 +1,4 @@
-{% with errors = get_flashed_messages(category_filter=["error"]) %}
-{% if errors %}
-<div style="color:red; display:inline-block">
-{%- for msg in errors %}
-{{ msg }}
-{% endfor -%}
-</div>
-{% endif %}
-{% endwith %}
 {% extends "layouts/estructura_administrador.html" %}
-
-{% block busqueda %}
-<div class="barra-busqueda">
-  <form autocomplete="off" class="barra-form">
-    <div class="autocomplete" style="width:300px;">
-      <input id="myInput" type="text" name="myCountry" placeholder="Materia" autocomplete="off">
-    </div>
-    <input class="boton-busqueda" type="button" value="buscar" onclick="azulfiltro()">
-  </form>
-</div>
-{% endblock %}
-
 
 {% block lateral %}
   <ul>
@@ -44,7 +23,7 @@
       </li>
     </a>
     <a href="{{url_for('historic_class')}}">
-          <li style="background-color: #0099cc;">
+          <li >
             <div class="menu-box">
               <div >
                 Materias
@@ -67,41 +46,51 @@
 {% endblock %}
 {% block tablas %}
 <div>
-  <a href="{{url_for('historic_class')}}" class="btn">
-        <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
+<a href="{{url_for('show_admin_alerts')}}" class="btn">
+      <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
   </a>
 </div>
-<div>
-<ul style="list-style-type:none" id="lista-estudiantes">
-  {% for class_name in classes %}
-  <a href="{{url_for('load_groups',class_name=class_name.0, year=year, period=period)}}">
-    <li style="font-size:18px;">
-      <div>
-        <div style="display:inline-block; font-size:28px;">
-            {{class_name.0}}
-        </div>
-        <div style="display:inline-block; float:right">
-          <a href="{{url_for('groups_report',class_name=class_name.0, year=year, period=period)}}">
-            <img width="50" height="50" style="margin-right: 20px; padding: 5px; float: right; background-color: white; border-radius: 10px;" src="{{ url_for('static', filename='template_general/imagenes/bar_plot.png') }}">
-          </a>
-        </div>
-        <br>
-          Código: {{class_name.1}} &nbsp &nbsp &nbsp &nbsp
-          Créditos: {{class_name.2}} &nbsp &nbsp &nbsp &nbsp
-      </div>
-      {% endfor %}
-    </li>
-  </a>
-</ul>
-</div>
-<a href="{{url_for('admin_edit_class', year=year, period=period)}}" class="special">Editar</a>
-{% endblock %}
 
+<div style="text-align: center;">
+    <div class="autocomplete" style="width:300px; display:inline-block">
+        <p style="display:inline-block">
+          Para:
+        </p>
+        <input id="myInput" type="text" name="inf_users" placeholder="Estudiante o Profesor" autocomplete="off" style="display:inline-block">
+    </div>
+    <div>
+       <label for="cars">Gravedad:</label>
+       <select name="tipo" id="cars">
+         <option value="Leve">Leve</option>
+         <option value="Media">Media</option>
+         <option value="Grave">Grave</option>
+       </select>
+       <br><br>
+        <input type="text" name="descripcion" placeholder="Descripción">
+    </div>
+        <input type="submit" value="Publicar">
+</div>
+{% endblock %}
 {% block code %}
 
-
-
 <script>
+  function habilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=false;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="#073D72";
+      document.getElementById("boton-editar").setAttribute("onclick","deshabilitar()");
+  }
+
+  function deshabilitar(){
+      var casillas_notas=document.getElementsByClassName("table-toggle");
+      for(var i=0;i<casillas_notas.length;i++){
+          casillas_notas[i].readOnly=true;
+      }
+      document.getElementById("boton-editar").style.backgroundColor="white";
+      document.getElementById("boton-editar").setAttribute("onclick","habilitar()");
+  }
 
   function autocomplete(inp, arr) {
   /*the autocomplete function takes two arguments,
@@ -122,8 +111,8 @@
       this.parentNode.appendChild(a);
       /*for each item in the array...*/
       for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+          /*check if the item starts with the same letters as the text field value:*/
+          if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
           /*make the matching letters bold:*/
@@ -140,7 +129,7 @@
               closeAllLists();
           });
           a.appendChild(b);
-        }
+          }
       }
   });
   /*execute a function presses a key on the keyboard:*/
@@ -148,84 +137,58 @@
       var x = document.getElementById(this.id + "autocomplete-list");
       if (x) x = x.getElementsByTagName("div");
       if (e.keyCode == 40) {
-        /*If the arrow DOWN key is pressed,
-        increase the currentFocus variable:*/
-        currentFocus++;
-        /*and and make the current item more visible:*/
-        addActive(x);
+          /*If the arrow DOWN key is pressed,
+          increase the currentFocus variable:*/
+          currentFocus++;
+          /*and and make the current item more visible:*/
+          addActive(x);
       } else if (e.keyCode == 38) { //up
-        /*If the arrow UP key is pressed,
-        decrease the currentFocus variable:*/
-        currentFocus--;
-        /*and and make the current item more visible:*/
-        addActive(x);
+          /*If the arrow UP key is pressed,
+          decrease the currentFocus variable:*/
+          currentFocus--;
+          /*and and make the current item more visible:*/
+          addActive(x);
       } else if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted,*/
-        e.preventDefault();
-        if (currentFocus > -1) {
+          /*If the ENTER key is pressed, prevent the form from being submitted,*/
+          e.preventDefault();
+          if (currentFocus > -1) {
           /*and simulate a click on the "active" item:*/
           if (x) x[currentFocus].click();
-        }
+          }
       }
   });
   function addActive(x) {
-    /*a function to classify an item as "active":*/
-    if (!x) return false;
-    /*start by removing the "active" class on all items:*/
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
+      /*a function to classify an item as "active":*/
+      if (!x) return false;
+      /*start by removing the "active" class on all items:*/
+      removeActive(x);
+      if (currentFocus >= x.length) currentFocus = 0;
+      if (currentFocus < 0) currentFocus = (x.length - 1);
+      /*add class "autocomplete-active":*/
+      x[currentFocus].classList.add("autocomplete-active");
   }
   function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
-    for (var i = 0; i < x.length; i++) {
+      /*a function to remove the "active" class from all autocomplete items:*/
+      for (var i = 0; i < x.length; i++) {
       x[i].classList.remove("autocomplete-active");
-    }
+      }
   }
   function closeAllLists(elmnt) {
-    /*close all autocomplete lists in the document,
-    except the one passed as an argument:*/
-    var x = document.getElementsByClassName("autocomplete-items");
-    for (var i = 0; i < x.length; i++) {
+      /*close all autocomplete lists in the document,
+      except the one passed as an argument:*/
+      var x = document.getElementsByClassName("autocomplete-items");
+      for (var i = 0; i < x.length; i++) {
       if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
+          x[i].parentNode.removeChild(x[i]);
       }
-    }
+      }
   }
   /*execute a function when someone clicks in the document:*/
   document.addEventListener("click", function (e) {
       closeAllLists(e.target);
   });
   }
-
-  var nombres={{nombres_mat | tojson}};
-  /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-  autocomplete(document.getElementById("myInput"), nombres);
-
-  function azulfiltro(){
-  var nombre=document.getElementById("myInput").value;
-  var j=nombres.indexOf(nombre);
-  console.log(j);
-  var lista=document.getElementById("lista-estudiantes");
-  if(j!=-1){
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      if(i!=j+2)
-      lista.childNodes[i].style.display="none";
-      else
-      lista.childNodes[i].style.display="block";
-    }
-  }
-  else{
-    for(var i=2;i<lista.childNodes.length-1;i++){
-      lista.childNodes[i].style.display="block";
-    }
-  }
-  }
-
-
-</script>
-
+  autocomplete(document.getElementById("myInput"),{{users|safe}});
+  </script>
 
 {% endblock %}

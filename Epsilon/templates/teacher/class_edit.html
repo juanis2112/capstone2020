@@ -1,6 +1,6 @@
 {% with errors = get_flashed_messages(category_filter=["error"]) %}
 {% if errors %}
-<div style="color:red;">
+<div style="color:red; display:inline-block">
 {%- for msg in errors %}
 {{ msg }}
 {% endfor -%}
@@ -11,6 +11,7 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
 <ul>
+  <a href="{{url_for('main_teacher')}}">
     <li style="background-color: #0099cc;">
       <div class="menu-box">
         <div >
@@ -19,6 +20,7 @@
       <img src="{{ url_for('static', filename='template_general/imagenes/teach.png') }}" style="background-color: white;" width="30px" width="30px">
     </div>
     </li>
+  </a>
   <a href="{{url_for('class_history', user_name = user_name)}}">
     <li>
       <div class="menu-box">
@@ -28,7 +30,7 @@
         <img src="{{ url_for('static', filename='template_general/imagenes/history.png') }}" width="30px" width="30px" style="background-color:white ;">
     </div>
     </li>
-  </a>
+
 </ul>
 {% endblock %}
 {% block tablas %}

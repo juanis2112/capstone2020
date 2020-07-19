@@ -29,10 +29,10 @@ import json
 
 # Connection to DataBase
 conn = psycopg2.connect(user="postgres",
-                        password="123",
+                        password="test",
                         host="localhost",
                         port="5432",
-                        database="Epsilon",)
+                        database="Epsilon_100",)
 
 conn.set_session(autocommit=True)
 cur = conn.cursor()
@@ -418,7 +418,7 @@ def main_student():
                            promedio=average, count=count)
 
 
-@app.route("/student_data/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/student_data/", methods=['POST', 'GET'])
 @flask_login.login_required
 def personal_data():
     user_name = flask_login.current_user.id
@@ -432,7 +432,7 @@ def personal_data():
                            count=count)
 
 
-@app.route("/academic_history/<string:user_name>", methods=['POST', 'GET'])
+@app.route("/academic_history/", methods=['POST', 'GET'])
 @flask_login.login_required
 def academic_history():
     user_name = flask_login.current_user.id
@@ -778,8 +778,9 @@ def load_classes(year,period):
                 periodo = %s
             ORDER BY(nombre_asignatura)""",(year,period))
     data = cur.fetchall()
+    nombres_materias = [user[0] for user in data]
     count = count_admin_alerts()
-    return render_template('/admin/admin_classes.html', classes=data, count=count, year=year, period=period)
+    return render_template('/admin/admin_classes.html', classes=data, count=count, year=year, period=period, nombres_mat=nombres_materias)
 
 
 @app.route("/groups/<string:class_name>/<string:year>/<string:period>", methods=['POST', 'GET'])
@@ -1073,7 +1074,7 @@ def groups_report(class_name, period, year):
     image = generate_image()
     plt.close()
     count = count_admin_alerts()
-    return render_template('/admin/groups_report.html', image=image, count=count)
+    return render_template('/admin/groups_report.html', image=image, count=count,period=period,year=year)
 
 def student_alerts(student, class_name, grade):
     #Consulta de la nota final (grade_final)
