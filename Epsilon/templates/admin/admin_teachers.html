@@ -185,9 +185,12 @@ for(var i=0;i<estudiantes.length;i++){
 autocomplete(document.getElementById("myInput2"), nombres);
 
 function azulfiltro(){
-  var nombre=document.getElementById("myInput").value;
+  var nombre=document.getElementById("myInput2").value;
   var lista=document.getElementById("lista-profesores")
-  for(var i=2;i<lista.childNodes.length-1;i++){
+  for(var i=0;i<lista.childNodes.length;i++){
+    if (lista.childNodes[i].nodeName != "LI") {
+        continue;
+    }
     if(lista.childNodes[i].childNodes[0].text.toLowerCase().includes(nombre.toLowerCase()))  {
       lista.childNodes[i].style.display="list-item";
       lista.childNodes[i].style.transform="translate3d(0,0,0)";

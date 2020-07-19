@@ -12,6 +12,7 @@ import secrets
 import time
 from functools import wraps
 from random import choice
+
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
 import flask_login
@@ -387,7 +388,6 @@ def send_forget_passwd():
                 WHERE usuario = %s """, (user,))
     email = cur.fetchone()[0]
     passwd = generate_passwd()
-    print(passwd)
     cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
                     where usuario = %s; """, (passwd,user))
     cur.execute("""UPDATE personas set estado_cuenta = '1' WHERE usuario = %s""",(user,))
@@ -405,7 +405,7 @@ def logout():
 # --- Student Page --------------------------------------------------------------------------------
 
 @app.route("/main_student", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def main_student():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT
@@ -439,7 +439,7 @@ def main_student():
 
 
 @app.route("/student_data/", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def personal_data():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
@@ -453,7 +453,7 @@ def personal_data():
 
 
 @app.route("/academic_history/", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def academic_history():
     user_name = flask_login.current_user.id
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
@@ -467,7 +467,7 @@ def academic_history():
 
 
 @app.route("/period_classes/<string:year>/<string:period>", methods=['POST', 'GET'])
-@flask_login.login_required
+@login_required(role='estudiante')
 def period_classes(year, period):
     user_name = flask_login.current_user.id
     cur.execute("""SELECT nombre_asignatura,nota1,nota2,nota3,nota4,nota5,
@@ -725,16 +725,15 @@ def admin_period_classes(user_name, year, period):
 @login_required(role='administrador')
 def load_teachers():
     cur.execute("""SELECT usuario, nombre, apellido_1, apellido_2 FROM personas
-                WHERE tipo='profesor' or tipo='administrador'""")
+                WHERE tipo='profesor'""")
     data = cur.fetchall()
     count = count_admin_alerts()
     return render_template('admin/admin_teachers.html', teachers=data, count=count)
 
 
-@app.route("/admin_main_teacher", methods=['POST', 'GET'])
+@app.route("/admin_main_teacher/<string:user_name>", methods=['POST', 'GET'])
 @login_required(role='administrador')
-def admin_main_teacher():
-    user_name = flask_login.current_user.id
+def admin_main_teacher(user_name):
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
                 FROM resumen
                 WHERE prof_usr = %s
