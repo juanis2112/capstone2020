@@ -1,24 +1,21 @@
-import psycopg2
-import pandas as pd
-import sqlalchemy
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import silhouette_score, confusion_matrix, classification_report, accuracy_score, precision_score
-from sklearn import metrics
-from sklearn.tree import DecisionTreeClassifier
-from sklearn import svm
-from scipy.stats import entropy
-from sklearn.ensemble import VotingClassifier
+#!/usr/bin/env python3
+
+# Standard library imports
 import pickle
 import os
-from pathlib import Path
 import shutil
+
+# Third party imports
+import pandas as pd
+import psycopg2
+from sklearn import svm
+from sklearn.ensemble import VotingClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 
 # Global-level variables
@@ -76,7 +73,8 @@ def funcion_paso(x):
         x: nota final
 
     RETORNA:
-        1 si el estudiante paso (x >= 3) o 0 si perdio (x < 3) como etiqueta para modelos de prediccion
+        1 si el estudiante paso (x >= 3) o 0 si perdio (x < 3)
+        como etiqueta para modelos de prediccion
     """
     if(x >= 3):
         return 1
@@ -131,7 +129,8 @@ def mejor_modelo_general_2(materia):
 
 def mejor_modelo_2(materia, modelo_general):
     """
-    Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
+    Determina el mejor modelo para una materia teniendo en cuenta las clases
+    en las que todos pasaron.
     El analisis es realizado con las notas de los cortes 1 y 2.
 
     PARAMETROS:
@@ -181,15 +180,15 @@ def mejor_modelo_2(materia, modelo_general):
             Accuracy = (True_posit + True_neg) / Total
             Accuracy_pass = (True_neg) / (True_neg + False_posit)
             Accuracy_fail = (True_posit) / (True_posit + False_neg)
-            F15 = ((1 + 1.5 * 1.5) * True_posit) / ((1 + 1.5 * 1.5) *
-                                                    True_posit + (1.5 * 1.5) * False_neg + False_posit)
+            F15 = (((1 + 1.5 * 1.5) * True_posit)
+                   / ((1 + 1.5 * 1.5) * True_posit + (1.5 * 1.5) * False_neg + False_posit))
 
             if F15 > F15_mejor_modelo:
                 F15_mejor_modelo = F15
                 mejor_modelo = modelo
                 indice = i
 
-            #print(r"F_{1.5}$:" +str(F15))
+            # print(r"F_{1.5}$:" +str(F15))
         mejor_seg_modelo, F15_mejor_seg_modelo = mejor_segundo_modelo_2(
             materia, mejor_modelo, indice, modelo_general)
         mejor_modelo, F15_mejor_modelo = enssemble(
@@ -250,23 +249,23 @@ def mejor_segundo_modelo_2(materia, mejor_modelo, indice, modelo_general):
             Accuracy = (True_posit + True_neg) / Total
             Accuracy_pass = (True_neg) / (True_neg + False_posit)
             Accuracy_fail = (True_posit) / (True_posit + False_neg)
-            F15 = ((1 + 1.5 * 1.5) * True_posit) / ((1 + 1.5 * 1.5) *
-                                                    True_posit + (1.5 * 1.5) * False_neg + False_posit)
+            F15 = (((1 + 1.5 * 1.5) * True_posit)
+                   / ((1 + 1.5 * 1.5) * True_posit + (1.5 * 1.5) * False_neg + False_posit))
 
             if F15 > F15_mejor_modelo:
                 F15_mejor_modelo = F15
                 mejor_modelo = modelo
-                indice = i
 
-            #print(r"F_{1.5}$:" +str(F15))
+            # print(r"F_{1.5}$:" +str(F15))
         return mejor_modelo, F15_mejor_modelo
 # --------------------------------------------------------------------------------------------------------------------
 
 
 def enssemble(modelo1, modelo2, X_train, Y_train, X_test, Y_test):
-    """
     # NOTA: revisar documentacion
-    Combina dos modelos de clasificacion usando clasificador de votacion (Voting Classifier),funciona tanto para primer corte y segundo corte
+    """
+    Combina dos modelos de clasificacion usando clasificador de votacion
+    (Voting Classifier),funciona tanto para primer corte y segundo corte.
 
     PARAMETROS:
         modelo1: uno de los modelos que se combina
@@ -337,7 +336,8 @@ def seleccionar_guardar_modelo_2(materia, nombre_materia):
 
 def seleccionar_guardar_modelo_2_gen(materia, nombre_materia):
     """
-    Esta funcion selecciona el modelo general para esta materia en caso de que no se pueda seleccionar un modelo específico para la misma
+    Esta funcion selecciona el modelo general para esta materia
+    en caso de que no se pueda seleccionar un modelo específico para la misma
     El análisis de los modelos para esta funcion es sobre los cortes 1 y 2.
 
     PARAMETROS:
@@ -399,7 +399,8 @@ def devolucion_estudiantes_riesgos_2(nombre_materia, materia):
     Retorna dataframe de estudiantes que el modelo predijo que van a perder
 
     PARAMETROS:
-        nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
+        nombre_materia: nombre de la materia que selecciona para cargar el modelo
+            (puede ser el nombre del archivo con el modelo general)
         materia: dataframe con los datos de las notas de la materia especificada
 
     RETORNA:
@@ -467,7 +468,8 @@ def mejor_modelo_general_1(materia):
 
 def mejor_modelo_1(materia, modelo_general):
     """
-    Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
+    Determina el mejor modelo para una materia teniendo en cuenta las clases
+    en las que todos pasaron.
     El analisis es realizado con las notas del corte 1 y 2.
 
     PARAMETROS:
@@ -516,8 +518,8 @@ def mejor_modelo_1(materia, modelo_general):
             Accuracy = (True_posit + True_neg) / Total
             Accuracy_pass = (True_neg) / (True_neg + False_posit)
             Accuracy_fail = (True_posit) / (True_posit + False_neg)
-            F15 = ((1 + 1.5 * 1.5) * True_posit) / ((1 + 1.5 * 1.5) *
-                                                    True_posit + (1.5 * 1.5) * False_neg + False_posit)
+            F15 = (((1 + 1.5 * 1.5) * True_posit)
+                   / ((1 + 1.5 * 1.5) * True_posit + (1.5 * 1.5) * False_neg + False_posit))
 
             if F15 > F15_mejor_modelo:
                 F15_mejor_modelo = F15
@@ -529,7 +531,7 @@ def mejor_modelo_1(materia, modelo_general):
         mejor_modelo, F15_mejor_modelo = enssemble(
             mejor_modelo, mejor_seg_modelo, X_train, Y_train, X_test, Y_test)
 
-        #print(r"F_{1.5}$:" +str(F15))
+        # print(r"F_{1.5}$:" +str(F15))
         return mejor_modelo, F15_mejor_modelo
 # --------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------
@@ -588,15 +590,15 @@ def mejor_segundo_modelo_1(materia, mejor_modelo, indice, modelo_general):
                 Accuracy = (True_posit + True_neg) / Total
                 Accuracy_pass = (True_neg) / (True_neg + False_posit)
                 Accuracy_fail = (True_posit) / (True_posit + False_neg)
-                F15 = ((1 + 1.5 * 1.5) * True_posit) / ((1 + 1.5 * 1.5)
-                                                        * True_posit + (1.5 * 1.5) * False_neg + False_posit)
+                F15 = (((1 + 1.5 * 1.5) * True_posit)
+                       / ((1 + 1.5 * 1.5) * True_posit + (1.5 * 1.5) * False_neg + False_posit))
 
                 if F15 > F15_mejor_modelo:
                     F15_mejor_modelo = F15
                     mejor_modelo = modelo
                     indice = i
 
-            #print(r"F_{1.5}$:" +str(F15))
+            # print(r"F_{1.5}$:" +str(F15))
         return mejor_modelo, F15_mejor_modelo
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -612,7 +614,7 @@ def seleccionar_guardar_modelo_general_1(materia, nombre_materia):
     """
     mejor_modelo1, F15 = mejor_modelo_general_1(materia)
     filename = file + "/modelos/mejor_modelo_" + nombre_materia + "1.sav"
-    #print("Modelo General Corte 1 Guardado")
+    # print("Modelo General Corte 1 Guardado")
     # print(os.getcwd())
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
 
@@ -640,7 +642,8 @@ def seleccionar_guardar_modelo_1(materia, nombre_materia):
 
 def seleccionar_guardar_modelo_1_gen(materia, nombre_materia):
     """
-    Esta funcion selecciona el modelo general para esta materia en caso de que no se pueda seleccionar un modelo específico para la misma
+    Esta funcion selecciona el modelo general para esta materia
+    en caso de que no se pueda seleccionar un modelo específico para la misma
     El análisis de los modelos para esta funcion es sobre el corte 1.
 
     PARAMETROS:
@@ -725,7 +728,8 @@ def devolucion_estudiantes_riesgos_1(nombre_materia, materia):
 def mover_modelos(source, destination):
     """
     Mueve todos los archivos de la carpeta fuente a la carpeta destino.
-    Si las direcciones son relativas, las direcciones empiezan desde la carpeta donde se encuentra el archivo con esta funcion.
+    Si las direcciones son relativas, las direcciones empiezan desde la carpeta
+    donde se encuentra el archivo con esta funcion.
 
     PARAMETROS:
         source: direccion de la carpeta fuente
@@ -733,7 +737,7 @@ def mover_modelos(source, destination):
     """
     files = os.listdir(source)
     for file in files:
-        new_path = shutil.move(f"{source}/{file}", destination)
+        shutil.move(f"{source}/{file}", destination)
 
 # ------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------
@@ -745,8 +749,9 @@ def main0():
     """
     Funcion de entrenamiento con csv de historico.
     """
-    #----------------------#
-    filename = file + "/modelos/Información_antes_de_aplicación/datos_notas_macc_cortes_historico_20172_20201.csv"
+    # ---------------------- #
+    filename = file + ("/modelos/Información_antes_de_aplicación/"
+                       "datos_notas_macc_cortes_historico_20172_20201.csv")
     notas = pd.read_csv(filename, encoding='utf-8', header=0, sep=";")
     # Eliminar Nans
     notas = notas.dropna()
@@ -769,7 +774,6 @@ def main0():
             'Nombre Asignatura': 'nombre_asignatura',
             'Nota 1er Corte': 'nota1',
             'Nota 2do Corte': 'nota2'})
-    # lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
     guardar_mejor_modelo_todas_materias_2(notas)
     guardar_mejor_modelo_todas_materias_1(notas)
 
@@ -781,10 +785,13 @@ def main1():
     """
     Funcion que se encarga de entrenar los modelos.
     """
-    #----------------------#
-    df = pd.read_sql("""select est_usr,nombre_asignatura,periodo,anio,nota1,nota2,round((nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*porcentaje4+nota5*porcentaje5)/100,2) as nota_final from resumen""", conn)
+    # ---------------------- #
+    df = pd.read_sql(
+        "select est_usr,nombre_asignatura,periodo,anio,nota1,nota2,"
+        "round((nota1*porcentaje1+nota2*porcentaje2+nota3*porcentaje3+nota4*"
+        "porcentaje4+nota5*porcentaje5)/100,2) as nota_final from resumen",
+        conn)
     df["Paso"] = df.apply(lambda row: funcion_paso(row["nota_final"]), axis=1)
-    #lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(),svm.SVC(kernel='rbf')]
     guardar_mejor_modelo_todas_materias_2(df)
     guardar_mejor_modelo_todas_materias_1(df)
 # ---------------------------------------------------------------------------------------------------------------------
@@ -797,12 +804,14 @@ def main2():
     RETORNA:
         lista_estudiantes_alerta: dataframe con los estudiantes con riesgo de perder la materia
     """
-    #lista_estudiantes: dataframe
+    # lista_estudiantes: dataframe
     columnas = ["est_usr", "nombre_asignatura", "nota1", "nota2"]
     lista_estudiantes_alerta = pd.DataFrame(columns=columnas)
     # query obtencion de notas normal
     query1 = """select est_usr,nombre_asignatura,nota1,nota2
-    from resumen where periodo = (select max(periodo) from resumen where anio =(select max(anio) from resumen )) and anio = (select max(anio) from resumen)"""
+    from resumen where periodo = (select max(periodo) from resumen
+                                  where anio =(select max(anio) from resumen ))
+     and anio = (select max(anio) from resumen)"""
     # query sin columna segundo corte
     df = pd.read_sql(query1, conn)
     lista_materias = []
