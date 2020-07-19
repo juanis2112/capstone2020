@@ -21,23 +21,43 @@ from pathlib import Path
 import shutil
 
 
-# Connection to DataBase
-conn = psycopg2.connect(user="postgres",
-                        password="1234",
-                        host="localhost",
-                        port="5432",
-                        database="capstone20201",)
+# Global-level variables
+app = None
+conn = None
+cur = None
+file = None
+lista_modelos = None
 
-conn.set_session(autocommit=True)
-cur = conn.cursor()
-#app = Flask(__name__)
-#app.secret_key = 'mysecretkey'
-#-------------------------------------------------------------------------
-# Obtener path relativo al script
-file = os.path.dirname(__file__)
-# NOTA: Variable global para modelos. 
-lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeighborsClassifier(n_neighbors=2),svm.SVC(kernel='rbf')]
-# IMPORTANTE: puede agregar modelos a esta lista con distintos parametros como prefiera quien maneje esto
+
+def init_app():
+    global app
+    global conn
+    global cur
+    global file
+    global lista_modelos
+
+    # Connection to Database
+    conn = psycopg2.connect(
+        user="postgres",
+        password="Jgrccgv",
+        host="localhost",
+        port="5432",
+        database="Epsilon52",
+        )
+
+    conn.set_session(autocommit=True)
+    cur = conn.cursor()
+    # app = Flask(__name__)
+    # app.secret_key = secrets.token_bytes(nbytes=16)
+
+    # Obtener path relativo al script
+    file = os.path.dirname(__file__)
+    # NOTA: Variable global para modelos
+    lista_modelos = [GaussianNB(), LogisticRegression(), DecisionTreeClassifier(),
+                     KNeighborsClassifier(n_neighbors=2), svm.SVC(kernel='rbf')]
+    # IMPORTANTE: puede agregar modelos a esta lista con distintos parametros
+    # como prefiera quien maneje esto
+
 
 #=======================================================================================================================
 # FUNCIONES DE MODELOS PARA SOLO EL PRIMER CORTE
@@ -45,11 +65,11 @@ lista_modelos =[GaussianNB(),LogisticRegression(),DecisionTreeClassifier(),KNeig
 def funcion_paso(x):
     """
     Funcion necesaria para crear la columna Paso en el dataframe.
-    
+
     PARAMETROS:
         x: nota final
 
-    RETORNA: 
+    RETORNA:
         1 si el estudiante paso (x >= 3) o 0 si perdio (x < 3) como etiqueta para modelos de prediccion
     """
     if(x >= 3):
@@ -100,11 +120,11 @@ def mejor_modelo_2(materia,modelo_general):
     """
     Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
     El analisis es realizado con las notas de los cortes 1 y 2.
-    
+
     PARAMETROS:
         materia: dataframe con los datos de una materia especifica
         modelo_genera: modelo general pre-establecido
-     
+
     RETORNA:
         mejor_modelo: modelo correspondiente al modelo general
         F_15_mejor_modelo: puntaje F15 asociado al modelo general
@@ -252,7 +272,7 @@ def seleccionar_guardar_modelo_general_2(materia):
 
     PARAMETROS:
         materia: dataframe con las notas de todos las materias de todos los estudiantes
-    """    
+    """
     nombre_materia = "Modelo_General"
     mejor_modelo1,F15 = mejor_modelo_general_2(materia)
     #Guardar el modelo en disco
@@ -263,7 +283,7 @@ def seleccionar_guardar_modelo_2(materia,nombre_materia):
     """
     Guarda el mejor modelo sobre una materia específica.
     El analisis es realizado con las notas de los cortes 1 y 2.
-    
+
     PARAMETROS:
         materia: dataframe de la materia especificada
         nombre_materia: string para el nombre del archivo del modelo
@@ -281,7 +301,7 @@ def seleccionar_guardar_modelo_2_gen(materia,nombre_materia):
     """
     Esta funcion selecciona el modelo general para esta materia en caso de que no se pueda seleccionar un modelo específico para la misma
     El análisis de los modelos para esta funcion es sobre los cortes 1 y 2.
-    
+
     PARAMETROS:
         materia: dataframe de la materia especificada
         nombre_materia: string para el nombre del archivo del modelo
@@ -396,11 +416,11 @@ def mejor_modelo_1(materia,modelo_general):
     """
     Determina el mejor modelo para una materia teniendo en cuenta las clases en las que todos pasaron.
     El analisis es realizado con las notas del corte 1 y 2.
-    
+
     PARAMETROS:
         materia: dataframe con los datos de una materia especifica
         modelo_genera: modelo general pre-establecido
-     
+
     RETORNA:
         mejor_modelo: modelo correspondiente al modelo general
         F_15_mejor_modelo: puntaje F15 asociado al modelo geenral
@@ -514,7 +534,7 @@ def seleccionar_guardar_modelo_general_1(materia,nombre_materia):
     """
     Guarda el mejor modelo sobre una materia específica en disco.
     El analisis es realizado con las notas del corte 1.
-    
+
     PARAMETROS:
         materia: dataframe de la materia especificada
         nombre_materia: string para el nombre del archivo del modelo
@@ -524,13 +544,13 @@ def seleccionar_guardar_modelo_general_1(materia,nombre_materia):
     #print("Modelo General Corte 1 Guardado")
     #print(os.getcwd())
     pickle.dump(mejor_modelo1, open(filename, 'wb'))
-    
+
 #--------------------------------------------------------------------------------------------------------------------
 def seleccionar_guardar_modelo_1(materia,nombre_materia):
     """
     Guarda el mejor modelo sobre una materia específica.
     El analisis es realizado con las notas del corte 1.
-    
+
     PARAMETROS:
         materia: dataframe de la materia especificada
         nombre_materia: string para el nombre del archivo del modelo
@@ -547,7 +567,7 @@ def seleccionar_guardar_modelo_1_gen(materia,nombre_materia):
     """
     Esta funcion selecciona el modelo general para esta materia en caso de que no se pueda seleccionar un modelo específico para la misma
     El análisis de los modelos para esta funcion es sobre el corte 1.
-    
+
     PARAMETROS:
         materia: dataframe de la materia especificada
         nombre_materia: string para el nombre del archivo del modelo
@@ -666,7 +686,7 @@ def main1():
 #---------------------------------------------------------------------------------------------------------------------
 def main2():
     """
-    Funcion que se encarga de hacer la predicción de los estudiantes. 
+    Funcion que se encarga de hacer la predicción de los estudiantes.
 
     RETORNA:
         lista_estudiantes_alerta: dataframe con los estudiantes con riesgo de perder la materia
@@ -703,7 +723,10 @@ def main2():
 
     return lista_estudiantes_alerta
 
-#main0()
-#main1()
-#lista_estudiantes_alerta = main2()
-#print(lista_estudiantes_alerta.head())
+
+if __name__ == "__main__":
+    init_app()
+    # main0()
+    # main1()
+    # lista_estudiantes_alerta = main2()
+    # print(lista_estudiantes_alerta.head())

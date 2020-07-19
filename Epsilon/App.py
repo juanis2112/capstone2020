@@ -35,26 +35,39 @@ ROLES = [
     "administrador",
     ]
 
-# Connection to DataBase
-conn = psycopg2.connect(user="postgres",
-                        password="Jgrccgv",
-                        host="localhost",
-                        port="5432",
-                        database="Epsilon52",)
-
-conn.set_session(autocommit=True)
-cur = conn.cursor()
+# Global-level variables
 app = Flask(__name__)
-app.secret_key = secrets.token_bytes(nbytes=16)
-
+conn = None
+cur = None
 login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
+
+
+def init_app():
+    global app
+    global conn
+    global cur
+    global login_manager
+
+    # Connection to Database
+    conn = psycopg2.connect(
+        user="postgres",
+        password="Jgrccgv",
+        host="localhost",
+        port="5432",
+        database="Epsilon52",
+        )
+
+    conn.set_session(autocommit=True)
+    cur = conn.cursor()
+    app.secret_key = secrets.token_bytes(nbytes=16)
+
+    login_manager.init_app(app)
 
 
 class User(flask_login.UserMixin):
     def __init__(self, user_id, user_role):
         """
-        
+
         El analisis es realizado con las notas de los cortes 1 y 2.
         PARAMETROS:
             materia: dataframe con notas en todas las materias
@@ -93,7 +106,7 @@ def login_required(role="ANY"):
         Determina si el rol de un usuario permite o no acceder
         a la función donde se encuentra este wrapper.
         PARAMETROS:
-            role: rol que requiere la función 
+            role: rol que requiere la función
         RETORNA:
             wrapper: wrapper dependiendo del rol
         """
@@ -147,10 +160,10 @@ def count_admin_alerts():
 
 def generate_passwd():
     """
-    Genera contraseña aleatoria para los usuarios que olvidan su contraseña  
+    Genera contraseña aleatoria para los usuarios que olvidan su contraseña
     RETORNA:
-        passwd: contraseña aleatoria 
-        
+        passwd: contraseña aleatoria
+
     """
     longitud = 8
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
@@ -160,13 +173,13 @@ def generate_passwd():
 
 def get_student_grades(user_name, class_name, group):
     """
-    Consulta de la base de datos, las notas de un estudiante en una clase y 
+    Consulta de la base de datos, las notas de un estudiante en una clase y
     grupos específicos en el periodo actual
     PARAMETROS:
         user_name: nombre de usuario del estudiante
     RETORNA:
-        grades: tupla con el nombre de usuario,, los nombres, apellidos y 
-        notas de un estudiante 
+        grades: tupla con el nombre de usuario,, los nombres, apellidos y
+        notas de un estudiante
     """
     cur.execute("""SELECT B1.est_usr,B1.nombre_est,B1.ap1_est,B1.ap2_est,B1.nota1,B1.nota2,
                 B1.nota3,B1.nota4,B1.nota5,nota_final from
@@ -193,7 +206,7 @@ def get_student_grades(user_name, class_name, group):
 
 def get_student_grades_period(user_name, class_name, year, period, group):
     """
-    Consulta de la base de datos, las notas de un estudiante en una clase y grupos 
+    Consulta de la base de datos, las notas de un estudiante en una clase y grupos
     específicos en un año y periodo determinado
     PARAMETROS:
         user_name: nombre de usuario del estudiante
@@ -222,7 +235,7 @@ def get_name_from_user(user_name):
     """
     Consulta el nombre y apellidos de un usuario a partir de su nombre de usuario
     PARAMETROS:
-        user_name: nombre de usuario 
+        user_name: nombre de usuario
     RETORNA:
         name: tupla con nombre y apellidos del usuario
     """
@@ -235,13 +248,13 @@ def get_name_from_user(user_name):
 
 def plot_groups(groups_data, class_name):
     """
-    Grafica el numero de estudiantes con respecto a su nota final para los distintos 
+    Grafica el numero de estudiantes con respecto a su nota final para los distintos
     grupos de una materia determinada
     PARAMETROS:
-        groups_data: lista de tuplas con los nombres, apellidos, grupos y notas de los estudiantes 
-        de una materia determinada 
-        class_name: nombre de la materia 
-        
+        groups_data: lista de tuplas con los nombres, apellidos, grupos y notas de los estudiantes
+        de una materia determinada
+        class_name: nombre de la materia
+
     """
     N = 10
     width = 0.4
@@ -273,10 +286,10 @@ def plot_groups(groups_data, class_name):
 
 def generate_image():
     """
-    Convierte una figura de matplotlib en una cadena de caracteres en base64 que representa 
-    el png de la figura 
+    Convierte una figura de matplotlib en una cadena de caracteres en base64 que representa
+    el png de la figura
     RETORNA:
-        image: cadena de caracteres que representa el png de la figura    
+        image: cadena de caracteres que representa el png de la figura
     """
     figfile = BytesIO()
     plt.savefig(figfile, format='png')
@@ -287,12 +300,12 @@ def generate_image():
 
 def send_email(username, email, codigo):
     """
-    Envía un correo a un usuario determinado con una contraseña temporal para el 
+    Envía un correo a un usuario determinado con una contraseña temporal para el
     inicio de sesión
     PARAMETROS:
          username: nombre de usuario
         email: correo del usuario
-        código: código del usuario que corresponde a la contraseña temporal 
+        código: código del usuario que corresponde a la contraseña temporal
     """
     sender_email = "EpsilonAppUR@gmail.com"
     receiver_email = email
@@ -334,7 +347,7 @@ def send_email(username, email, codigo):
 
 def return_current_year_period():
     """
-    Consulta el periodo y año del periodo actual (ultimo periodo registrado en la base 
+    Consulta el periodo y año del periodo actual (ultimo periodo registrado en la base
     de datos)
     RETORNA:
         current_year: entero con el numero del año actual
@@ -350,16 +363,16 @@ def return_current_year_period():
 
 def render_main_windows(user_name):
     """
-    Muestra las ventanas principales de los usuarios dependiendo de su rol en la 
-    base de datos 
+    Muestra las ventanas principales de los usuarios dependiendo de su rol en la
+    base de datos
     PARAMETROS:
         user_name: nombre de usuario
     RETORNA:
         ventana principal de los usuarios dependiendo de su rol
-        
+
     """
     logging(user_name, '1', 'INICIO')
-    cur.execute("SELECT esAdmin,esProfesor FROM personas"
+    cur.execute("SELECT esAdmin,esProfesor FROM personas "
                 "JOIN empleado ON personas.codigo = empleado.codigo WHERE usuario= %s;",
                 (user_name,))
     aux = cur.fetchone()
@@ -380,14 +393,14 @@ def render_main_windows(user_name):
 
 def upload_file(file, path_to_file, data_insertion_path, **kwargs):
     """
-    Sube un archivo de csv a la base de datos guardando una copia de dicho archivo  
+    Sube un archivo de csv a la base de datos guardando una copia de dicho archivo
     en la carpeta del repositorio
     PARAMETROS:
         file: archivo a guardar
-        path_to_file: path al archivo temporal donde se genera la 
+        path_to_file: path al archivo temporal donde se genera la
         copia del archivo
-        data_insertion_path: path al archivo de sql que se encarga de hacer la 
-        inserción de datos en la base de datos 
+        data_insertion_path: path al archivo de sql que se encarga de hacer la
+        inserción de datos en la base de datos
         **kwargs: period, year: año y periodo para el cual se desean subir los datos
     """
     csv_file_path = Path(path_to_file).resolve()
@@ -401,17 +414,17 @@ def upload_file(file, path_to_file, data_insertion_path, **kwargs):
 
 def upload_data(role, send_email=False, period=None, year=None):
     """
-    Sube los datos del csv a la base de datos dependiendo si se suben 
-    datos para estudiantes o empleados. Manda un correo a los usuarios 
+    Sube los datos del csv a la base de datos dependiendo si se suben
+    datos para estudiantes o empleados. Manda un correo a los usuarios
     nuevos (ver función send_email)
     PARAMETROS:
         role: tipo de usuario para el cual se suben datos
-        send_email: determina si se envía o no el correo a los 
+        send_email: determina si se envía o no el correo a los
         usuarios
-        period: en caso de subir datos para un period específico, el 
+        period: en caso de subir datos para un period específico, el
         parámetro debe indicar el periodo.
-        year: en caso de subir datos para un año específico, el 
-        parámetro debe indicar el año.  
+        year: en caso de subir datos para un año específico, el
+        parámetro debe indicar el año.
     """
     file = request.files['inputfile']
     if role == 'estudiante':
@@ -433,11 +446,15 @@ def upload_data(role, send_email=False, period=None, year=None):
 
 def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teacher_usr):
     """
-    
+    Actualiza las notas para un estudiante en una materia específica dictada
+    por un profesor específico
     PARAMETROS:
-        
-    RETORNA:
-        
+        grade*: notas nuevas para subirse a la base de datos correspondientes
+        a los 5 cortes
+        class_name: nombre de la materia para la cual se van a cambiar notas
+        user: usuario del estudiante para el cual se van a cambiar notas
+        teacher_usr: nombre del profesor de la materia para la cual se van a
+        cambiar notas
     """
     cur.execute("""UPDATE toma
                     SET -- Las 'nueva nota' se reemplazan por la nueva nota NUMERICA NO STRING
@@ -471,11 +488,12 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
 def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura=None, grupo=None,
             cuando=None, notas_antes=None, notas_despues=None):
     """
-    
+    Registra las actividades realizadas por los usuarios en la base de datos
+    junto con su datestamp correspondiente
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
     if action == "INICIO":
@@ -516,7 +534,7 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
                  + " para el periodo " + cuando)
     else:
         text = "El usuario " + usuario + " hizo halgo"
-    cur.execute("INSERT INTO logging VALUES(%s,%s,%s,%s,%s)", usuario, nivel, action, date, text)
+    cur.execute("INSERT INTO logging VALUES(%s,%s,%s,%s,%s)", (usuario, nivel, action, date, text))
 
 
 # --- Login Window --------------------------------------------------------------------------------
@@ -524,11 +542,14 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
 @app.route("/")
 def main_window():
     """
-    
-    PARAMETROS:
-        
+    Carga las tablas necesarias en la base de datos si aún no se han cargado
+    ejecutando el archivo creacion_bd_2.sql
+    Crea un usuario adminsitrador en la base de datos para acceder a las
+    funciones de la aplicación
+    Redirecciona al formulario de login para que el usuario administrador
+    pueda iniciar sesión
     RETORNA:
-        
+        Inicio de sesión
     """
     try:
         cur.execute("SELECT * from personas")
@@ -544,11 +565,12 @@ def main_window():
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     """
-    
-    PARAMETROS:
-        
+    Realizar el inicio de sesión para los usuarios de la aplicación
+    verificando que la contraseña ingresada es la correcta y
+    revisando si el usuario inicia sesion por primera vez
     RETORNA:
-        
+        Cambio de contraseña o inicio de sesión dependiendo de
+        si es la primera vez que el usuario inicia sesión
     """
     if request.method == 'POST':
         username_input = request.form['username']
@@ -580,11 +602,11 @@ def login():
 @flask_login.login_required
 def change_passwd():
     """
-    
-    PARAMETROS:
-        
+    Realiza el cambio de contraseña de un usuario actualizando
+    la contraseña en la base de datos
     RETORNA:
-        
+        Ventana principal para el usuario si el cambio de contraseña
+        fue exitoso
     """
     user_name = flask_login.current_user.id
     logging(user_name, '2', 'EDICION', sobre_que='CONTRASENA')
@@ -604,11 +626,9 @@ def change_passwd():
 @app.route("/forget_passwd", methods=['POST', 'GET'])
 def forget_passwd():
     """
-    
-    PARAMETROS:
-        
+    Muestra el formulario de olvidó de los usuarios
     RETORNA:
-        
+        Formulario de olvidó la contraseña
     """
     return render_template('/forget_passwd.html')
 
@@ -616,11 +636,10 @@ def forget_passwd():
 @app.route("/send_forget_passwd", methods=['POST', 'GET'])
 def send_forget_passwd():
     """
-    
-    PARAMETROS:
-        
+    Pide el correo al usuario que olvida su contraseña para
+    enviar un correo con una contraseña temporal
     RETORNA:
-        
+        Formulario de login
     """
     user = request.form['username']
     cur.execute("""SELECT correo_institucional FROM personas
@@ -638,11 +657,9 @@ def send_forget_passwd():
 @flask_login.login_required
 def logout():
     """
-    
-    PARAMETROS:
-        
+    Cierra la sesión de un usuario determinado
     RETORNA:
-        
+        Inicio de sesión
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'SALIR')
@@ -656,11 +673,10 @@ def logout():
 @login_required(role='estudiante')
 def main_student():
     """
-    
-    PARAMETROS:
-        
+    Cargar la ventana principal de los usuarios de tipo estudiante mostrando
+    las materias y notas del periodo actual
     RETORNA:
-        
+        Ventana principal de estudiante
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -700,11 +716,11 @@ def main_student():
 @login_required(role='estudiante')
 def personal_data():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
@@ -721,11 +737,11 @@ def personal_data():
 @login_required(role='estudiante')
 def academic_history():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
@@ -742,11 +758,11 @@ def academic_history():
 @login_required(role='estudiante')
 def period_classes(year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -772,11 +788,11 @@ def period_classes(year, period):
 @login_required(role='profesor')
 def main_teacher():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -798,17 +814,17 @@ def main_teacher():
 @login_required(role='profesor')
 def show_class(class_name, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
     period_year = f"{current_period}_{current_year}"
-    logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS",
-            sobre_quien=class_name, grupo=group, cuando=period_year)
+    #logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS",
+            #sobre_quien=class_name, grupo=group, cuando=period_year)
     data = get_student_grades(user_name, class_name, group)
     return render_template('/teacher/class.html', user_name=user_name,
                            students_class=data, class_name=class_name, group=group)
@@ -818,11 +834,11 @@ def show_class(class_name, group):
 @login_required(role='profesor')
 def edit_grade(class_name, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     students_class = get_student_grades(user_name, class_name, group)
@@ -835,11 +851,11 @@ def edit_grade(class_name, group):
 @login_required(role='profesor')
 def update_grade(class_name, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     students_class = get_student_grades(user_name, class_name, group)
@@ -884,11 +900,11 @@ def update_grade(class_name, group):
 @login_required(role='profesor')
 def upload_grades_from_csv(class_name, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     file = request.files['inputfile']
@@ -916,11 +932,11 @@ def upload_grades_from_csv(class_name, group):
 @login_required(role='profesor')
 def class_history():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'CONSULTA', sobre_que="PERIODOS")
@@ -936,11 +952,11 @@ def class_history():
 @login_required(role='profesor')
 def classes(user_name, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     period_year = f"{period}_{year}"
     logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", cuando=period_year)
@@ -961,16 +977,16 @@ def classes(user_name, year, period):
 @login_required(role='profesor')
 def show__historic_class(class_name, year, period, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     period_year = f"{period}_{year}"
     user_name = flask_login.current_user.id
-    logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", sobre_quien=class_name,
-            grupo=group, cuando=period_year)
+    #logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", sobre_quien=class_name,
+     #       grupo=group, cuando=period_year)
     data = get_student_grades_period(user_name, class_name, year, period, group)
     return render_template('/teacher/historic_class.html', user_name=user_name,
                            students_class=data, class_name=class_name, year=year,
@@ -983,11 +999,11 @@ def show__historic_class(class_name, year, period, group):
 @login_required(role='administrador')
 def main_admin():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     count = count_admin_alerts()
@@ -1000,11 +1016,11 @@ def main_admin():
 @login_required(role='administrador')
 def load_students():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -1041,11 +1057,11 @@ def load_students():
 @login_required(role='administrador')
 def admin_main_student(user_name):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     admin_user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -1073,11 +1089,11 @@ def admin_main_student(user_name):
 @login_required(role='administrador')
 def admin_personal_data(user_name):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT codigo, nombre, apellido_1, apellido_2,
                 correo_institucional, documento_actual FROM personas
@@ -1093,11 +1109,11 @@ def admin_personal_data(user_name):
 @login_required(role='administrador')
 def admin_academic_history(user_name):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT
                         distinct cast(anio as varchar),cast(periodo as varchar),
@@ -1122,11 +1138,11 @@ def admin_academic_history(user_name):
 @login_required(role='administrador')
 def admin_period_classes(user_name, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     admin_user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1153,11 +1169,11 @@ def admin_period_classes(user_name, year, period):
 @login_required(role='administrador')
 def load_teachers():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'CONSULTA', sobre_que="PERIODOS")
@@ -1172,11 +1188,11 @@ def load_teachers():
 @login_required(role='administrador')
 def admin_main_teacher(user_name):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     admin_user_name = flask_login.current_user.id
     logging(admin_user_name, '1', 'CONSULTA', sobre_que="PROFESORES", sobre_quien=user_name)
@@ -1195,11 +1211,11 @@ def admin_main_teacher(user_name):
 @login_required(role='administrador')
 def admin_teacher_classes(user_name, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     admin_user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1224,11 +1240,11 @@ def admin_teacher_classes(user_name, year, period):
 @login_required(role='administrador')
 def admin_show_class(user_name, class_name, year, period, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     admin_user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1248,11 +1264,11 @@ def admin_show_class(user_name, class_name, year, period, group):
 @login_required(role='administrador')
 def historic_class():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS")
@@ -1268,11 +1284,11 @@ def historic_class():
 @login_required(role='administrador')
 def load_classes(year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1296,11 +1312,11 @@ def load_classes(year, period):
 @login_required(role='administrador')
 def load_groups(class_name, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT distinct nombre_asignatura,grupo,prof_usr,
                 nombre_prof,ap1_prof,ap2_prof
@@ -1321,11 +1337,11 @@ def load_groups(class_name, year, period):
 @login_required(role='administrador')
 def admin_show_group_class(user_name, class_name, group, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1342,11 +1358,11 @@ def admin_show_group_class(user_name, class_name, group, year, period):
 @login_required(role='administrador')
 def admin_edit_class(year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     current_year, current_period = return_current_year_period()
     period_year = f"{current_period}_{current_year}"
@@ -1376,11 +1392,11 @@ def admin_edit_class(year, period):
 @login_required(role='administrador')
 def admin_update_class(year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
@@ -1438,11 +1454,11 @@ def admin_update_class(year, period):
 @login_required(role='administrador')
 def admin_functions():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     count = count_admin_alerts()
     return render_template('admin/admin_functions.html', count=count)
@@ -1452,11 +1468,11 @@ def admin_functions():
 @login_required(role='administrador')
 def import_data_from_file(data_type):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
 
     count = count_admin_alerts()
@@ -1468,11 +1484,11 @@ def import_data_from_file(data_type):
 @login_required(role='administrador')
 def import_data_from_file_year(data_type, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
 
     count = count_admin_alerts()
@@ -1484,16 +1500,16 @@ def import_data_from_file_year(data_type, year, period):
 @login_required(role='administrador')
 def upload_teachers():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     upload_data(role='teacher', send_email=False)
     count = count_admin_alerts()
     user_name = flask_login.current_user.id
-    logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='PROFESORES')
+    #logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='PROFESORES')
     return render_template('admin/import_success.html', count=count)
 
 
@@ -1501,11 +1517,11 @@ def upload_teachers():
 @login_required(role='administrador')
 def upload_students():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     period = request.form['period']
     year = request.form['year']
@@ -1522,11 +1538,11 @@ def upload_students():
 @login_required(role='administrador')
 def upload_classes(year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     file = request.files['inputfile']
     upload_file(file, '../datos_prueba/temp_data_classes.csv',
@@ -1542,11 +1558,11 @@ def upload_classes(year, period):
 @login_required(role='administrador')
 def create_user():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     count = count_admin_alerts()
     return render_template('admin/create_user.html', count=count)
@@ -1556,11 +1572,11 @@ def create_user():
 @login_required(role='administrador')
 def upload_new_user():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     count = count_admin_alerts()
     user_name = flask_login.current_user.id
@@ -1577,7 +1593,7 @@ def upload_new_user():
                 sobre_quien='ESTUDIANTES', cuando=period_year)
     elif user_role == 'Profesor' or user_role == 'Administrador':
         upload_data(role='profesor', send_email=False)
-        year, period = return_current_year_period
+        year, period = return_current_year_period()
         period_year = f"{period}_{year}"
         logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS',
                 sobre_quien='PROFESORES', cuando=period_year)
@@ -1594,11 +1610,11 @@ def upload_new_user():
 @login_required(role='administrador')
 def one_group_report(user_name, class_name,  year, period, group):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     data = get_student_grades_period(user_name, class_name, year, period, group)
     df = pd.DataFrame(data, columns=['user', 'student', 'last_name1',
@@ -1627,11 +1643,11 @@ def one_group_report(user_name, class_name,  year, period, group):
 @login_required(role='administrador')
 def student_report(user_name, year, period):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT
                      round(sum(creditos_asignatura*nota1)/sum(creditos_asignatura),1)
@@ -1672,11 +1688,11 @@ def student_report(user_name, year, period):
 @login_required(role='administrador')
 def student_historic_report(user_name):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT
                     distinct cast(anio as varchar),cast(periodo as varchar),
@@ -1711,11 +1727,11 @@ def student_historic_report(user_name):
 @login_required(role='administrador')
 def groups_report(class_name, period, year):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     cur.execute("""SELECT distinct nombre_asignatura,grupo
                 FROM RESUMEN
@@ -1749,11 +1765,11 @@ def groups_report(class_name, period, year):
 
 def student_alerts(student, class_name, grade):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     # Consulta de la nota final (grade_final)
     if grade is None:
@@ -1789,11 +1805,11 @@ def student_alerts(student, class_name, grade):
 @flask_login.login_required
 def show_alerts():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     user_name = flask_login.current_user.id
@@ -1821,11 +1837,11 @@ def show_alerts():
 @login_required(role='administrador')
 def show_admin_alerts():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name = flask_login.current_user.id
     cur.execute(""" SELECT
@@ -1868,11 +1884,11 @@ def show_admin_alerts():
 @flask_login.login_required
 def delete_alerts(user_name, date, user_type):
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     user_name_admin = flask_login.current_user.id
     if user_type == 'admin':
@@ -1892,15 +1908,15 @@ def delete_alerts(user_name, date, user_type):
 @login_required(role='administrador')
 def create_alert():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
-    cur.execute("""SELECT usuario,nombre,apellido_1,apellido_2
-                    FROM personas
-                    ORDER BY(usuario);""")
+    cur.execute("""select usuario,nombre,apellido_1,apellido_2
+                    from personas join estudiante as est
+                    on personas.codigo = est.codigo;""")
     data = cur.fetchall()
     users = [" ".join(user[1:4]) + " (" + user[0] + ")" for user in data]
     count = count_admin_alerts()
@@ -1911,11 +1927,11 @@ def create_alert():
 @login_required(role='administrador')
 def publish_alert():
     """
-    
+
     PARAMETROS:
-        
+
     RETORNA:
-        
+
     """
     inf_user = request.form["inf_users"]
     print(inf_user)
@@ -1935,4 +1951,5 @@ def publish_alert():
 
 
 if __name__ == "__main__":
+    init_app()
     app.run(port=2000, debug=True, use_reloader=False)
