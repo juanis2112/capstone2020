@@ -2,11 +2,13 @@
     box-sizing: border-box;
   }
 
+/* Imagen de fondo */
 body{
   background-image: url("fondo.jpg");
   background-size: 100%;
 }
 
+/* Tipo de letra que se maneja */
 html {
   font-family: "Candara", sans-serif;
 }
@@ -63,6 +65,26 @@ html {
 }
 
 
+/* Para la notificacion de alertas se crea la clase notification*/
+.notification {
+  text-decoration: none;
+  padding: 1px 1px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+
+
 
 /* Barra lateral de cada uno de los usuarios esta sera llamada la clase col-3*/
 
@@ -71,6 +93,42 @@ html {
   font-size: 20px;
   font-family: Candara;
 }
+
+.menu ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu li {
+  padding: 8px;
+  margin-bottom: 20px;
+  background-color: #073D72;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  height: 90px;
+  border-radius: 30px;
+  text-align: center;
+}
+
+
+.menu li:hover {
+  background-color: #0099cc;
+}
+
+.menu li:active{
+  background-color: #0099cc;
+}
+
+.menu-box{
+  display: block;
+}
+
+.content-item{
+  display:block;
+}
+
+
 
 /* Para la imagen de cada cuadro*/
 
@@ -96,9 +154,43 @@ html {
   font-family: Candara;
 }
 
+/* Para la creacion de bloques*/
+.col-9 li{
+  padding: 8px;
+  margin-bottom: 20px;
+  background-color: #073D72;
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  height: 90px;
+  border-bottom-right-radius: 60px;
+  text-align: center;
+}
 
 
-/* Administrador */
+
+/* Color de los bloques cuando estan siendo clickeados*/
+.col-9 li:hover{
+  background-color: #0099cc;
+}
+
+
+/* Esta es la barra que se define en algunos html como titulo*/
+.mini-titulo{
+  font-size: large;
+  color: white;
+  margin-top: 0px;
+  background-color: #0099cc;
+  border-bottom-right-radius: 15px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline-block;
+}
+
+
+
+/* Algunas clases que usa el Administrador */
 
 .ul_bloques{
   list-style-type: none;
@@ -122,64 +214,8 @@ html {
 }
 
 
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
 
-
-.mini-titulo{
-  font-size: large;
-  color: white;
-  margin-top: 0px;
-  background-color: #0099cc;
-  border-bottom-right-radius: 15px;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  display: inline-block;
-}
-
-
-.menu ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.menu li {
-  padding: 8px;
-  margin-bottom: 20px;
-  background-color: #073D72;
-  color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  height: 90px;
-  border-radius: 30px;
-  text-align: center;
-}
-
-
-.menu li:hover {
-  background-color: #0099cc;
-}
-
-.col-9 li:hover{
-  background-color: #0099cc;
-}
-
-.menu li:active{
-  background-color: #0099cc;
-}
-
-
-
+/*Clase de todos los botones: btn*/
 .btn {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -208,17 +244,7 @@ html {
   color: black;
 }
 
-
-a.special{
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border: solid 1px #20538D;
-  background-color: blue;
-  color: black;
-  padding: 8px 12px;
-}
-
+/* Definicion de estilos de los links */
 
 a:link {
     color: white;
@@ -232,9 +258,6 @@ a:visited{
 
 
 
-a.special:link {color:black;}
-a.special:visited {color:black;}
-a.special:hover {color:black;}
 
 .button-cambios {
   font: bold 11px Arial;
@@ -254,43 +277,8 @@ tr:nth-child(even) {
 }
 
 
-.notification {
-  text-decoration: none;
-  padding: 1px 1px;
-  position: relative;
-  display: inline-block;
-  border-radius: 2px;
-}
 
-.notification .badge {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  padding: 5px 10px;
-  border-radius: 50%;
-  background-color: red;
-  color: white;
-}
-
-
-.col-9 li{
-  padding: 8px;
-  margin-bottom: 20px;
-  background-color: #073D72;
-  color: #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  height: 90px;
-  border-bottom-right-radius: 60px;
-  text-align: center;
-}
-
-.menu-box{
-  display: block;
-}
-
-.content-item{
-  display:block;
-}
+/* Formato de las tablas*/
 
 table, th, td {
   border: 1px solid black;
@@ -313,15 +301,22 @@ table.center {
   margin: 10px;
 }
 
+
+
+/* Clase para crear un tipo de letra*/
 div.letra {
   font-size: 14px;
   margin-left: 40px;
 }
 
+/* Formato para span*/
 span{
   margin-left: 10em;
 }
 
+
+
+/* Formato de los botones de javascript de todos los archivos*/
 input[type=button]{
   background-color: white;
   border-radius: 40px;
@@ -346,6 +341,9 @@ input[type=submit], input[type=reset] {
   cursor: pointer;
 }
 
+
+
+/* Clase que define los botones que permiten importan archivos*/
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -369,7 +367,7 @@ input[type=submit], input[type=reset] {
 }
 
 
-/* Barra de busqueda */
+/* Barra de busqueda para el administrador*/
 
 
 .barra-busqueda{
@@ -410,6 +408,7 @@ input[type=submit] {
   color: black;
 }
 
+/* Para el autocompletado de la barra de busqueda*/
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;

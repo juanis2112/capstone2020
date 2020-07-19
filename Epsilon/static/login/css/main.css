@@ -3,7 +3,7 @@
 
 
 /*//////////////////////////////////////////////////////////////////
-[ FONT ]*/
+[ Fuente ]*/
 
 @font-face {
   font-family: Poppins-Regular;
@@ -26,7 +26,7 @@
 }
 
 /*//////////////////////////////////////////////////////////////////
-[ RESTYLE TAG ]*/
+*/
 
 * {
 	margin: 0px;
@@ -34,6 +34,7 @@
 	box-sizing: border-box;
 }
 
+/* Imagen de fondo */
 
 body{
   background-image: url("imagenes/fondo.jpg");
@@ -46,6 +47,8 @@ html {
 	font-family: Poppins-Regular, sans-serif;
 }
 /*---------------------------------------------*/
+/* Formato para los links*/
+
 a {
 	font-family: Poppins-Regular;
 	font-size: 14px;
@@ -68,6 +71,8 @@ a:hover {
 }
 
 /*---------------------------------------------*/
+
+/* Clases para texto y bloques dentro del html */
 h1,h2,h3,h4,h5,h6 {
 	margin: 0px;
 }
@@ -87,6 +92,9 @@ ul, li {
 
 
 /*---------------------------------------------*/
+
+/* Definicion de clases para los objetos donde el usuario escribe*/
+
 input {
 	outline: none;
 	border: none;
@@ -122,6 +130,8 @@ textarea::-moz-placeholder { color: #999999; }
 textarea:-ms-input-placeholder { color: #999999; }
 
 /*---------------------------------------------*/
+/* Clase de los botones*/
+
 button {
 	outline: none !important;
 	border: none;
@@ -138,7 +148,7 @@ iframe {
 
 
 /*//////////////////////////////////////////////////////////////////
-[ Utility ]*/
+*/
 .txt1 {
   font-family: Poppins-Regular;
   font-size: 13px;
@@ -155,12 +165,14 @@ iframe {
 
 
 /*//////////////////////////////////////////////////////////////////
-[ login ]*/
+[ Para el contenedor del login ]*/
 
 .limiter {
   width: 100%;
   margin: 0 auto;
 }
+
+/* Bloque azul que contiene el login */
 
 .container-login100 {
   width: auto;
@@ -225,6 +237,8 @@ iframe {
   width: 290px;
 }
 
+/* Para el titulo del login */
+
 .login100-form-title {
   font-family: Poppins-Bold;
   font-size: 18px;
@@ -238,7 +252,6 @@ iframe {
 }
 
 
-/*---------------------------------------------*/
 .wrap-input100 {
   position: relative;
   width: 100%;
@@ -371,7 +384,7 @@ iframe {
 
 
 /*------------------------------------------------------------------
-[ Responsive ]*/
+[ Volver la pagina responsive ]*/
 
 
 
@@ -411,7 +424,7 @@ iframe {
 
 
 /*------------------------------------------------------------------
-[ Alert validate ]*/
+[ Validacion de alerta ]*/
 
 .validate-input {
   position: relative;

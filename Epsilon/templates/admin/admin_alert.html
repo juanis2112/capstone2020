@@ -1,48 +1,48 @@
 {% extends "layouts/estructura_administrador.html" %}
 
 {% block lateral %}
-  <ul>
-    <a href="{{url_for('load_students')}}">
-      <li>
-        <div class="menu-box">
-          <div >
-            Estudiantes
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+<ul>
+  <a href="{{url_for('load_students')}}">
+    <li>
+      <div class="menu-box">
+        <div >
+          Estudiantes
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('load_teachers')}}">
-      <li>
-        <div class="menu-box">
-          <div >
-            Profesores
-          </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/teacher.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('load_teachers')}}">
+    <li>
+      <div class="menu-box">
+        <div >
+          Profesores
         </div>
-      </li>
-    </a>
-    <a href="{{url_for('historic_class')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Materias
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+      <img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" width="30px" width="30px" style="background-color:white ;">
+      </div>
+    </li>
+  </a>
+  <a href="{{url_for('historic_class')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Materias
             </div>
-          </li>
-    </a>
-    <a href="{{url_for('admin_functions')}}">
-          <li>
-            <div class="menu-box">
-              <div >
-                Administración
-              </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/keys.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+  <a href="{{url_for('admin_functions')}}">
+        <li>
+          <div class="menu-box">
+            <div >
+              Administración
             </div>
-          </li>
-    </a>
-  </ul>
+          <img src="{{ url_for('static', filename='template_general/imagenes2/search.png') }}" width="30px" width="30px" style="background-color:white ;">
+          </div>
+        </li>
+  </a>
+</ul>
 {% endblock %}
 {% block tablas %}
 <a href="{{url_for('main_admin')}}" class="btn">
@@ -50,7 +50,7 @@
 </a>
 <table class="center" id="table">
 <tr>
-    <th>Estudiante</th>
+    <th>Estudiante/Materias</th>
     <th>Fecha</th>
     <th>Materia</th>
     <th> Tipo </th>
@@ -60,7 +60,11 @@
 </tr>
 {% for alert in unread_alerts%}
 <tr style="text-align: center;" id="{{alert.9}}/{{alert.5}}">
-    <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+      {% if alert.0 is not none%}
+      <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% else %}
+      <td>{{alert.9}}</td>
+    {% endif %}
     <td>{{alert.5}} </td>
     <td>{{alert.8}} </td>
     <td>{{alert.4}} </td>
@@ -73,7 +77,11 @@
 <br>
 {% for alert in read_alerts%}
 <tr style="text-align: center;" id="{{alert.9}}/{{alert.5}}">
-    <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% if alert.0 is not none%}
+      <td>{{alert.0}} {{alert.1}} {{alert.2}}</td>
+    {% else %}
+      <td>{{alert.9}}</td>
+    {% endif %}
     <td>{{alert.5}} </td>
     <td>{{alert.8}} </td>
     <td>{{alert.4}} </td>

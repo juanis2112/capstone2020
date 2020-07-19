@@ -23,11 +23,11 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/util.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/main.css') }}" />
 	<!--===============================================================================================-->
-    
-    <style> 
+
+    <style>
     .error {
     color: red;
-    opacity: 1; 
+    opacity: 1;
     }
     </style>
 	</head>
@@ -52,7 +52,7 @@
                             {% endif %}
                             {% endwith %}
 						</span>
-
+						<!-- Envio de correo para cambio de contraseña -->
 						<div class="wrap-input100 validate-input" data-validate = "Se require un usuario válido">
 							<input class="input100" type="text" name="username" placeholder="Usuario">
 							<span class="focus-input100"></span>
@@ -93,6 +93,3 @@
 	</body>
 	</html>
 </form>
-
-
-

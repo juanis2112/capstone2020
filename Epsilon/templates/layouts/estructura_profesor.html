@@ -9,16 +9,20 @@
 
   <div>
       <div class="header">
-        <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+        <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes2/camp.png') }}">
         <a href="{{ url_for('logout') }}">
-            <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            <img type="image" src="{{ url_for('static', filename='template_general/imagenes2/logou.png') }}" class="top-logo">
         </a>
       </div>
+      <!-- Bloques de la parte izquierda -->
       <div class="row">
+        {% block war %}
+        {% endblock %}
         <div class="col-3 menu">
       {% block lateral %}
       {% endblock %}
       </div>
+      <!-- contenido de la pagina -->
       <div class="col-9">
         {% block tablas %}
         {% endblock %}
@@ -98,4 +102,12 @@ input.addEventListener( 'change', function( e )
   console.log("add event")
 });
 </script>
+
+<footer style="color:black; font-size:9px;">
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>&nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+</footer>
 </html>

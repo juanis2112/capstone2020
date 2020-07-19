@@ -9,22 +9,25 @@
 
   <div>
       <div class="header">
+        <!-- Campana y logout-->
         <a href="{{url_for('show_alerts', user_name=user_name)}}" class="notification" >
             <span>
-            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}">
+            <img class="top-logo" src="{{ url_for('static', filename='template_general/imagenes2/camp.png') }}">
             </span>
             <span class="badge">{{count}}</span>
           </a>
           <a href="{{ url_for('logout') }}">
-            <img type="image" src="{{ url_for('static', filename='template_general/imagenes/logoout.jpg') }}" class="top-logo">
+            <img type="image" src="{{ url_for('static', filename='template_general/imagenes2/logou.png') }}" class="top-logo">
           </a>
       </div>
       <div class="row">
         <div class="col-3 menu">
-      {% block lateral %}
-      {% endblock %}
-      </div>
+          <!-- Bloques de la parte izquierda de la pagina -->
+          {% block lateral %}
+          {% endblock %}
+        </div>
       <div class="col-9">
+        <!-- contenido de la pagina -->
         {% block tablas %}
         {% endblock %}
       </div>
@@ -103,6 +106,12 @@ input.addEventListener( 'change', function( e )
   console.log("add event")
 });
 
-/*An array containing all the country names in the world:*/
 </script>
+<footer style="color:black; font-size:9px;">
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>&nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+      Icons made by <a style="color:dodgerblue;" href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a style="color:dodgerblue;" href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> &nbsp &nbsp
+</footer>
 </html>

@@ -7,7 +7,7 @@
         <div >
           Datos personales
         </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/user.jpg') }}" width="30px" width="30px">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/user.png') }}" width="30px" width="30px">
       </div>
     </li>
   </a>
@@ -17,7 +17,7 @@
         <div >
           Datos académicos
         </div>
-          <img src="{{ url_for('static', filename='template_general/imagenes/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
+          <img src="{{ url_for('static', filename='template_general/imagenes2/datos_academicos.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
     </li>
   </a>
@@ -61,6 +61,12 @@
     </table>
     <br>
     <br>
-    Promedio Semestre: {{promedio}} <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+    <div style="text-align:center; font-size:22px;">
+        Promedio Semestre: {{promedio}}
+    </div>
+    <br>
+    <div style="text-align:center;">
+      <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
+    </div>
 </div>
 {% endblock %}

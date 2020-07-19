@@ -891,6 +891,7 @@ def update_grade(class_name, group):
     # logging(user_name, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user_name_ESTUDIANTE,
     #         asignatura=class_name,grupo=group,cuando=period_year,notas_antes=previous_grades,
     #         notas_despues=grades)
+    course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
 
@@ -924,6 +925,7 @@ def upload_grades_from_csv(class_name, group):
     # logging(user_name, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user_name_ESTUDIANTE,
     #         asignatura=class_name, grupo=group, cuando=period_year, notas_antes=previous_grades,
     #         notas_despues=grades)
+    course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
 
@@ -1351,9 +1353,9 @@ def admin_show_group_class(user_name, class_name, group, year, period):
     count = count_admin_alerts()
     return render_template('/admin/admin_show_class.html', user_name=user_name,
                            students_class=data, class_name=class_name,
-                           count=count, group=group)
+                           count=count, group=group,year=year,period=period)
 
-
+  
 @app.route("/admin_classes_edit/<string:year>/<string:period>", methods=['POST', 'GET'])
 @login_required(role='administrador')
 def admin_edit_class(year, period):
@@ -1599,7 +1601,6 @@ def upload_new_user():
                 sobre_quien='PROFESORES', cuando=period_year)
     else:
         flash('Error', 'error')
-
     return render_template('admin/user_upload_success.html', count=count)
 
 
@@ -1635,7 +1636,7 @@ def one_group_report(user_name, class_name,  year, period, group):
     image = generate_image()
     plt.close()
     count = count_admin_alerts()
-    return render_template('admin/class_report.html', image=image, count=count)
+    return render_template('admin/class_report.html', image=image, count=count,year=year,period=period,user_name=user_name,class_name=class_name)
 
 
 @app.route("/student_report/<string:user_name>/<string:year>/<string:period>/",
@@ -1797,8 +1798,51 @@ def student_alerts(student, class_name, grade):
                      current_year, class_name))
         cur.execute("""INSERT INTO notificacion SELECT %s,%s,codigo
                     from empleado where esadmin='1';""", (student, date))
+         
+          
+def course_alert(class_name,group):
+    cur.execute("""SELECT count(*)
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    total_estudent = cur.fetchone()[0]
+    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5) 
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
+    cortes = list(cur.fetchone())
+    corte = 0
+    for idx,element in enumerate(cortes):
+        if element == total_estudent:
+            corte = idx + 1
+        elif element != 0:
+            return
+        else:
+            corte = idx
+            break
+    corte_string = "nota" + str(corte)
+    cur.execute("""SELECT round(avg("""+corte_string+"""),3)
+                from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    mean_corte = cur.fetchone()[0]
+    if mean_corte  >= 2 and mean_corte < 3:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
+        Tipo = "BAJO"
+    elif mean_corte < 2:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
+        Tipo = "MUY BAJO"
+    else: 
+        return 
+    date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+    cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
+                    from semestre) GROUP BY(anio);""") 
+    period,year = list(cur.fetchone())
+    cur.execute("""INSERT INTO alertas VALUES(%s,%s,%s,%s,%s,%s);"""
+                ,(class_name,text_alert,Tipo,date,period,year))
+    cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
 
-
+    
 # ---- Admin: Alert -----------------------------------------------------------------------------
 
 @app.route("/student_alerts", methods=['POST', 'GET'])
