@@ -33,7 +33,7 @@ CREATE TABLE Public.tablaEstudiante(
 	, PRIMARY KEY(Documento_actual,Nombre_Asignatura)
 );
 
-COPY Public.tablaEstudiante FROM '/home/juanc/GitHub/capstone2020/datos_prueba/Datos_2018_1.csv' DELIMITER ',' CSV HEADER ;
+COPY Public.tablaEstudiante FROM '{path}' DELIMITER ',' CSV HEADER ;
 
 --select * from tablaEstudiante
 
