@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<form action="{{url_for('change_passwd')}}" method="POST">
+<form action="{{url_for('send_forget_passwd')}}" method="POST">
 
 	<html lang="en">
 	<head>
@@ -23,11 +23,11 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/util.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login/css/main.css') }}" />
 	<!--===============================================================================================-->
-
-    <style>
+    
+    <style> 
     .error {
     color: red;
-    opacity: 1;
+    opacity: 1; 
     }
     </style>
 	</head>
@@ -41,7 +41,7 @@
 					</div>-->
 					<form class="login100-form validate-form">
 						<span class="login100-form-title">
-							Ingreso al sistema de notas Epsilon
+							Por favor ingrese su usuario para enviar al correo su contraseña
 							{% with errors = get_flashed_messages(category_filter=["error"]) %}
 							{% if errors %}
                             <div style="color:red;">
@@ -54,24 +54,15 @@
 						</span>
 
 						<div class="wrap-input100 validate-input" data-validate = "Se require un usuario válido">
-							<input class="input100" type="password" name="passwd" placeholder="Contraseña>
+							<input class="input100" type="text" name="username" placeholder="Usuario">
 							<span class="focus-input100"></span>
 							<span class="symbol-input100">
-								<i class="fa fa-lock" aria-hidden="true"></i>
+								<i class="fa fa-envelope" aria-hidden="true"></i>
 							</span>
 						</div>
-
-						<div class="wrap-input100 validate-input" data-validate = "Contraseña requerida">
-							<input class="input100" type="password" name="passwd_conf" placeholder="Nueva contraseña">
-							<span class="focus-input100"></span>
-							<span class="symbol-input100">
-								<i class="fa fa-lock" aria-hidden="true"></i>
-							</span>
-						</div>
-
 						<div class="container-login100-form-btn">
 							<button class="login100-form-btn">
-								Guardar
+								Enviar
 							</button>
 						</div>
 					</form>
@@ -102,3 +93,6 @@
 	</body>
 	</html>
 </form>
+
+
+

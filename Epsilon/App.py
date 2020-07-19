@@ -11,7 +11,7 @@ from pathlib import Path
 import secrets
 import time
 from functools import wraps
-
+from random import choice
 # Third party imports
 from flask import flash, Flask, redirect, render_template, request, url_for
 import flask_login
@@ -24,6 +24,7 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import json
+
 
 
 # Connection to DataBase
@@ -90,6 +91,12 @@ def count_admin_alerts():
                 where usuario = %s)) as R;  """, (user_name,))
     count = int(cur.fetchone()[0])
     return count
+
+def generate_passwd():
+    longitud = 8
+    valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<=>@#%&+"
+    passwd = "".join([choice(valores) for i in range(longitud)])
+    return passwd
 
 def get_student_grades(user_name, class_name, group):
     cur.execute("""SELECT B1.est_usr,B1.nombre_est,B1.ap1_est,B1.ap2_est,B1.nota1,B1.nota2,
@@ -324,17 +331,16 @@ def login():
             flash('El usuario no se encuentra registrado o la contraseña es incorrecta', 'error')
             return render_template('login.html')
         flask_login.login_user(user)
-        #logging(username_input,'INICIO')
-        # Realizar consulta del login para saber si es la primera vez que se ingresa
-        first_time = False
-        if first_time:
-            return render_template('/change_passwd.html', user_name=username_input)
+        cur.execute("""SELECT estado_cuenta FROM  personas WHERE usuario = %s  """,(username_input,))
+        first_time = str(cur.fetchone()[0])
+        if first_time == 'True':
+            return render_template('/change_passwd.html')
         else:
             return render_main_windows(username_input)        
     else:
         return render_template('login.html')
 
-@app.route("/change_passwd/<string:user_name>", methods=['POST','GET'])
+@app.route("/change_passwd", methods=['POST','GET'])
 @flask_login.login_required
 def change_passwd():
     user_name = flask_login.current_user.id
@@ -346,8 +352,27 @@ def change_passwd():
     else:
         cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
                     where usuario = %s; """, (password_input_conf,user_name))
+        cur.execute("""UPDATE personas set estado_cuenta = '0' WHERE usuario = %s""",(user_name,))
         flash('La contraseña fue cambiada', 'error')
         return render_main_windows(user_name)
+
+@app.route("/forget_passwd", methods=['POST', 'GET'])
+def forget_passwd():
+    return render_template('/forget_passwd.html')
+
+@app.route("/send_forget_passwd", methods=['POST', 'GET'])
+def send_forget_passwd():
+    user = request.form['username']
+    cur.execute("""SELECT correo_institucional FROM personas 
+                WHERE usuario = %s """, (user,))
+    email = cur.fetchone()[0]
+    passwd = generate_passwd()
+    print(passwd)
+    cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes')) 
+                    where usuario = %s; """, (passwd,user))
+    cur.execute("""UPDATE personas set estado_cuenta = '1' WHERE usuario = %s""",(user,))
+    send_email(user,email,passwd)
+    return render_template('/login.html')
 
 
 @app.route("/logout")
@@ -1066,9 +1091,14 @@ def student_alerts(student, class_name, grade):
             alert_student = "Tiene una alerta de nota muy baja en la materia "+class_name
             alert_type ='ALTA'
         date = str(time.strftime('%Y-%m-%d %H:%M:%S')) 
+        cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
+        current_year = int(cur.fetchone()[0])
+        cur.execute( """(SELECT max(periodo) FROM RESUMEN WHERE anio =
+                        (SELECT max(anio) FROM RESUMEN))""")
+        current_period = int(cur.fetchone()[0])
         cur.execute("""INSERT INTO alertas(usuario,texto,tipo,fecha,periodo,anio,nombre_asignatura)
                     VALUES (%s,%s,%s,
-                    %s,'2', '2020', %s);""", (student, alert_student, alert_type,date, class_name))
+                    %s,%s, %s, %s);""", (student, alert_student, alert_type,date,current_period,current_year,class_name))
         cur.execute("""INSERT INTO notificacion select %s,%s,codigo 
                     from empleado where esadmin='1';""", (student,date))
          
