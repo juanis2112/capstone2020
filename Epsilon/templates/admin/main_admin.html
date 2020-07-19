@@ -1,4 +1,5 @@
 {% extends "layouts/estructura_administrador.html" %}
+style="background-color: #0099cc;"
 {% block lateral %}
   <ul>
     <a href="{{url_for('load_students')}}">
@@ -7,7 +8,7 @@
           <div >
             Estudiantes
           </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/student.png') }}" width="30px" width="30px" style="background-color:white ;">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/teacher.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
       </li>
     </a>
@@ -17,7 +18,7 @@
           <div >
             Profesores
           </div>
-        <img src="{{ url_for('static', filename='template_general/imagenes/profesorbien.png') }}" width="30px" width="30px" style="background-color:white ;">
+        <img src="{{ url_for('static', filename='template_general/imagenes2/class.png') }}" width="30px" width="30px" style="background-color:white ;">
         </div>
       </li>
     </a>
@@ -27,7 +28,7 @@
               <div >
                 Materias
               </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/materia.png') }}" width="30px" width="30px" style="background-color:white ;">
+            <img src="{{ url_for('static', filename='template_general/imagenes2/keys.png') }}" width="30px" width="30px" style="background-color:white ;">
             </div>
           </li>
     </a>
@@ -37,7 +38,7 @@
               <div >
                 Administración
               </div>
-            <img src="{{ url_for('static', filename='template_general/imagenes/campana.png') }}" width="30px" width="30px" style="background-color:white ;">
+            <img src="{{ url_for('static', filename='template_general/imagenes2/search.png') }}" width="30px" width="30px" style="background-color:white ;">
             </div>
           </li>
     </a>
