@@ -20,15 +20,15 @@ CREATE TABLE Public.tablaEstudiante(
   ,Creditos_Asignatura   INTEGER  NOT NULL
   ,Grupo_Asignatura      INTEGER  NOT NULL
   ,Tipologia_Asignatura  VARCHAR(100) NOT NULL
-  ,Nota_1er_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_1er_Corte        NUMERIC(3,1) 
   ,Corte_1p              INTEGER  NOT NULL
-  ,Nota_2do_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_2do_Corte        NUMERIC(3,1) 
   ,Corte_2p              INTEGER  NOT NULL
-  ,Nota_3er_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_3er_Corte        NUMERIC(3,1) 
   ,Corte_3p              INTEGER  NOT NULL
-  ,Nota_4to_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_4to_Corte        NUMERIC(3,1) 
   ,Corte_4p              INTEGER  NOT NULL
-  ,Nota_5to_Corte        NUMERIC(3,1) NOT NULL
+  ,Nota_5to_Corte        NUMERIC(3,1) 
   ,Corte_5p              INTEGER  NOT NULL
 	, PRIMARY KEY(Documento_actual,Nombre_Asignatura)
 );
