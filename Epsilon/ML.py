@@ -47,8 +47,6 @@ cur = conn.cursor()
 # app = Flask(__name__)
 # app.secret_key = secrets.token_bytes(nbytes=16)
 
-# Obtener path relativo al script
-file = os.path.dirname(__file__)
 # NOTA: Variable global para modelos
 lista_modelos = [
     GaussianNB(),
@@ -752,7 +750,7 @@ def model_selection_from_historic_data():
     # Esta función fue ejecutada antes de entrgar la aplicación, para obtener los archivos
     # que se encuentran en la carpeta de modelos
     # ---------------------- #
-    filename = ("/modelos/Información_antes_de_aplicación/"
+    filename = ("modelos/Información_antes_de_aplicación/"
                 "datos_notas_macc_cortes_historico_20172_20201.csv")
     notas = pd.read_csv(filename, encoding='utf-8', header=0, sep=";")
     # Eliminar Nans
@@ -846,8 +844,8 @@ def prediction_from_trained_models():
 
 
 if __name__ == "__main__":
-    init_app()
-    # main0()
+    pass
+    # model_selection_from_historic_data()
     # main1()
     # lista_estudiantes_alerta = main2()
     # print(lista_estudiantes_alerta.head())
