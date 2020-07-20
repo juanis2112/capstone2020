@@ -36,10 +36,10 @@ lista_modelos = None
 # Connection to Database
 conn = psycopg2.connect(
     user="postgres",
-    password="Jgrccgv",
+    password="123",
     host="localhost",
     port="5432",
-    database="Epsilon56",
+    database="epsilon",
 )
 
 conn.set_session(autocommit=True)
