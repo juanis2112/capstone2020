@@ -27,6 +27,9 @@ import seaborn as sns
 import smtplib
 import ssl
 
+# Local imports
+import ML
+
 
 # General constants
 ROLES = [
@@ -54,7 +57,7 @@ def init_app():
         password="Jgrccgv",
         host="localhost",
         port="5432",
-        database="Epsilon52",
+        database="Epsilon55",
         )
 
     conn.set_session(autocommit=True)
@@ -496,6 +499,106 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
                  class_name, user, teacher_usr, class_name, user))
 
 
+def student_alerts(student, class_name, grade):
+    """
+
+    PARAMETROS:
+
+    RETORNA:
+
+    """
+    # Consulta de la nota final (grade_final)
+    if grade is None:
+        return
+
+    grade = float(grade)
+    if grade < 2:  # row[corte] es la nota de la materia del estudiante ne esa asignatura
+        # Consulta que mete el string a la base de datos
+        if grade >= 1:
+            alert_student = "Tiene una alerta de nota baja en la materia "+class_name
+            alert_type = 'MEDIA'
+        if grade < 1:
+            # Consulta que mete el string a la base de datos
+            alert_student = "Tiene una alerta de nota muy baja en la materia " + class_name
+            alert_type = 'ALTA'
+        date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+        cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
+        current_year = int(cur.fetchone()[0])
+        cur.execute("""(SELECT max(periodo) FROM RESUMEN WHERE anio =
+                        (SELECT max(anio) FROM RESUMEN))""")
+        current_period = int(cur.fetchone()[0])
+        cur.execute("""INSERT INTO alertas(usuario,texto,tipo,fecha,periodo,anio,nombre_asignatura)
+                    VALUES (%s, %s, %s, %s,%s, %s, %s);""",
+                    (student, alert_student, alert_type, date, current_period,
+                     current_year, class_name))
+        cur.execute("""INSERT INTO notificacion SELECT %s,%s,codigo
+                    from empleado where esadmin='1';""", (student, date))
+
+
+def course_alert(class_name,group):
+    cur.execute("""SELECT count(*)
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    total_estudent = cur.fetchone()[0]
+    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5)
+                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
+    cortes = list(cur.fetchone())
+    corte = 0
+    for idx,element in enumerate(cortes):
+        if element == total_estudent:
+            corte = idx + 1
+        elif element != 0:
+            return
+        else:
+            corte = idx
+            break
+    corte_string = "nota" + str(corte)
+    cur.execute("""SELECT round(avg("""+corte_string+"""),3)
+                from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+                where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    mean_corte = cur.fetchone()[0]
+    if mean_corte  >= 2 and mean_corte < 3:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
+        Tipo = "BAJO"
+    elif mean_corte < 2:
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
+        Tipo = "MUY BAJO"
+    else:
+        return
+    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+    cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
+                    from semestre) GROUP BY(anio);""")
+    period,year = list(cur.fetchone())
+    cur.execute("""INSERT INTO alertas VALUES(%s,%s,%s,%s,%s,%s);"""
+                ,(class_name,text_alert,Tipo,date,period,year))
+    cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
+
+def ML_prediction():
+    cur.execute("""SELECT count(*) from toma where anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """)
+    total_student = cur.fetchone()[0]
+    cur.execute("""SELECT count(nota1),count(nota2) from toma where anio = (select max(anio) from RESUMEN) AND
+                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));  """)
+    corte1,corte2 = cur.fetchone()
+    if corte1 == total_student or corte2 == total_student:
+        ML_alert_student = ML.prediction_from_trained_models()
+    tipo = "Grave"
+    for index, student in ML_alert_student.iterrows():
+        cur.execute("""SELECT nombre,apellido_1,apellido_2 FROM personas WHERE usuario = %s """, (student['est_usr'],))
+        name = " ".join(cur.fetchone())
+        text = "El estudiante " + name + " tiene posibilidades de perder la materia " + student["nombre_asignatura"]
+        date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+        current_year, current_period = return_current_year_period()
+        cur.execute("""INSERT into alertas VALUES
+        (%s,%s,%s,%s,%s,%s,%s)""",
+        (student['est_usr'],text,tipo,date,current_period,current_year,student['nombre_asignatura']))
+        cur.execute("""INSERT into notificacion select %s,%s,codigo from empleado WHERE esadmin = '1';""",(student['est_usr'], date))
+        time.sleep(2)
+
 def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura=None, grupo=None,
             cuando=None, notas_antes=None, notas_despues=None):
     """
@@ -634,7 +737,6 @@ def change_passwd():
         cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes'))
                     where usuario = %s; """, (password_input_conf, user_name))
         cur.execute("""UPDATE personas set estado_cuenta = '0' WHERE usuario = %s""", (user_name,))
-        flash('La contraseña fue cambiada', 'error')
         return render_main_windows(user_name)
 
 
@@ -902,6 +1004,7 @@ def update_grade(class_name, group):
         update_grades(*grades, class_name, student[0], user_name, group)
     current_year, current_period = return_current_year_period()
     course_alert(class_name, group)
+    ML_prediction()
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
 
@@ -930,8 +1033,8 @@ def upload_grades_from_csv(class_name, group):
                 for idx, col in enumerate(row):
                     if len(col) == 0:
                         row[idx] = None
-                print(row)
-                update_grades(row[2], row[3], row[4], row[5], row[6], class_name, user, user_name, group)
+                update_grades(row[2], row[3], row[4], row[5], row[6], class_name,
+                              user, user_name, group)
     course_alert(class_name, group)
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
@@ -1567,6 +1670,7 @@ def upload_classes(year, period):
     # logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='MATERIAS',
     #         asignatura=class_name, grupo=group, cuando=period_year)
     count = count_admin_alerts()
+    ML.model_training()
     return render_template('admin/import_success.html', count=count)
 
 
@@ -1776,86 +1880,6 @@ def groups_report(class_name, period, year):
     count = count_admin_alerts()
     return render_template('/admin/groups_report.html',
                            image=image, count=count, period=period, year=year)
-
-
-def student_alerts(student, class_name, grade):
-    """
-
-    PARAMETROS:
-
-    RETORNA:
-
-    """
-    # Consulta de la nota final (grade_final)
-    if grade is None:
-        return
-
-    grade = float(grade)
-    if grade < 2:  # row[corte] es la nota de la materia del estudiante ne esa asignatura
-        # Consulta que mete el string a la base de datos
-        if grade >= 1:
-            alert_student = "Tiene una alerta de nota baja en la materia"+class_name
-            alert_type = 'MEDIA'
-        if grade < 1:
-            # Consulta que mete el string a la base de datos
-            alert_student = "Tiene una alerta de nota muy baja en la materia " + class_name
-            alert_type = 'ALTA'
-        date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
-        cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
-        current_year = int(cur.fetchone()[0])
-        cur.execute("""(SELECT max(periodo) FROM RESUMEN WHERE anio =
-                        (SELECT max(anio) FROM RESUMEN))""")
-        current_period = int(cur.fetchone()[0])
-        cur.execute("""INSERT INTO alertas(usuario,texto,tipo,fecha,periodo,anio,nombre_asignatura)
-                    VALUES (%s, %s, %s, %s,%s, %s, %s);""",
-                    (student, alert_student, alert_type, date, current_period,
-                     current_year, class_name))
-        cur.execute("""INSERT INTO notificacion SELECT %s,%s,codigo
-                    from empleado where esadmin='1';""", (student, date))
-
-
-def course_alert(class_name,group):
-    cur.execute("""SELECT count(*)
-                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
-    total_estudent = cur.fetchone()[0]
-    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5)
-                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
-    cortes = list(cur.fetchone())
-    corte = 0
-    for idx,element in enumerate(cortes):
-        if element == total_estudent:
-            corte = idx + 1
-        elif element != 0:
-            return
-        else:
-            corte = idx
-            break
-    corte_string = "nota" + str(corte)
-    cur.execute("""SELECT round(avg("""+corte_string+"""),3)
-                from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
-    mean_corte = cur.fetchone()[0]
-    if mean_corte  >= 2 and mean_corte < 3:
-        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
-        Tipo = "BAJO"
-    elif mean_corte < 2:
-        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
-        Tipo = "MUY BAJO"
-    else:
-        return
-    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
-    cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
-                    from semestre) GROUP BY(anio);""")
-    period,year = list(cur.fetchone())
-    cur.execute("""INSERT INTO alertas VALUES(%s,%s,%s,%s,%s,%s);"""
-                ,(class_name,text_alert,Tipo,date,period,year))
-    cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
-
 
 # ---- Admin: Alert -----------------------------------------------------------------------------
 

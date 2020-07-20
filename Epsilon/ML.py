@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Standard library imports
+from pathlib import Path
 import pickle
 import os
 import shutil
@@ -18,46 +19,45 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 
+global app
+global conn
+global cur
+global file
+global lista_modelos
+
 # Global-level variables
 app = None
 conn = None
 cur = None
-file = None
+file = str(Path("").resolve())
 lista_modelos = None
 
 
-def init_app():
-    global app
-    global conn
-    global cur
-    global file
-    global lista_modelos
+# Connection to Database
+conn = psycopg2.connect(
+    user="postgres",
+    password="Jgrccgv",
+    host="localhost",
+    port="5432",
+    database="Epsilon55",
+)
 
-    # Connection to Database
-    conn = psycopg2.connect(
-        user="postgres",
-        password="Jgrccgv",
-        host="localhost",
-        port="5432",
-        database="Epsilon52",
-    )
+conn.set_session(autocommit=True)
+cur = conn.cursor()
+# app = Flask(__name__)
+# app.secret_key = secrets.token_bytes(nbytes=16)
 
-    conn.set_session(autocommit=True)
-    cur = conn.cursor()
-    # app = Flask(__name__)
-    # app.secret_key = secrets.token_bytes(nbytes=16)
-
-    # Obtener path relativo al script
-    file = os.path.dirname(__file__)
-    # NOTA: Variable global para modelos
-    lista_modelos = [
-        GaussianNB(),
-        LogisticRegression(),
-        DecisionTreeClassifier(),
-        KNeighborsClassifier(
-            n_neighbors=2),
-        svm.SVC(
-            kernel='rbf')]
+# Obtener path relativo al script
+file = os.path.dirname(__file__)
+# NOTA: Variable global para modelos
+lista_modelos = [
+    GaussianNB(),
+    LogisticRegression(),
+    DecisionTreeClassifier(),
+    KNeighborsClassifier(
+        n_neighbors=2),
+    svm.SVC(
+        kernel='rbf')]
     # IMPORTANTE: puede agregar modelos a esta lista con distintos parametros
     # como prefiera quien maneje esto
 
@@ -745,13 +745,15 @@ def mover_modelos(source, destination):
 # --------------------------------------------------------------------------------------------------------------------
 
 
-def main0():
+def model_selection_from_historic_data():
     """
     Funcion de entrenamiento con csv de historico.
     """
+    # Esta función fue ejecutada antes de entrgar la aplicación, para obtener los archivos
+    # que se encuentran en la carpeta de modelos
     # ---------------------- #
-    filename = file + ("/modelos/Información_antes_de_aplicación/"
-                       "datos_notas_macc_cortes_historico_20172_20201.csv")
+    filename = ("/modelos/Información_antes_de_aplicación/"
+                "datos_notas_macc_cortes_historico_20172_20201.csv")
     notas = pd.read_csv(filename, encoding='utf-8', header=0, sep=";")
     # Eliminar Nans
     notas = notas.dropna()
@@ -778,10 +780,9 @@ def main0():
     guardar_mejor_modelo_todas_materias_1(notas)
 
 # ---------------------------------------------------------------------------------------------------------------------
-# NOTA: La funcion entrena los modelos con los datos históricos?
 
 
-def main1():
+def model_training():
     """
     Funcion que se encarga de entrenar los modelos.
     """
@@ -797,7 +798,7 @@ def main1():
 # ---------------------------------------------------------------------------------------------------------------------
 
 
-def main2():
+def prediction_from_trained_models():
     """
     Funcion que se encarga de hacer la predicción de los estudiantes.
 
@@ -809,9 +810,9 @@ def main2():
     lista_estudiantes_alerta = pd.DataFrame(columns=columnas)
     # query obtencion de notas normal
     query1 = """select est_usr,nombre_asignatura,nota1,nota2
-    from resumen where periodo = (select max(periodo) from resumen
-                                  where anio =(select max(anio) from resumen ))
-     and anio = (select max(anio) from resumen)"""
+                from resumen where periodo = (select max(periodo) from resumen
+                where anio =(select max(anio) from resumen ))
+                and anio = (select max(anio) from resumen)"""
     # query sin columna segundo corte
     df = pd.read_sql(query1, conn)
     lista_materias = []
