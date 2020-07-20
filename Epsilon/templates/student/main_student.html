@@ -1,5 +1,6 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
+<!-- Agregamos los bloques de la columna izquierda de la ventana-->
 <ul>
   <a href="{{url_for('personal_data')}}">
     <li>
@@ -24,12 +25,14 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+<!-- Creación de la tabla con materias del periodo actual -->
 <div style="display:block;">
   <span style="margin-left:0px;">
     <a href="{{url_for('main_window')}}" class="btn">
       <img src="{{ url_for('static', filename='template_general/imagenes/retorno.png') }}" height="13px" width="13px">
     </a>
   </span>
+  <!-- Se crea el titulo que indica en donde estamos -->
   <div style="diplay:inline-block; text-align:center; width:80%;">
     <span class="mini-titulo">
       Listado de materias del periodo actual
@@ -37,6 +40,7 @@
   </div>
 </div>
 <div>
+  <!-- Para rellenar la tabla -->
   <table class="center" id="table">
         <tr>
             <th>Materias</th>
@@ -61,10 +65,12 @@
     </table>
     <br>
     <br>
+    <!-- Promedio del semestre -->
     <div style="text-align:center; font-size:22px;">
         Promedio Semestre: {{promedio}}
     </div>
     <br>
+    <!-- Para descargar tabla -->
     <div style="text-align:center;">
       <a id="downloadLink" onclick="exportF(this)" class="btn">Descargar</a>
     </div>

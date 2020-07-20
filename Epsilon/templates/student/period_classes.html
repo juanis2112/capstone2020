@@ -1,5 +1,7 @@
 {% extends "layouts/estructura_estudiante.html" %}
 {% block lateral %}
+
+<!-- Agregamos los bloques de la columna izquierda de la ventana-->
 <ul>
   <a href="{{url_for('personal_data', user_name = user_name)}}">
     <li>
@@ -24,6 +26,8 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+
+<!-- Tabla que nos muestra las notas que obtuvo en un semestre un estudiante -->
 <div style="display:block;">
   <span style="margin-left:0px;">
     <a href="{{url_for('academic_history')}}" class="btn">

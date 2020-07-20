@@ -1,5 +1,8 @@
 {% extends "layouts/estructura_profesor.html" %}
 {% block lateral %}
+
+
+<!-- Creacion de la barra izquierda de bloques -->
 <ul>
   <a href="{{url_for('main_teacher')}}">
     <li>
@@ -24,6 +27,7 @@
 </ul>
 {% endblock %}
 {% block tablas %}
+<!-- Lista de periodos de las clases dictadas -->
 <ul style="list-style-type:none">
    {% for period in periods %}
    <a href="{{url_for('classes', user_name = user_name, year = period.0, period = period.1)}}">
