@@ -143,18 +143,26 @@ githubusercontent.com/33558020/87895659-95820a80-ca0b-11ea-8809-76ec77804969.PNG
 # Pruebas de aceptación:
 
 A continuación, hay un listado con las características aprobadas por el cliente:
-•	Características visuales:
+
+•	**Características visuales:**
+
 a.	Se eligió una paleta de colores adecuada (azul y colores claros de fondo) para la aplicación
 b.	Diseño de la ventana de inicia sesión
 c.	Se aprobaron las siguientes características para cada uno de los usuarios:
-Para estudiantes:
+
+**Para estudiantes:**
+
 -	Botón de Datos personales: para ver información del estudiante como nombres, apellidos, correo, número de documento y otra información. También se encuentra un botón para descargar la información personal
 -	Botón de Datos académicos: para seleccionar el periodo académico que el estudiante desee y ver sus notas en cada una de las materias y cortes.
 -	Notificación de alertas: botón de alertas para notificar al estudiante cuando tenga una nota baja.
-Para profesores:
+
+**Para profesores:**
+
 -	Botón Mis materias: para ver las materias que el profesor está dictando en el semestre actual. Al seleccionar una de las materias se puede ver las notas de los estudiantes en la materia, así como botones para editar, o descargar las notas actualmente registradas y botones para seleccionar un archivo y subir notas de la materia.
 -	Botón Historial de materias:  para ver las notas que el profesor ha dictado anteriormente. Al seleccionar una de estas materias se puede ver las notas de primero a quinto corte y nota final de los estudiantes que la cursaron. 
-Para administradores:
+
+**Para administradores:**
+
 -	Botón de estudiantes: para ver todos los estudiantes inscritos en el último semestre. Para cada uno de ellos se puede ver el número de créditos inscritos y el promedio de cada uno. También se encuentra una barra de búsqueda para encontrar estudiantes por su nombre.
 -	Botón de profesores: para acceder a información de cada uno de los profesores. Al seleccionar un profesor se puede ver los cursos que dicta, en qué periodo y las notas de los estudiantes en ese curso. También se encuentra una barra de búsqueda para encontrar profesores por su nombre
 -	Botón de materias: para acceder a un semestre específico y ver las materias dictadas en ese semestre.
