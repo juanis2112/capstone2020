@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML API Docs &#8212; documentación de Epsilon - 0.1</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="App API Docs" href="App.html" />
+    <link rel="prev" title="Bienvenido a la Documentación de Epsilon" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-ML">
+<span id="ml-api-docs"></span><h1>ML API Docs<a class="headerlink" href="#module-ML" title="Enlazar permanentemente con este título">¶</a></h1>
+<dl class="py function">
+<dt id="ML.cargar_modelo_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">cargar_modelo_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.cargar_modelo_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga un modelo de prediccion que usa el corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>nombre_materia: string del nombre de la materia para cargar el modelo</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>loaded_model: mejor modelo asociado a la materia elegida</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.cargar_modelo_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">cargar_modelo_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.cargar_modelo_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga un modelo de prediccion que usa cortes 1 y 2</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>nombre_materia: string del nombre de la materia para cargar el modelo</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>loaded_model: mejor modelo asociado a la materia elegida</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.devolucion_estudiantes_riesgos_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">devolucion_estudiantes_riesgos_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nombre_materia</span></em>, <em class="sig-param"><span class="n">materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.devolucion_estudiantes_riesgos_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Retorna dataframe de estudiantes que el modelo predijo que van a perder</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>nombre_materia: nombre de la materia que selecciona para cargar el modelo (puede ser el nombre del archivo con el modelo general)
+materia: dataframe con los datos de las notas de la materia especificada</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>estudiantes: dataframe con los estudiantes que se predijo que van a perder la materia</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.devolucion_estudiantes_riesgos_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">devolucion_estudiantes_riesgos_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nombre_materia</span></em>, <em class="sig-param"><span class="n">materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.devolucion_estudiantes_riesgos_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Retorna dataframe de estudiantes que el modelo predijo que van a perder</p>
+<dl>
+<dt>PARAMETROS:</dt><dd><dl class="simple">
+<dt>nombre_materia: nombre de la materia que selecciona para cargar el modelo</dt><dd><p>(puede ser el nombre del archivo con el modelo general)</p>
+</dd>
+</dl>
+<p>materia: dataframe con los datos de las notas de la materia especificada</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>estudiantes: dataframe con los estudiantes que se predijo que van a perder la materia</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.enssemble">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">enssemble</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">modelo1</span></em>, <em class="sig-param"><span class="n">modelo2</span></em>, <em class="sig-param"><span class="n">X_train</span></em>, <em class="sig-param"><span class="n">Y_train</span></em>, <em class="sig-param"><span class="n">X_test</span></em>, <em class="sig-param"><span class="n">Y_test</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.enssemble" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Combina dos modelos de clasificacion usando clasificador de votacion
+(Voting Classifier),funciona tanto para primer corte y segundo corte.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>modelo1: uno de los modelos que se combina
+modelo2: uno de los modelos que se combina
+X_train: dataframe de entrenamiento
+Y_train: variable independiente de entrenamiento
+X_test: dataframe para testeo de modelo para posterior elección del mejor modelo
+Y_test: variable independiente para hacer test</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>vot: modelo clasificador de tipo VotingClassifier
+F15: puntaje F15 del VotingClassifier asociado</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.funcion_paso">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">funcion_paso</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.funcion_paso" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion necesaria para crear la columna Paso en el dataframe.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>x: nota final</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>1 si el estudiante paso (x &gt;= 3) o 0 si perdio (x &lt; 3)
+como etiqueta para modelos de prediccion</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.guardar_mejor_modelo_todas_materias_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">guardar_mejor_modelo_todas_materias_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_completo</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.guardar_mejor_modelo_todas_materias_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo para todas las materias analizando el corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>df_completo: dataframe con los datos de todos los estudiantes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.guardar_mejor_modelo_todas_materias_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">guardar_mejor_modelo_todas_materias_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_completo</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.guardar_mejor_modelo_todas_materias_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo para todas las materias analizando cortes 1 y 2</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>df_completo: dataframe con los datos de todos los estudiantes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_modelo_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_modelo_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">modelo_general</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_modelo_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Determina el mejor modelo para una materia teniendo en cuenta las clases
+en las que todos pasaron.
+El analisis es realizado con las notas del corte 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe con los datos de una materia especifica
+modelo_genera: modelo general pre-establecido</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo: modelo correspondiente al modelo general
+F_15_mejor_modelo: puntaje F15 asociado al modelo geenral</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_modelo_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_modelo_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">modelo_general</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_modelo_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Determina el mejor modelo para una materia teniendo en cuenta las clases
+en las que todos pasaron.
+El analisis es realizado con las notas de los cortes 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe con los datos de una materia especifica
+modelo_genera: modelo general pre-establecido</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo: modelo correspondiente al modelo general
+F_15_mejor_modelo: puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_modelo_general_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_modelo_general_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_modelo_general_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Determina el mejor modelo (modelo general sobre todas las materias) sobre todos los datos.
+El analisis es realizado con las notas del corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe con notas en todas las materias</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo:  modelo correspondiente al modelo general
+F15_mejor_modelo: el puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_modelo_general_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_modelo_general_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_modelo_general_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Determina el mejor modelo (modelo general sobre todas las materias) sobre todos los datos.
+El analisis es realizado con las notas de los cortes 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe con notas en todas las materias</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo:  modelo correspondiente al modelo general
+F15_mejor_modelo: el puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_segundo_modelo_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_segundo_modelo_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">mejor_modelo</span></em>, <em class="sig-param"><span class="n">indice</span></em>, <em class="sig-param"><span class="n">modelo_general</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_segundo_modelo_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Función que devuelve el segundo mejor modelo de la materia analizando primer corte.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe,lista
+indice: indice mejor modelo
+mejor_modelo: mejor modelo estadistico para la materia
+modelo_general: modelo estadistico general para todas las materias</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo: segundo mejor modelo
+F_15_mejor_modelo: puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mejor_segundo_modelo_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mejor_segundo_modelo_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">mejor_modelo</span></em>, <em class="sig-param"><span class="n">indice</span></em>, <em class="sig-param"><span class="n">modelo_general</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mejor_segundo_modelo_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Función que devuelve el segundo mejor modelo de la materia analizando primer y segundo corte</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe,lista
+indice: indice mejor modelo
+mejor_modelo: mejor modelo estadistico para la materia
+modelo_general: modelo estadistico general para todas las materias</p>
+</dd>
+<dt>RETORNA:</dt><dd><p>mejor_modelo: segundo mejor modelo
+F_15_mejor_modelo: puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.model_selection_from_historic_data">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">model_selection_from_historic_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ML.model_selection_from_historic_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion de entrenamiento con csv de historico.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.model_training">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">model_training</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ML.model_training" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion que se encarga de entrenar los modelos.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.mover_modelos">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">mover_modelos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">source</span></em>, <em class="sig-param"><span class="n">destination</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.mover_modelos" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Mueve todos los archivos de la carpeta fuente a la carpeta destino.
+Si las direcciones son relativas, las direcciones empiezan desde la carpeta
+donde se encuentra el archivo con esta funcion.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>source: direccion de la carpeta fuente
+destination: direccion de la carpeta destino</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.prediction_from_trained_models">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">prediction_from_trained_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ML.prediction_from_trained_models" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion que se encarga de hacer la predicción de los estudiantes.</p>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>lista_estudiantes_alerta: dataframe con los estudiantes con riesgo de perder la materia</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo sobre una materia específica.
+El analisis es realizado con las notas del corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe de la materia especificada
+nombre_materia: string para el nombre del archivo del modelo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_1_gen">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_1_gen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_1_gen" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion selecciona el modelo general para esta materia
+en caso de que no se pueda seleccionar un modelo específico para la misma
+El análisis de los modelos para esta funcion es sobre el corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe de la materia especificada
+nombre_materia: string para el nombre del archivo del modelo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo sobre una materia específica.
+El analisis es realizado con las notas de los cortes 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe de la materia especificada
+nombre_materia: string para el nombre del archivo del modelo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_2_gen">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_2_gen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_2_gen" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Esta funcion selecciona el modelo general para esta materia
+en caso de que no se pueda seleccionar un modelo específico para la misma
+El análisis de los modelos para esta funcion es sobre los cortes 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe de la materia especificada
+nombre_materia: string para el nombre del archivo del modelo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_general_1">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_general_1</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em>, <em class="sig-param"><span class="n">nombre_materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_general_1" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo sobre una materia específica en disco.
+El analisis es realizado con las notas del corte 1.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe de la materia especificada
+nombre_materia: string para el nombre del archivo del modelo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="ML.seleccionar_guardar_modelo_general_2">
+<code class="sig-prename descclassname">ML.</code><code class="sig-name descname">seleccionar_guardar_modelo_general_2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">materia</span></em><span class="sig-paren">)</span><a class="headerlink" href="#ML.seleccionar_guardar_modelo_general_2" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Guarda el mejor modelo, es decir el modelo general, sobre todas las materias.
+El analisis es realizado con las notas de los cortes 1 y 2.</p>
+<dl class="simple">
+<dt>PARAMETROS:</dt><dd><p>materia: dataframe con las notas de todos las materias de todos los estudiantes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Epsilon</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ML API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="App.html">App API Docs</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="capítulo anterior">Bienvenido a la Documentación de Epsilon</a></li>
+      <li>Next: <a href="App.html" title="próximo capítulo">App API Docs</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Juanita Gomez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/ML.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

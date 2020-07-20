@@ -1,0 +1,918 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App API Docs &#8212; documentación de Epsilon - 0.1</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="ML API Docs" href="ML.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-App">
+<span id="app-api-docs"></span><h1>App API Docs<a class="headerlink" href="#module-App" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Webapp that allows browsing, modifying, analysing student data.</p>
+<dl class="py class">
+<dt id="App.User">
+<em class="property">class </em><code class="sig-prename descclassname">App.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span></em>, <em class="sig-param"><span class="n">user_role</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.User" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="App.academic_history">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">academic_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.academic_history" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con los periodos académicos en los que un estudiante ha
+registrado materias.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana con los periodos académicos registrados por un estudiante</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_academic_history">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_academic_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_academic_history" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con todos los años y periodos académicos en lo que un estudinate
+registró materias.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario de un estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con años y periodos registrados por un estudiante.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_edit_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_edit_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_edit_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_functions">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_functions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_functions" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_main_student">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_main_student</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_main_student" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga las asignaturas y notas correspoendientes de un estudiante en el último semestre
+registrado
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del estudiante.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con asignaturas y notas del útlimo semestre registrado.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_main_teacher">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_main_teacher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_main_teacher" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_period_classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_period_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_period_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con las asignaturas y notas de un estudiante específico para un año y perido
+específico.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario
+year: año a observar
+period: periodo a observar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con las asignaturas y notas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_personal_data">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_personal_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_personal_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga la información personal de un estudiante en específico almacenada en la base de datos.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario de un estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con los datos personales de un estudiante en particular.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_show_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_show_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_show_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_show_group_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_show_group_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_show_group_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_teacher_classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_teacher_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_teacher_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.admin_update_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_update_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_update_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.change_passwd">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">change_passwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.change_passwd" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Realiza el cambio de contraseña de un usuario actualizando
+la contraseña en la base de datos
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana principal para el usuario si el cambio de contraseña
+fue exitoso</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.class_history">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">class_history</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.class_history" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con los periodos académicos en los que un profesor ha
+dictado asignaturas.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana con los periodos académicos registrados por un profesor</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con todas las asignaturas dictadas por un profesor en un año y
+periodo específico.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del profesor
+year: año a observar.
+period: periodo a observar.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con las asignaturas en un añio y periodo determinado</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.count_admin_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">count_admin_alerts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.count_admin_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cuenta el numero de alertas que no han sido vistas por los administradores.
+PARAMETROS:</p>
+<blockquote>
+<div><p>materia: dataframe con notas en todas las materias</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>mejor_modelo:  modelo correspondiente al modelo general
+F15_mejor_modelo: el puntaje F15 asociado al modelo general</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.count_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">count_alerts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.count_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cuenta el numero de alertas que no han sido vistas aun por los estudiantes.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>count: numero de alertas sin leer del estudiante</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.course_alert">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">course_alert</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.course_alert" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Genera una alerta asociada a una materia según el promedio de los estudiantes en el
+cohorte que haya finalizado
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la clase a la que se le genera una alerta
+group: grupo de la clase</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.create_alert">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">create_alert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.create_alert" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Muestra el formulario para crear una alerta
+RETORNA:
+El formulario de la creación de los archivos.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.create_user">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">create_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.create_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.delete_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">delete_alerts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">user_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.delete_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Borra una alerta de la base de datos
+PARAMETROS:</p>
+<blockquote>
+<div><p>User_name: persona que tiene la alerta
+date: fecha de la publicación de la alerta
+user_type: tipo de estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se muestran todas las alertas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.edit_grade">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">edit_grade</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.edit_grade" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga la ventana de edición de notas de un profesor
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la asignatura
+group: grupo específico de la asignatura</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana de edición de notas manuales de un profesor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.forget_passwd">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">forget_passwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.forget_passwd" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Muestra el formulario de olvidó de los usuarios
+RETORNA:</p>
+<blockquote>
+<div><p>Formulario de olvidó la contraseña</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.generate_image">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">generate_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.generate_image" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Convierte una figura de matplotlib en una cadena de caracteres en base64 que representa
+el png de la figura
+RETORNA:</p>
+<blockquote>
+<div><p>image: cadena de caracteres que representa el png de la figura</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.generate_passwd">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">generate_passwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.generate_passwd" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Genera contraseña aleatoria para los usuarios que olvidan su contraseña
+RETORNA:</p>
+<blockquote>
+<div><p>passwd: contraseña aleatoria</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.get_name_from_user">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">get_name_from_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.get_name_from_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Consulta el nombre y apellidos de un usuario a partir de su nombre de usuario
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>name: tupla con nombre y apellidos del usuario</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.get_student_grades">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">get_student_grades</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.get_student_grades" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Consulta de la base de datos, las notas de un estudiante en una clase y
+grupos específicos en el periodo actual
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>grades: tupla con el nombre de usuario,, los nombres, apellidos y
+notas de un estudiante</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.get_student_grades_period">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">get_student_grades_period</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.get_student_grades_period" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Consulta de la base de datos, las notas de un estudiante en una clase y grupos
+específicos en un año y periodo determinado
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del estudiante</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>grades: tupla con el nombre de usuario,, los nombres, apellidos y notas de un estudiante</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.groups_report">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">groups_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">year</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.groups_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.historic_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">historic_class</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.historic_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.import_data_from_file">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">import_data_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.import_data_from_file" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.import_data_from_file_year">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">import_data_from_file_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_type</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.import_data_from_file_year" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.load_classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.load_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.load_groups">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_groups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.load_groups" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.load_students">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_students</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.load_students" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con todos los estudiantes registrados en la aplicación con datos de
+interes como su promedio acumulado y créditos cursados.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana con todos los estudiantes registardos.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.load_teachers">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_teachers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.load_teachers" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.load_user">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.load_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una instancia de usuario a partir de su nombre de usuario.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_id: nombre de usuario</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>instancia de un usuario</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.logging">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">logging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">usuario</span></em>, <em class="sig-param"><span class="n">nivel</span></em>, <em class="sig-param"><span class="n">action</span></em>, <em class="sig-param"><span class="n">sobre_que</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sobre_quien</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">asignatura</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">grupo</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cuando</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">notas_antes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">notas_despues</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.logging" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Registra las actividades realizadas por los usuarios en la base de datos
+junto con su datestamp correspondiente
+PARAMETROS:</p>
+<blockquote>
+<div><p>usuario: usuario registrado en la base de datos de la persona que realiza la accion.
+nivel: determina la gravedad de la acción sobre la aplicación. Va de 1 a 3.
+sobre_que: sobre que parte de la aplicación se realiza la acción.
+sobre_quien: a que usuario o asignatura está afectando la acción.
+asignatura: nombre de la asignatura que está involucrada
+grupo: grupo al que pertenece la asignatura involucrada
+cuando: sobre que periodo académico se está realizando la acción.
+notas_antes: notas que serán editadas
+notas_despues: nuevos valores de las notas que serán editadas.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.login">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.login" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Realizar el inicio de sesión para los usuarios de la aplicación
+verificando que la contraseña ingresada es la correcta y
+revisando si el usuario inicia sesion por primera vez
+RETORNA:</p>
+<blockquote>
+<div><p>Cambio de contraseña o inicio de sesión dependiendo de
+si es la primera vez que el usuario inicia sesión</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.logout">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.logout" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cierra la sesión de un usuario determinado
+RETORNA:</p>
+<blockquote>
+<div><p>Inicio de sesión</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.main_admin">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">main_admin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.main_admin" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cargar la ventana principal de los usuarios de tipo administrador mostrando las opciones que
+este puede realizar.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana principal de administrador</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.main_student">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">main_student</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.main_student" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cargar la ventana principal de los usuarios de tipo estudiante mostrando
+las materias y notas del periodo actual
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana principal de estudiante</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.main_teacher">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">main_teacher</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.main_teacher" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cargar la ventana principal de los usuarios de tipo profesor mostrando
+las materias que dicta en el periodo actual
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana principal de profesor</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.main_window">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">main_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.main_window" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga las tablas necesarias en la base de datos si aún no se han cargado
+ejecutando el archivo creacion_bd_2.sql
+Crea un usuario adminsitrador en la base de datos para acceder a las
+funciones de la aplicación
+Redirecciona al formulario de login para que el usuario administrador
+pueda iniciar sesión
+RETORNA:</p>
+<blockquote>
+<div><p>Inicio de sesión</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.one_group_report">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">one_group_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.one_group_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.period_classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">period_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.period_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con todas las asignaturas inscritas por un estudiante en un periodo y
+año específicos
+PARAMETROS:</p>
+<blockquote>
+<div><p>year: año a ser buscado.
+period: periodo académico a ser buscado.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Asignaturas vistas por un estudinate en un año y periodo determinados</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.personal_data">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">personal_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.personal_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con los datos personales del estudiante que están almacenados en la
+base de datos, como codigo, nombre, apellidos, correo institucional y documento.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana de datos personales del estudiante</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.plot_groups">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">plot_groups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">groups_data</span></em>, <em class="sig-param"><span class="n">class_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.plot_groups" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Grafica el numero de estudiantes con respecto a su nota final para los distintos
+grupos de una materia determinada
+PARAMETROS:</p>
+<blockquote>
+<div><p>groups_data: lista de tuplas con los nombres, apellidos, grupos y notas de los estudiantes
+de una materia determinada
+class_name: nombre de la materia</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.publish_alert">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">publish_alert</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.publish_alert" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Publica alerta creada para un estudiante
+RETORNA:</p>
+<blockquote>
+<div><p>HTML en donde se puede ver las alertas</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.render_main_windows">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">render_main_windows</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.render_main_windows" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Muestra las ventanas principales de los usuarios dependiendo de su rol en la
+base de datos
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>ventana principal de los usuarios dependiendo de su rol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.return_current_year_period">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">return_current_year_period</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.return_current_year_period" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Consulta el periodo y año del periodo actual (ultimo periodo registrado en la base
+de datos)
+RETORNA:</p>
+<blockquote>
+<div><p>current_year: entero con el numero del año actual
+current_period: entero con el numero del periodo actual</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.send_email">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">send_email</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">email</span></em>, <em class="sig-param"><span class="n">codigo</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.send_email" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Envía un correo a un usuario determinado con una contraseña temporal para el
+inicio de sesión
+PARAMETROS:</p>
+<blockquote>
+<div><blockquote>
+<div><p>username: nombre de usuario</p>
+</div></blockquote>
+<p>email: correo del usuario
+código: código del usuario que corresponde a la contraseña temporal</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.send_forget_passwd">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">send_forget_passwd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.send_forget_passwd" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Pide el correo al usuario que olvida su contraseña para
+enviar un correo con una contraseña temporal
+RETORNA:</p>
+<blockquote>
+<div><p>Formulario de login</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.show__historic_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">show__historic_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.show__historic_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con los estudiantes y notas de una asignatura específica en un año
+específico en un periodo específico.
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la asignatura a observar
+year: año a observar
+period: periodo a observar
+group: grupo a observar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con los estudiantes y sus notas en la asignatura</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.show_admin_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">show_admin_alerts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.show_admin_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Muestra las alertas del administrador
+RETORNA:</p>
+<blockquote>
+<div><p>El HTML en donde se muestra todas las alertas del administrador</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.show_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">show_alerts</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.show_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Muestra las alertas para un estudiante
+RETORNA:</p>
+<blockquote>
+<div><p>El HTML en donde se puede ver las alertas del estudiantes</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.show_class">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">show_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.show_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Carga una ventana con los estudiantes y sus respectivas notas por cohorte en el
+periodo actual.
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la asignatura a observar
+group: grupo específico de la asignatura</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con estudiantes y notas de la asignatura en el periodo actual</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.student_alerts">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">student_alerts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">student</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">grade</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.student_alerts" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Genera una alerta en la base de datos basado en la nota que saca un estudiante
+en una pateria específica
+PARAMETROS:</p>
+<blockquote>
+<div><p>student: usuario del estudiante al cual se le genera una alerta
+class_name: nombre de la asignatura en la que se genera la alerta
+garde: nota del estudiante</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.student_historic_report">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">student_historic_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.student_historic_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.student_report">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">student_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.student_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.update_grade">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">update_grade</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.update_grade" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Actualiza las notas de los estudiantes en la base de de datos que han sido cambiadas
+por el profesor de forma manual.
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la asignatura
+group: grupo específico de la asignatura</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con los estudiantes y sus notas actualizadas en la asignatura</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.update_grades">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">update_grades</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">grade1</span></em>, <em class="sig-param"><span class="n">grade2</span></em>, <em class="sig-param"><span class="n">grade3</span></em>, <em class="sig-param"><span class="n">grade4</span></em>, <em class="sig-param"><span class="n">grade5</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">user</span></em>, <em class="sig-param"><span class="n">teacher_usr</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.update_grades" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Actualiza las notas para un estudiante en una materia específica dictada
+por un profesor específico
+PARAMETROS:</p>
+<blockquote>
+<div><p>grade*: notas nuevas para subirse a la base de datos correspondientes
+a los 5 cortes
+class_name: nombre de la materia para la cual se van a cambiar notas
+user: usuario del estudiante para el cual se van a cambiar notas
+teacher_usr: nombre del profesor de la materia para la cual se van a
+cambiar notas</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_classes">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_data">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">role</span></em>, <em class="sig-param"><span class="n">send_email</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">year</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_data" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Sube los datos del csv a la base de datos dependiendo si se suben
+datos para estudiantes o empleados. Manda un correo a los usuarios
+nuevos (ver función send_email)
+PARAMETROS:</p>
+<blockquote>
+<div><p>role: tipo de usuario para el cual se suben datos
+send_email: determina si se envía o no el correo a los
+usuarios
+period: en caso de subir datos para un period específico, el
+parámetro debe indicar el periodo.
+year: en caso de subir datos para un año específico, el
+parámetro debe indicar el año.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_file">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em>, <em class="sig-param"><span class="n">path_to_file</span></em>, <em class="sig-param"><span class="n">data_insertion_path</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_file" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Sube un archivo de csv a la base de datos guardando una copia de dicho archivo
+en la carpeta del repositorio
+PARAMETROS:</p>
+<blockquote>
+<div><p>file: archivo a guardar
+path_to_file: path al archivo temporal donde se genera la
+copia del archivo
+data_insertion_path: path al archivo de sql que se encarga de hacer la
+inserción de datos en la base de datos
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: period, year: año y periodo para el cual se desean subir los datos</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_grades_from_csv">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_grades_from_csv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_grades_from_csv" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Actualiza las notas de los estudiantes en la base de de datos que han sido cambiadas
+por el profesor con un archivo csv.
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nombre de la asignatura
+group: grupo específico de la asignatura</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con los estudiantes y sus notas actualizadas en la asignatura</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_new_user">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_new_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_new_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_students">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_students</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_students" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.upload_teachers">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_teachers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_teachers" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>PARAMETROS:</p>
+<p>RETORNA:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="App.utc_to_local">
+<code class="sig-prename descclassname">App.</code><code class="sig-name descname">utc_to_local</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">utc_dt</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.utc_to_local" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Cambia la hora de entrada a la hora local
+PARAMETROS:</p>
+<blockquote>
+<div><p>utc_dt: hora en zona horaria UTC</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>hora local</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Epsilon</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegación</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ML.html">ML API Docs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">App API Docs</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="ML.html" title="capítulo anterior">ML API Docs</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Búsqueda rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir a" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Juanita Gomez.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/App.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
