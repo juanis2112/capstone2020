@@ -31,4 +31,6 @@ Son las pruebas que se hacen de principio a fin y que validan toda la experienci
 # Estudiante
 
 Simulamos la aplicación con el usuario Juanita Gómez.
+![Alt text](https://user-images.githubusercontent.com/33558020/87893607-01fa0b00-ca06-11ea-9d92-02daad1e30cc.PNG)
+
 
