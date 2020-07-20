@@ -149,9 +149,9 @@ Teniendo su archivo de la aplicación ya configurado podrá realizar la activaci
 
 ```bash
 $ sudo systemctl start nginx
-$ gunircorn3 App:app
+$ gunicorn3 App:app
 ```
-La ejecución del gunircorn 3 debe realizarse en la carpeta en donde se encuentra el archivo de flask.
+La ejecución del gunicorn 3 debe realizarse en la carpeta en donde se encuentra el archivo de flask.
 
 **NOTA**
 La aplicación ya se encuentra corriendo en una instancia con la siguiente dirección:
