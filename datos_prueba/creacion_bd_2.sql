@@ -1,5 +1,45 @@
 CREATE EXTENSION pgcrypto;
 
+/*  Archivo para crear todas las tablas (asociadas al modelo entidad relacion y otros aspectos) necesarias para el uso de la base de datos. 
+	Cada tabla representa lo siguiente:
+
+	--> Programa: Almacena las carreras que ofrece la universidad. Para esta aplicación la inserción se limita a 
+				solo una carrera.
+	--> Personas: Almacena la información de todos los usuarios que interactuan con la aplicación sin importar el 
+				perfil que tengan. Representa en el modelo entidad relación una generalización de los roles de la aplicacion.
+	--> Estudiante: Especialización de la tabla 'Personas'. Almacena a todos los estudiantes que son inscritos en la
+				aplicación.
+	--> Empleado: Esta tabla almacena la informacion sobre si la persona almacenada cumple el rol de profesor, administrador 
+				o ambos.
+	--> Asignaturas: Esta tabla nos habla de las asignaturas registradas en la universidad con su respectivo codigo, nombre, 
+				numero de creditos, tipologia y porcentaje sobre las distintas cohortes.
+	--> semestre: Almacena todas las clases a las que se inscribe un estudiante cada semestre. A cada registro se le 
+				asocia una asignatura, un profesor y un conjunto de estudiantes. Además contiene un atributo el cual
+				representa el grupo de la asignatura a la cual pertenece la clase.
+	--> alertas: Almacena todas las alertas que la aplicación Epsilon genera de forma automática o manual. 
+	--> logging: Almacena todas las interacciones se los usuarios con la aplicación. Se divide en acciones como 'CONSULTA'
+				'EDICION','IMPORTACION','EXPORTACION','INICIO' y 'SALIDA'.
+	--> ofrece: En ofrece podemos encontrar la relacion entre asignaturas y programas académicos, es decir, donde se referencia
+				a que programa pertenece una asingatura.
+	--> Pertenece: Representa una relación en el modelo entidad relación entre las tablas 
+	--> inscrito: En esta tabla se tiene almacenada la relacion de los estudiantes con los programas, aqui podemos saber a que 
+				a que programa pertenece un estudiante.
+	--> dicta: En esta tabla se llevan los registros de los profesores con las asignaturas, aqui se tiene almacenada la informacion
+				de que asignaturas dicto un profesor, en que periodo, en que año y el o los grupos a los que dicto clase.
+	--> toma: Esta relacion nos dice que cursos tomaron los estudiantes y se tiene la informacion del periodo en el que se tomo
+				(primer semestre, segundo semestre o intersemestral), el año y el grupo al que pertenece o pertenecio el 
+				estudiante tambien se tienen las notas en los 5 cohortes del estudiante, ademas las referencias a estudiante y 
+				asignatura se dan con los respectivos codigos de estas entidades.
+	--> curso_sem:	Esta tabla nos permite saber la relacion entre asignaturas y el momento en el tiempo, aqui almacenamos la asignatura,
+				el periodo, el año y el grupo de esta.
+	--> notificacion: Es una relacion que implementamos para llevar un registro de los administradores con las alertas, esto para saber
+				que admin borro que alerta para no mostrarsela mas sin afectar la visibilidad para los otros administradores.
+	--> Resumen: Esta vista simplemente nos ayuda a tener la informacion de manera mas reducida, tiene un par de finalidades. La primera 
+				como ya se comento nos permite tener de manera resumida informacion especifica de los estudiantes y cursos, por otro lado
+				tambien nos ayuda a limitar la interaccion de la aplicacion con la base de datos para no filtrar informacion innecesaria
+				o algun inconveniente de ese estilo
+*/
+
 /* Conjuntos de entidades */
 
 Create table Programa(
@@ -168,5 +208,9 @@ on (B1.codigo_asignatura = B2.codigo_asignatura and B1.grupo = B2.grupo)) as B6
 join (select codigo as prof_cod,usuario as prof_usr,nombre_prof,ap1_prof,ap2_prof,codigo_asignatura,grupo from (select codigo,usuario,nombre as nombre_prof,apellido_1 as ap1_prof,apellido_2 as ap2_prof from empleado natural join personas) as B natural join dicta) as B7
 on (B6.codigo_asignatura = B7.codigo_asignatura and B6.grupo = B7.grupo);
 
+
+/*  En esta parte introducimos un usuario principal a la aplicacion el cual sera el primer usuario y con el cual
+	se puede llenar de informacion la aplicacion.
+*/
 INSERT INTO personas VALUES (1,'ADMIN','-','-','admin@urosario.edu.co','-',1,'admin',crypt('admin', gen_salt('xdes')),'administrador');
 INSERT INTO Empleado VALUES (1,'0','1');
