@@ -33,4 +33,29 @@ Son las pruebas que se hacen de principio a fin y que validan toda la experienci
 Simulamos la aplicación con el usuario Juanita Gómez.
 ![Alt text](https://user-images.githubusercontent.com/33558020/87893607-01fa0b00-ca06-11ea-9d92-02daad1e30cc.PNG)
 
+En efecto el sistema nos pide cambio de contraseña para el usuario.
+![Alt text](https://user-images.githubusercontent.com/33558020/87893895-d3306480-ca06-11ea-8ba8-ddc138be3fbc.PNG)
+
+Podemos ingresar de manera correcta a la ventana principal del estudiante.
+![Alt text](https://user-images.githubusercontent.com/33558020/87893900-d592be80-ca06-11ea-83b2-278dce0e311a.PNG)
+
+Se puede ver correctamente los datos personales de Juanita y tambien la descarga de las notas se esta haciendo bien.
+![Alt text](https://user-images.githubusercontent.com/33558020/87893896-d3c8fb00-ca06-11ea-8cde-54677e3e0c83.PNG)
+
+Se puede ver el historico de periodos que ha visto la estudiante.
+![Alt text](https://user-images.githubusercontent.com/33558020/87893898-d4fa2800-ca06-11ea-8b4a-33abf65b4732.PNG)
+
+Y las materias vistas en cada periodo
+![Alt text](https://user-images.githubusercontent.com/33558020/87893902-d592be80-ca06-11ea-9be3-8789c4e5c884.PNG)
+
+Asimismo las alertas que tiene.
+![Alt text](https://user-images.githubusercontent.com/33558020/87894106-6ff30200-ca07-11ea-811d-3c363f97c868.PNG)
+
+
+
+
+
+
+
+
 
