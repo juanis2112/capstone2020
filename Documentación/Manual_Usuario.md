@@ -4,85 +4,115 @@
 
 # Índice
 
+0. Caso base
+
 1.Iniciando sesión. 
 
 2.Estudiante 
 
-- Ver datos personales. 
+a. Ver datos personales. 
 
-- Ver notas de asignaturas de un periodo académico.  
+b. Ver notas de asignaturas de un periodo académico.  
 
-- Descargar notas de un periodo académico. 
+c. Descargar notas de un periodo académico. 
 
-- Ver y borrar alertas 
+d. Ver y borrar alertas 
 
 3. Profesor 
 
-- Ver materias dictadas de un periodo académico. 
+- a. Ver materias dictadas de un periodo académico. 
 
-- Ver estudiantes y notas de una asignatura dictada. 
+- b. Ver estudiantes y notas de una asignatura dictada. 
 
-- Descargar notas de estudiantes en una asignatura dictada. 
+- c. Descargar notas de estudiantes en una asignatura dictada. 
 
-- Editar notas de asignaturas dictadas en el semestre actual. 
+- d. Editar notas de asignaturas dictadas en el semestre actual. 
 
-- - Editar notas mediante interacción con la aplicación. 
+- - i. Editar notas mediante interacción con la aplicación. 
 
-- - Editar notas mediante un archivo de Excel. 
+- - ii. Editar notas mediante un archivo de Excel. 
 
 4. Administrativo 
 
-- Acciones sobre estudiantes 
+- a. Acciones sobre estudiantes 
 
-- - Ver semestres cursados por estudiante. 
+- - i. Ver semestres cursados por estudiante. 
 
-- - Ver asignaturas y notas en un periodo académico. 
+- - ii. Ver asignaturas y notas en un periodo académico. 
 
-- Acciones sobre profesores 
+- b. Acciones sobre profesores 
 
-- - Ver periodos en los que un profesor dictó materias. 
+- - i. Ver periodos en los que un profesor dictó materias. 
 
-- - Ver asignaturas dictadas por un profesor en un periodo académico. 
+- - ii. Ver asignaturas dictadas por un profesor en un periodo académico. 
 
-- - Ver estudiantes y notas de asignaturas dictadas en un periodo académico. 
+- - iii. Ver estudiantes y notas de asignaturas dictadas en un periodo académico. 
 
-- Acciones sobre asignaturas 
+- c. Acciones sobre asignaturas 
 
-- - Ver periodos académicos donde se dictaron asignaturas. 
+- - i. Ver periodos académicos donde se dictaron asignaturas. 
 
-- - Ver asignaturas dictadas en un periodo académico. 
+- - ii. Ver asignaturas dictadas en un periodo académico. 
 
-- - Ver profesores y grupos de una asignatura en un periodo académico. 
+- - iii. Ver profesores y grupos de una asignatura en un periodo académico. 
 
-- - Ver notas de estudiantes de un grupo de una asignatura dictada en un periodo académico. 
+- - iv. Ver notas de estudiantes de un grupo de una asignatura dictada en un periodo académico. 
 
-- - Editar porcentaje de calificaciones  
+- - v. Editar porcentaje de calificaciones  
 
-- Generar reportes 
+- d. Generar reportes 
 
-- - Reporte de estudiante. 
+- - i. Reporte de estudiante. 
 
-- - Reporte de asignatura en un determinado periodo. 
+- - ii. Reporte de asignatura en un determinado periodo. 
 
-- Importar información 
+- e. Importar información 
 
-- - Importar información de estudiantes en un periodo académico. 
+- - i. Importar información de estudiantes en un periodo académico. 
 
-- - Importar información de asignaturas dictadas 
+- - ii. Importar información de asignaturas dictadas 
 
-- - Importar información de empleados. 
+- - iii. Importar información de empleados. 
 
-- Exportar información 
+- f. Exportar información 
 
-- Crear usuarios 
+- g. Crear usuarios 
 
-- Acciones sobre Alertas 
+- h. Acciones sobre Alertas 
 
-- - Ver y borrar alertas. 
+- - i. Ver y borrar alertas. 
 
-- - Generar alertas manuales 
+- - ii. Generar alertas manuales 
 
-- Todo lo respecto a los modelos de machine laearning 
+# 0. Caso base
+
+Cuando se inicia la aplicación el único usuario existente es el usuario admin cuya contraseña es admin. Ingresamos como se muestra en la imagen:
+
+![admin_login](https://user-images.githubusercontent.com/33558020/87900253-72f6ee00-ca19-11ea-9c2e-ea6e80482c76.PNG)
+
+Luego cambiamos la contraseña
+
+![Alt text](https://user-images.githubusercontent.com/33558020/87893895-d3306480-ca06-11ea-8ba8-ddc138be3fbc.PNG)
+
+Es necesario despues ir a la pestaña administración y cargar el archivo de profesores en información profesores.
+
+Para cargar el archivo de estudiantes
+
+![aaaa](https://user-images.githubusercontent.com/33558020/87900454-029c9c80-ca1a-11ea-9088-a93b3575e286.PNG)
+
+
+luego cargamos el archivo de las materias
+
+
+![adios](https://user-images.githubusercontent.com/33558020/87900456-03353300-ca1a-11ea-9905-e18b930ac5dc.PNG)
+
+Si todo se hizo bien aparece:
+
+![listo](https://user-images.githubusercontent.com/33558020/87900448-003a4280-ca1a-11ea-8304-8bdfa68c19f7.PNG)
+
+
+
+
 
 # 1. Iniciando sesión:  
 
@@ -221,14 +251,102 @@ Una vez se haya iniciado sesión, la aplicación abrirá una ventana vacía con 
 
 ![notas_periodos_profe](https://user-images.githubusercontent.com/33558020/87895666-97e46480-ca0b-11ea-9bb1-fe5d4a25d30c.PNG)
 
-Se puede generar un reporte por periodo
 
-![reporte_periodo_profe](https://user-images.githubusercontent.com/33558020/87895637-9024c000-ca0b-11ea-84e1-093305fc7521.PNG)
+**c. Acciones sobre asignaturas:** 
+
+**i. Ver periodos académicos donde se dictaron asignaturas:** Al seleccionar la opción de “Materias” se obtendrá un listado de todos los periodos académicos en los que se han dictado por lo menos una asignatura. 
+
+![periodos_materias](https://user-images.githubusercontent.com/33558020/87895627-8e5afc80-ca0b-11ea-859f-67b2513e2d5d.PNG)
 
 
+**ii. Ver asignaturas dictadas en un periodo académico:** Seleccionando un periodo académico (como se describe en el punto anterior), se obtendrá un listado de todas las asignaturas que fueron o son dictadas en el periodo seleccionado con sus respectivos códigos de asignatura y créditos. 
+
+![listado_materias](https://user-images.githubusercontent.com/33558020/87895655-9450dd80-ca0b-11ea-9194-d5af2186a7b9.PNG)
 
 
+**iii. Ver profesores y grupos de una asignatura en un periodo académico:** Seleccionando una asignatura en un periodo académico determinado (como se describe en los puntos anteriores) se obtendrá un listado de los grupos existentes en el periodo determinado y los respectivos profesores que dictaron la materia. 
 
+![grupos](https://user-images.githubusercontent.com/33558020/87895649-931fb080-ca0b-11ea-9e7f-0c1703a43902.PNG)
+
+**iv. Ver notas de estudiantes de un grupo de una asignatura dictada en un periodo académico:** El administrador podrá consultar una asignatura y de esta un grupo respectivo donde podrá ver las respectivas notas de los estudiantes en los 5 cortes del periodo. 
+
+![notas_grupo](https://user-images.githubusercontent.com/33558020/87895662-96b33780-ca0b-11ea-8618-a0a6a2938a2a.PNG)
+
+
+**v. Editar porcentaje de calificaciones:** Al ingresar a la opción de “Materias” y oprimir el botón de “Editar”, se pueden cambiar los créditos y los porcentajes de relevancia de las notas en cada materia. Esta acción solo afecta al último periodo registrado. Para guardar los cambios ingresados se oprime “Guardar” y las modificaciones se efectuarán de manera automática.   
+
+![bb](https://user-images.githubusercontent.com/33558020/87899637-6e313a80-ca17-11ea-8d9a-298853e4dec0.PNG)
+
+
+**d. Generar reportes:**
+
+**i. Reporte de estudiante:** Al ingresar en la opción de “Estudiantes” se puede generar un reporte de los promedios por periodo académico al oprimir el botón en el extremo derecho de cada estudiante registrado. Este reporte se desplegará en la pantalla principal y posee la opción de descargarlo. 
+
+![reporte_estudiante](https://user-images.githubusercontent.com/33558020/87895633-8f8c2980-ca0b-11ea-9630-9c3234fdf4b8.PNG)
+
+
+**ii. Reporte de asignatura en un determinado periodo:** Al ingresar a la opción de “Materias” y seleccionar un determinado periodo, el usuario podrá generar un reporte con el botón en el extremo derecho de cada asignatura. Este reporte se desplegará en la pantalla principal y posee la opción de descargarlo. 
+
+![reporte_grupos](https://user-images.githubusercontent.com/33558020/87895636-9024c000-ca0b-11ea-89a3-7f91158c1f1d.PNG)
+
+
+**e. Importar documentos:** El rol de administrador tiene la capacidad de poder ingresar la información sobre los estudiantes, profesores y cursos que habrá en un periodo académico, al dirigirse a la ventana “Administración” aparecerán las siguientes opciones: 
+
+
+![administracion](https://user-images.githubusercontent.com/33558020/87895639-90bd5680-ca0b-11ea-83a0-3939637626b1.PNG)
+
+
+**i. Importar información de estudiantes en un periodo académico:*** En este apartado el administrador mediante un archivo de Excel con un formato especifico puede ingresar la información de los distintos estudiantes que haya, tanto inscritos previamente como nuevos. Por defecto a los nuevos estudiantes se les hará el proceso comentado en el apartado de Iniciando sesión, por otro lado, este archivo tiene las clases y demás información pertinente con referencia en la matrícula de los estudiantes. 
+
+![bb](https://user-images.githubusercontent.com/33558020/87899851-2959d380-ca18-11ea-898b-caada3dd573b.PNG)
+
+**ii. Importar información de asignaturas dictadas:** A partir del proceso realizado en el apartado anterior la plataforma nos habilitará la opción de manera inmediata para poder ingresar la información de los profesores con las asignaturas que estos dictarán, para esto también se tiene un formato que se mostrará a continuación. 
+
+![cc](https://user-images.githubusercontent.com/33558020/87899852-29f26a00-ca18-11ea-8459-d0ec39c238ad.PNG)
+
+**iii. Importar información de empleados:** Se podrá importar la información de los empleados que se encuentre en un documento de Excel, donde se tenga la información personal del empleado y el o los roles que este empleará (administrador, profesor o ambos), el formato para esto es el siguiente: 
+
+![dd](https://user-images.githubusercontent.com/33558020/87899853-2a8b0080-ca18-11ea-9844-9244fb8bc175.PNG)
+
+**f. Exportar información:**  
+
+**i. Asignaturas y notas de un estudiante en el último semestre:** Al ingresar a la opción de “Estudiantes” y seleccionar un estudiante, el administrador ingresara a una ventana con las asignaturas y notas del último semestre registrado. Al oprimir el botón de “descargar”, se descargará un archivo .csv con las asignaturas y notas del estudiante. 
+
+![1](https://user-images.githubusercontent.com/33558020/87900792-fb29c300-ca1a-11ea-9862-02896a25f41f.PNG)
+
+**ii. Reporte de promedios por semestre cursado:** Al ingresar a la opción de “Estudiante” el usuario podrá oprimir en la casilla del extremo derecho de cada estudiante para obtener un reporte del promedio del estudiante por semestre cursado. Al oprimir sobre “descargar” obtendrá una imagen del gráfico.
+
+![2](https://user-images.githubusercontent.com/33558020/87900794-fbc25980-ca1a-11ea-8907-00993a53e9da.PNG)
+
+**iii. Estudiantes y notas de una materia y grupo específico:**  ingresar a “Materias”, y seleccionar un periodo específico, el administrador podrá escoger una asignatura dictada durante ese semestre, en donde podrá descargar un archivo .CSV con los estudiantes y notas al oprimir sobre ‘descarga’.    
+udiantes y notas de una materia y grupo específico: Al ingresar a “Materias”, y seleccionar un periodo específico, el administrador podrá escoger una asignatura dictada durante ese semestre, en donde podrá descargar un archivo .CSV con los estudiantes y notas al oprimir sobre ‘descarga’.  
+
+**iv. Reporte de promedios de una materia** Al ingresar la opción de “Materias”, selecciona una materia, el administrador ingresara a una ventana con las asignaturas, si hace clic en la imagen de gráficas, podrá visualizar un reporte tipo histograma donde se podrá consultar el rango de notas obtenidas por los estudiantes en intervalos de 0.5, es decir; (0,0.5](0.5,1]…(4.5,5].
+
+![4](https://user-images.githubusercontent.com/33558020/87900795-fbc25980-ca1a-11ea-90be-285763a82db2.PNG)
+
+
+**g. Crear usuario:** Si desea crear un nuevo usuario debe dirigirse a la ventana administración y en esta seleccionar la opción “Crear usuario nuevo”, ahí tendrá la posibilidad de elegir el rol correspondiente para este nuevo registro y seleccionar el archivo CSV del cual se obtendrá esta información. 
+
+![crear_usuario](https://user-images.githubusercontent.com/33558020/87899998-9a00f000-ca18-11ea-9d8b-0905ddcf7fd2.PNG)
+
+**h. Acciones sobre alertas **
+
+**i. Ver y borrar alertas:** Cuando se genere una alerta de las diferentes posibilidades, a el administrador en el signo de la campana le llegara una notificación de alerta. Donde podrá consultar todas las alertas recibidas y si es del gusto del administrador, podrá eliminar cada alerta de manera individual. 
+
+![alertas](https://user-images.githubusercontent.com/33558020/87895642-91ee8380-ca0b-11ea-9ec5-ba03a2cb9508.PNG)
+
+**ii. Generar alertas manuales:** El administrador, podrá genera una alerta manual dependiendo del tipo de alerta. Además, podrá ingresar un texto como descripción del caso generado. 
+
+![alerta_manual](https://user-images.githubusercontent.com/33558020/87895640-9155ed00-ca0b-11ea-97e9-7271361d766d.PNG)
+
+**iii. Tipos de alertas:** 
+
+**i. Nota baja:** El estudiante recibió una nota de 2 a 3 en algún corte. 
+
+**ii. Nota muy baja:** El estudiante recibió una nota de entre 0 y 2 en algún corte. 
+
+**iii. Posible pérdida de materia:** Esta alerta funciona en base a que dado las notas ya sea de primer o segundo corte, un modelo de predicción destinado para la materia predice si el estudiante se encuentra en riesgo de pérdida. 
 
 
 
