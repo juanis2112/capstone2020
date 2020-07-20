@@ -6,6 +6,7 @@ Webapp that allows browsing, modifying, analysing student data.
 # Standard library imports
 import base64
 import csv
+from datetime import datetime, timezone
 from functools import wraps
 from io import BytesIO
 from pathlib import Path
@@ -57,14 +58,16 @@ def init_app():
         password="Jgrccgv",
         host="localhost",
         port="5432",
-        database="Epsilon55",
+        database="Epsilon56",
         )
 
     conn.set_session(autocommit=True)
     cur = conn.cursor()
     app.secret_key = secrets.token_bytes(nbytes=16)
-
     login_manager.init_app(app)
+
+
+app.before_first_request(init_app)
 
 
 class User(flask_login.UserMixin):
@@ -126,6 +129,17 @@ def login_required(role="ANY"):
 
 
 # --- Util Functions -------------------------------------------------------------------------------
+
+def utc_to_local(utc_dt):
+    """
+    Cambia la hora de entrada a la hora local
+    PARAMETROS:
+        utc_dt: hora en zona horaria UTC
+    RETORNA:
+        hora local
+    """
+    return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+
 
 def count_alerts(user_name):
     """
@@ -535,19 +549,23 @@ def student_alerts(student, class_name, grade):
                     from empleado where esadmin='1';""", (student, date))
 
 
-def course_alert(class_name,group):
-    cur.execute("""SELECT count(*)
-                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+def course_alert(class_name, group):
+    cur.execute(
+        """SELECT count(*)
+        FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+        WHERE nombre_asignatura = %s AND grupo = %s  AND anio = (select max(anio) from RESUMEN) AND
+        periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
+        """, (class_name, group))
     total_estudent = cur.fetchone()[0]
-    cur.execute("""SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5)
-                FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """,(class_name,group))
+    cur.execute(
+        """SELECT COUNT(nota1),count(nota2),count(nota3),count(nota4),count(nota5)
+        FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+        WHERE nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+        periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));
+        """, (class_name, group))
     cortes = list(cur.fetchone())
     corte = 0
-    for idx,element in enumerate(cortes):
+    for idx, element in enumerate(cortes):
         if element == total_estudent:
             corte = idx + 1
         elif element != 0:
@@ -556,10 +574,11 @@ def course_alert(class_name,group):
             corte = idx
             break
     corte_string = "nota" + str(corte)
-    cur.execute("""SELECT round(avg("""+corte_string+"""),3)
-                from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
-                where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
-                periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
+    cur.execute(
+        """SELECT round(avg("""+corte_string+"""),3)
+        from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
+        where nombre_asignatura = %s AND grupo = %s AND anio = (select max(anio) from RESUMEN) AND
+        periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
     mean_corte = cur.fetchone()[0]
     if mean_corte  >= 2 and mean_corte < 3:
         text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
@@ -609,7 +628,7 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
     RETORNA:
 
     """
-    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+    date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
     if action == "INICIO":
         text = "El usuario " + usuario + " ha iniciado sesion."
         # Insercion en login
@@ -1463,7 +1482,7 @@ def admin_show_group_class(user_name, class_name, group, year, period):
     count = count_admin_alerts()
     return render_template('/admin/admin_show_class.html', user_name=user_name,
                            students_class=data, class_name=class_name,
-                           count=count, group=group,year=year,period=period)
+                           count=count, group=group, year=year, period=period)
 
 
 @app.route("/admin_classes_edit/<string:year>/<string:period>", methods=['POST', 'GET'])
@@ -1477,10 +1496,6 @@ def admin_edit_class(year, period):
 
     """
     current_year, current_period = return_current_year_period()
-    period_year = f"{current_period}_{current_year}"
-    # logging(user_name, '2', 'EDICION', sobre_que="PORCENTAJE", asignatura=ASIGANTURA,
-    #         grupo=GRUPO, cuando=period_year, notas_antes=PORCENTAJE_ANTES,
-    #         notas_despues=PORCENTAJE_DESPUES)
     if int(year) == current_year and int(period) == current_period:
         cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                     creditos_asignatura, porcentaje1,

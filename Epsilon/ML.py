@@ -39,7 +39,7 @@ conn = psycopg2.connect(
     password="Jgrccgv",
     host="localhost",
     port="5432",
-    database="Epsilon55",
+    database="Epsilon56",
 )
 
 conn.set_session(autocommit=True)
