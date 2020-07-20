@@ -147,16 +147,83 @@ Ventana de alertas
 ![Alt text](https://user-images.githubusercontent.com/33558020/87894106-6ff30200-ca07-11ea-811d-3c363f97c868.PNG)
 
 
-#3. Profesor
+# 3. Profesor
+
+Una vez se haya iniciado sesión, la aplicación abrirá una ventana con las asignaturas que se encuentra dictando en el último periodo académico registrado: 
+
+![main_profesor](https://user-images.githubusercontent.com/33558020/87894540-a54c1f80-ca08-11ea-950a-6f81788a9117.PNG)
+
+**a. Ver materias dictadas de un periodo académico:** Ingresando a la opción de “Historial de materias”, el profesor podrá observar los periodos académicos en los que ha dictado por lo menos una asignatura. Seleccionando cualquiera de estos periodos se le mostrará una lista de asignaturas con el o los respectivos grupos que dictó. 
+
+Menú periodos académicos donde el profesor dictó al menos una asignatura
+
+![periodos](https://user-images.githubusercontent.com/33558020/87894546-a715e300-ca08-11ea-80aa-c830d01b63b8.PNG)
+
+Menú asignaturas dictadas en el periodo 2020-2. 
+
+![materias_periodos](https://user-images.githubusercontent.com/33558020/87894541-a5e4b600-ca08-11ea-9d8a-5f17caaef8c4.PNG)
 
 
 
+**b. Ver estudiantes y notas de una asignatura dictada:** tras haber seleccionado una asignatura a partir del inciso anterior (a), va a aparecer una tabla con los estudiantes y sus respectivas notas en esta asignatura. 
+
+Notas de estudiantes en la asignatura elegida
+
+![notas_periodos](https://user-images.githubusercontent.com/33558020/87894545-a67d4c80-ca08-11ea-9e84-9597fec1f518.PNG)
+
+**c. Descargar notas de estudiantes en una asignatura dictada:**  Tras haber seleccionado una asignatura a partir del inciso (a), se puede descargar la información sobre los estudiantes oprimiendo el botón “descargar”. Este archivo será en formato CSV el cual podrá abrir con Excel.  
+Ejemplo botón Descargar. 
+
+![descarga_notas](https://user-images.githubusercontent.com/33558020/87899163-eac31980-ca15-11ea-8662-cdf1722c7934.PNG)
 
 
+**d. Editar notas de asignaturas dictadas en el semestre actual:** en la tabla de notas de estudiantes aparecen botones de editar y de subir las notas mediante un Excel, a continuación, explicamos estas dos funcionalidades. 
+
+**i. Editar notas mediante interacción con la aplicación:**  en este punto hacemos referencia a la funcionalidad de editar las notas directamente en la tabla que se muestra en la aplicación, para usar esta función debemos dar clic en el botón editar, luego se habilitará la edición de las casillas que contienen notas en la tabla, para editar una casilla es suficiente con dar clic en esta e ingresar el valor deseado, tras haber ingresado los datos en cuestión se da clic en el botón de guardar. 
+
+![edicion_notas](https://user-images.githubusercontent.com/33558020/87894547-a715e300-ca08-11ea-8baf-c8fda2e88c45.PNG)
+
+**ii. Editar notas mediante un archivo de Excel:** para este apartado es posible hacer el cambio en las notas de los estudiantes de la asignatura elegida mediante un archivo de Excel que contenga esta información, cabe destacar que se debe tener un formato igual al que se mostrará a continuación. 
+
+![archivo_Ex](https://user-images.githubusercontent.com/33558020/87899253-3fff2b00-ca16-11ea-90e4-b50785a2b7be.PNG)
 
 
+# 4. Administrativo
+
+Una vez se haya iniciado sesión, la aplicación abrirá una ventana vacía con las funcionalidades del administrador:
+
+![main_Admin](https://user-images.githubusercontent.com/33558020/87895658-95820a80-ca0b-11ea-8b0d-49da3654b811.PNG)
 
 
+**a. Acciones sobre estudiantes:** En el apartado estudiantes el administrador podrá ver todos los estudiantes registrados en la aplicación además de un pequeño resumen de estos, podrá generar reportes pulsando el botón al final de la información del estudiante. 
+
+![lista_estudiantes](https://user-images.githubusercontent.com/33558020/87895651-93b84700-ca0b-11ea-81df-2cbc3aa63a6a.PNG)
+
+**i. Ver semestres cursados por estudiante:**  Luego de seleccionar alguno de los estudiantes, el administrador podrá ver los periodos en los que ese estudiante registró alguna asignatura. 
+
+![periodos_estu](https://user-images.githubusercontent.com/33558020/87895625-8dc26600-ca0b-11ea-8a1a-533e0c19efbb.PNG)
+
+**ii. Ver asignaturas y notas en un periodo académico:** Si el administrador desea también puede descargar la información del desempeño del estudiante en alguno de estos periodos. 
+
+![notas_periodos_estu](https://user-images.githubusercontent.com/33558020/87895665-974bce00-ca0b-11ea-93d3-797440673253.PNG)
+
+**b. Acciones sobre profesores**
+
+![lista_profesores](https://user-images.githubusercontent.com/33558020/87895652-9450dd80-ca0b-11ea-8cc2-3c3fab9d373c.PNG)
+
+**i. Ver periodos en los que un profesor dictó materias:** Al ingresar a la opción de “Profesores” y seleccionar un profesor se desplegarán todos los distintos periodos académicos en los que este dicto al menos una asignatura. 
+
+![periodos_profesor](https://user-images.githubusercontent.com/33558020/87895631-8ef39300-ca0b-11ea-85d9-e4748b6f1815.PNG)
+
+**ii. Ver asignaturas dictadas por un profesor en un periodo académico:** Al seleccionar un periodo académico, como se describe en el inciso b-i, se desplegarán las asignaturas dictadas por el profesor en el periodo académico consultado. 
+
+**iii. Ver estudiantes y notas de asignaturas dictadas en un periodo académico:** El administrador al elegir la asignatura dictada por el profesor en el periodo académico especifico, la información que se le mostrará es la del desempeño de los estudiantes en esta. 
+
+![notas_periodos_profe](https://user-images.githubusercontent.com/33558020/87895666-97e46480-ca0b-11ea-9bb1-fe5d4a25d30c.PNG)
+
+Se puede generar un reporte por periodo
+
+![reporte_periodo_profe](https://user-images.githubusercontent.com/33558020/87895637-9024c000-ca0b-11ea-84e1-093305fc7521.PNG)
 
 
 
