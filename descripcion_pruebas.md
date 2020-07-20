@@ -19,6 +19,27 @@ En este texto abordaremos los diferentes tipos de pruebas funcionales con el fin
 - Seguimiento de estudiantes, incluyendo su desempeño académico. ✓ 
 - Importación de notas en Excel.  ✓ 
 - Reporte de notas directamente por parte de los profesores. ✓ 
--
+- Sistema de Alertas. ✓ 
+- Información almacenada de forma segura. ✓ 
+- Garantía de que los usuarios puedan acceder a la aplicación. ✓ 
+- Garantía que la aplicación no pueda ser utilizada por terceros sin autorización. ✓ 
+
+# Pruebas de extremos: 
+Son las pruebas que se hacen de principio a fin y que validan toda la experiencia que debe tener un usuario de la aplicación. 
+
+**Resultado pruebas:**
+# Estudiante
+
+Simulamos la aplicación con el usuario Juanita Gómez.
+
+
+
+
+
+
+
+
+
+
 
 
