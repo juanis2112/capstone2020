@@ -70,15 +70,31 @@ PARAMETROS:</p>
 <dl class="py function">
 <dt id="App.admin_edit_class">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_edit_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_edit_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Permite editar los datos de las clases de un estudiante
+PARAMETROS:</p>
+<blockquote>
+<div><p>year:año de la actualizacion
+Period: periodo de la actualizcion</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>EL HTML en donde se puede realizar los cambios</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.admin_functions">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_functions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_functions" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Permite realizar la actualizacion de los datos de las clases
+PARAMETROS:</p>
+<blockquote>
+<div><p>year: anio de la modificacion
+period: periodo de la modificacion</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Retorna el HTML donde se puede evidenciar los cambios</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -99,8 +115,16 @@ PARAMETROS:</p>
 <dl class="py function">
 <dt id="App.admin_main_teacher">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_main_teacher</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_main_teacher" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con todos los periodos y años en los que un profesor específico ha
+dictado asignaturas.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del estudiante.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con per1iodos y años.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -137,29 +161,66 @@ PARAMETROS:</p>
 <dl class="py function">
 <dt id="App.admin_show_class">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_show_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_show_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con los estudiantes y notas de una asignatura y grupo
+en específico en un periodo y año dictado por el profesor seleccionado.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del profesor
+class_name: nombre de la asignatura a observar
+year: año a observar
+period: periodo a observar
+group: grupo a observar de la asignatura.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Venatan con los estudantes y notas de una asigantura</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.admin_show_group_class">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_show_group_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">group</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_show_group_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Muestra los grupos de clases
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario
+class_name: nombre de la clase
+group: grupo
+year: anio que se quiere mostrar
+period: periodo que se quiere mostrar</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.admin_teacher_classes">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_teacher_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_teacher_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una venatan con las asignaturas dictadas por un profesor en
+espcífico en un periodo y año específico.
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: nombre de usuario del profesor
+year: año a observar
+period: periodo a observar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con asignaturas dictadas por el profesor.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.admin_update_class">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">admin_update_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.admin_update_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Actualiza los datos de las clases de un estudiante
+PARAMETROS:</p>
+<blockquote>
+<div><p>year:año de la actualizacion
+Period: periodo de la actualizcion</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>EL HTML en donde se puede ver los cambios realizados</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -254,8 +315,11 @@ El formulario de la creación de los archivos.</p>
 <dl class="py function">
 <dt id="App.create_user">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">create_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.create_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Permite llamar a la función en donde se actualiza el nuevo usuario
+RETORNA:</p>
+<blockquote>
+<div><p>El HTML en donde se puede crear un usuario</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
@@ -368,43 +432,89 @@ PARAMETROS:</p>
 <dl class="py function">
 <dt id="App.groups_report">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">groups_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">year</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.groups_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Grafica un reporte para un grupo dado
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: Nombre de clase
+period: El periodo en el que se quiere graficar
+year: Anio en el cual se queire graficar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se puede ver los reportes por grupos</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.historic_class">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">historic_class</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.historic_class" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con todos los años y periodos en los que se han dictado asignaturas.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana con periodos y años.</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.import_data_from_file">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">import_data_from_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.import_data_from_file" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una HTML para poder subir la informacion
+PARAMETROS:</p>
+<blockquote>
+<div><p>data_type: datos de los usuarios</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML que permite importar la informacion</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.import_data_from_file_year">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">import_data_from_file_year</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data_type</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.import_data_from_file_year" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una HTML para poder subir la informacion de un año y periodo específico
+PARAMETROS:</p>
+<blockquote>
+<div><p>data_type: datos de los usuarios
+year: año
+period: periodo</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML que permite importar la informacion</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.load_classes">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.load_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con todas las asignaturas dictadas en un periodo y año específico.
+PARAMETROS:</p>
+<blockquote>
+<div><p>year: año a observar
+period: periodo a observar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>ventana con asignaturas y datos de estas.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.load_groups">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_groups</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.load_groups" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con los grupos de una asignatura específica en un periodo y año específico con el
+profesor que dicto la asignatura.
+PARAMETROS:</p>
+<blockquote>
+<div><p>class_name: nobre de la asignatura a observar
+year: año a obsrvar
+period: periodo a obserrvar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>Ventana con grupos y respectivos profesores.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -421,8 +531,11 @@ RETORNA:</p>
 <dl class="py function">
 <dt id="App.load_teachers">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">load_teachers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.load_teachers" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Carga una ventana con todos los profesores registrados en la base de datos.
+RETORNA:</p>
+<blockquote>
+<div><p>Ventana con nombres y apellidos de profesores registrados.</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
@@ -532,8 +645,19 @@ RETORNA:</p>
 <dl class="py function">
 <dt id="App.one_group_report">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">one_group_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">class_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em>, <em class="sig-param"><span class="n">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.one_group_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Genera un reporte para un grupo
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: usuario del estudiante
+class_name: nomnbre de la asignatura
+year: anio de la materia
+period: periodo de la materia
+group: grupo al cual pertenece una asignatura</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se puede ver el reporte generado</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -709,15 +833,33 @@ garde: nota del estudiante</p>
 <dl class="py function">
 <dt id="App.student_historic_report">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">student_historic_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.student_historic_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Genera un reporte para un estudiante
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: usuario del estudiante
+year: Anio de donde se realizando la consulta
+period: Periodo de donde se esta realizando la consulta</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se encuentra el reporte generado</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.student_report">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">student_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user_name</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.student_report" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Genera un reporte para un estudiante
+PARAMETROS:</p>
+<blockquote>
+<div><p>user_name: usuario del estudiante
+year: Anio de donde se realizando la consulta
+period: Periodo de donde se esta realizando la consulta</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se encuentra el reporte generado</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -755,8 +897,16 @@ cambiar notas</p>
 <dl class="py function">
 <dt id="App.upload_classes">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_classes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">period</span></em><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_classes" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Cargar las clases que se van a dictar este semestre
+PARAMETROS:</p>
+<blockquote>
+<div><p>year: anio el cual se va a importar
+period: periodo el cual se va a importar</p>
+</div></blockquote>
+<dl class="simple">
+<dt>RETORNA:</dt><dd><p>El HTML en donde se puede importar el archivo csv</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -812,22 +962,29 @@ group: grupo específico de la asignatura</p>
 <dl class="py function">
 <dt id="App.upload_new_user">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_new_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_new_user" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Actualizacion de un nuevo usuario en la base de datos
+RETORNA:
+El HTML en donde se puede un mensaje que ejectivamente se ejecuto la insercion.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.upload_students">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_students</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_students" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Cargar base de datos de estudiantes en un semestre
+RETORNA:</p>
+<blockquote>
+<div><p>El HTML que permite subir el archivo csv</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt id="App.upload_teachers">
 <code class="sig-prename descclassname">App.</code><code class="sig-name descname">upload_teachers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#App.upload_teachers" title="Enlazar permanentemente con esta definición">¶</a></dt>
-<dd><p>PARAMETROS:</p>
-<p>RETORNA:</p>
+<dd><p>Cargar la base de datos de los profesors de un semestre
+RETORNA:</p>
+<blockquote>
+<div><p>El HTML en donde permite subir el archivo csv</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
