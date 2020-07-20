@@ -140,8 +140,9 @@ githubusercontent.com/33558020/87895659-95820a80-ca0b-11ea-8809-76ec77804969.PNG
 
 
 
-#Pruebas de aceptación:
-**A** continuación, hay un listado con las características aprobadas por el cliente:
+# Pruebas de aceptación:
+
+A continuación, hay un listado con las características aprobadas por el cliente:
 •	Características visuales:
 a.	Se eligió una paleta de colores adecuada (azul y colores claros de fondo) para la aplicación
 b.	Diseño de la ventana de inicia sesión
@@ -162,25 +163,37 @@ Para administradores:
 -	Notificación y creación de alertas: ventana donde se puede ver las alertas que haya levantado el sistema sobre estudiantes en riesgo junto con botón para agregar alertas personalizadas. 
 
 
-•	Características funcionales:
+•	**Características funcionales**:
+
 a.	Acceso web a la aplicación con su IP respectivo
 
 b.	Alertas automáticas: Se validó que los modelos corrieran con los datos de entrenamiento subministrado por los clientes. De igual manera se revisó que los modelos se vuelvan a entrenar con la información de los datos y que se hicieran las respectivas predicciones de los riesgos de los diferentes tipos de materias y estudiantes.
 Por otra parte, se revisó que se produjeran las alertas si un estudiante le fue mal en un corte, o en promedio a todos los estudiantes en una materia.
+
 c.	Para estudiantes:
 -	Consultas de los estudiantes sobre sus resultados académicos e información personal
+
 d.	Para profesores:
 -	Se notifica al profesor en caso de ingresar notas incorrectamente (mayores a 5, menores a 1 o ingresar caracteres no numéricos)
 -	Importar archivo .csv con las notas de los estudiantes
 -	Cambiar porcentajes de las materias como prefiera el profesor y verificar que la suma de los porcentajes sea correcta.
 -	Consultar, modificar, cargar y descargar notas de estudiantes en cada una de las materias que dicta el profesor en el semestre actual. Además, también se puede ver gráficas de resultados de los estudiantes.
 -	Consulta de notas del semestre pasado
+
 e.	Para administradores:
 -	Generar alertas manuales para enviarlas a los estudiantes
 -	Consultas para ver notas por estudiante, profesor o curso
 -	Importar información de profesores, de notas de un periodo académico y creación de nuevos usuarios a partir de archivos .csv
-•	Características no funcionales: 
+
+•	**Características no funcionales**: 
+
 a.	Seguridad: las contraseñas están encriptadas en la base de datos
 b.	Logging: tabla con registro de las acciones de los usuarios con la aplicación. Cada acción está clasificada en una de 3 categorías posibles dependiendo de su importancia 
 c.	Verificación de roles (estudiante, profesor, administrador) para no acceder pasar de un rol a otro
 d.	Conexión a la base de datos con una llave segura
+
+
+
+
+
+
