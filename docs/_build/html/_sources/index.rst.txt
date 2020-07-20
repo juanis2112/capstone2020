@@ -3,27 +3,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Epsilon's documentation!
-===================================
+Bienvenido a la Documentación de Epsilon
+========================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-
-App API Docs
-============
-
-.. automodule:: App
-   :members:
-
-
-ML API Docs
-===========
-
-.. automodule:: ML
-   :members:
-
+   ML
+   App
 
 Indices and tables
 ==================

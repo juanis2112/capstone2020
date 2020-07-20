@@ -33,31 +33,31 @@ file = str(Path("").resolve())
 lista_modelos = None
 
 
-# Connection to Database
-conn = psycopg2.connect(
-    user="postgres",
-    password="Jgrccgv",
-    host="localhost",
-    port="5432",
-    database="Epsilon56",
-)
+# # Connection to Database
+# conn = psycopg2.connect(
+#     user="postgres",
+#     password="Jgrccgv",
+#     host="localhost",
+#     port="5432",
+#     database="Epsilon56",
+# )
 
-conn.set_session(autocommit=True)
-cur = conn.cursor()
-# app = Flask(__name__)
-# app.secret_key = secrets.token_bytes(nbytes=16)
+# conn.set_session(autocommit=True)
+# cur = conn.cursor()
+# # app = Flask(__name__)
+# # app.secret_key = secrets.token_bytes(nbytes=16)
 
-# NOTA: Variable global para modelos
-lista_modelos = [
-    GaussianNB(),
-    LogisticRegression(),
-    DecisionTreeClassifier(),
-    KNeighborsClassifier(
-        n_neighbors=2),
-    svm.SVC(
-        kernel='rbf')]
-    # IMPORTANTE: puede agregar modelos a esta lista con distintos parametros
-    # como prefiera quien maneje esto
+# # NOTA: Variable global para modelos
+# lista_modelos = [
+#     GaussianNB(),
+#     LogisticRegression(),
+#     DecisionTreeClassifier(),
+#     KNeighborsClassifier(
+#         n_neighbors=2),
+#     svm.SVC(
+#         kernel='rbf')]
+#     # IMPORTANTE: puede agregar modelos a esta lista con distintos parametros
+#     # como prefiera quien maneje esto
 
 
 # =======================================================================================================================
