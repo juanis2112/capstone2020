@@ -515,10 +515,12 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
 
 def student_alerts(student, class_name, grade):
     """
-
+    Genera una alerta en la base de datos basado en la nota que saca un estudiante
+    en una pateria específica
     PARAMETROS:
-
-    RETORNA:
+        student: usuario del estudiante al cual se le genera una alerta 
+        class_name: nombre de la asignatura en la que se genera la alerta
+        garde: nota del estudiante
 
     """
     # Consulta de la nota final (grade_final)
@@ -535,7 +537,7 @@ def student_alerts(student, class_name, grade):
             # Consulta que mete el string a la base de datos
             alert_student = "Tiene una alerta de nota muy baja en la materia " + class_name
             alert_type = 'ALTA'
-        date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+        date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
         cur.execute("""(SELECT max(anio) FROM RESUMEN)""")
         current_year = int(cur.fetchone()[0])
         cur.execute("""(SELECT max(periodo) FROM RESUMEN WHERE anio =
@@ -550,6 +552,16 @@ def student_alerts(student, class_name, grade):
 
 
 def course_alert(class_name, group):
+
+    """
+    Genera una alerta asociada a una materia según el promedio de los estudiantes en el 
+    cohorte que haya finalizado
+    PARAMETROS: 
+        class_name: nombre de la clase a la que se le genera una alerta
+        group: grupo de la clase 
+
+    """
+
     cur.execute(
         """SELECT count(*)
         FROM toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
@@ -588,7 +600,7 @@ def course_alert(class_name, group):
         Tipo = "MUY BAJO"
     else:
         return
-    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+    date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
     cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (select max(anio)
                     from semestre) GROUP BY(anio);""")
     period,year = list(cur.fetchone())
@@ -610,13 +622,12 @@ def ML_prediction():
         cur.execute("""SELECT nombre,apellido_1,apellido_2 FROM personas WHERE usuario = %s """, (student['est_usr'],))
         name = " ".join(cur.fetchone())
         text = "El estudiante " + name + " tiene posibilidades de perder la materia " + student["nombre_asignatura"]
-        date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+        date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
         current_year, current_period = return_current_year_period()
         cur.execute("""INSERT into alertas VALUES
         (%s,%s,%s,%s,%s,%s,%s)""",
         (student['est_usr'],text,tipo,date,current_period,current_year,student['nombre_asignatura']))
         cur.execute("""INSERT into notificacion select %s,%s,codigo from empleado WHERE esadmin = '1';""",(student['est_usr'], date))
-        time.sleep(2)
 
 def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura=None, grupo=None,
             cuando=None, notas_antes=None, notas_despues=None):
@@ -625,7 +636,15 @@ def logging(usuario, nivel, action, sobre_que=None, sobre_quien=None, asignatura
     junto con su datestamp correspondiente
     PARAMETROS:
 
-    RETORNA:
+        usuario: usuario registrado en la base de datos de la persona que realiza la accion.
+        nivel: determina la gravedad de la acción sobre la aplicación. Va de 1 a 3.
+        sobre_que: sobre que parte de la aplicación se realiza la acción.
+        sobre_quien: a que usuario o asignatura está afectando la acción.
+        asignatura: nombre de la asignatura que está involucrada 
+        grupo: grupo al que pertenece la asignatura involucrada
+        cuando: sobre que periodo académico se está realizando la acción.
+        notas_antes: notas que serán editadas
+        notas_despues: nuevos valores de las notas que serán editadas.
 
     """
     date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
@@ -852,10 +871,10 @@ def main_student():
 @login_required(role='estudiante')
 def personal_data():
     """
-
-    PARAMETROS:
-
+    Carga una ventana con los datos personales del estudiante que están almacenados en la 
+    base de datos, como codigo, nombre, apellidos, correo institucional y documento.
     RETORNA:
+        Ventana de datos personales del estudiante
 
     """
     user_name = flask_login.current_user.id
@@ -873,11 +892,10 @@ def personal_data():
 @login_required(role='estudiante')
 def academic_history():
     """
-
-    PARAMETROS:
-
+    Carga una ventana con los periodos académicos en los que un estudiante ha 
+    registrado materias.
     RETORNA:
-
+        Ventana con los periodos académicos registrados por un estudiante
     """
     user_name = flask_login.current_user.id
     cur.execute("""SELECT distinct cast(anio as varchar), cast(periodo as varchar)
@@ -894,11 +912,13 @@ def academic_history():
 @login_required(role='estudiante')
 def period_classes(year, period):
     """
-
+    Carga una ventana con todas las asignaturas inscritas por un estudiante en un periodo y 
+    año específicos
     PARAMETROS:
-
+        year: año a ser buscado.
+        period: periodo académico a ser buscado.
     RETORNA:
-
+        Asignaturas vistas por un estudinate en un año y periodo determinados
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -924,11 +944,10 @@ def period_classes(year, period):
 @login_required(role='profesor')
 def main_teacher():
     """
-
-    PARAMETROS:
-
+    Cargar la ventana principal de los usuarios de tipo profesor mostrando
+    las materias que dicta en el periodo actual
     RETORNA:
-
+        Ventana principal de profesor
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -950,11 +969,13 @@ def main_teacher():
 @login_required(role='profesor')
 def show_class(class_name, group):
     """
-
+    Carga una ventana con los estudiantes y sus respectivas notas por cohorte en el 
+    periodo actual.
     PARAMETROS:
-
+        class_name: nombre de la asignatura a observar
+        group: grupo específico de la asignatura
     RETORNA:
-
+        Ventana con estudiantes y notas de la asignatura en el periodo actual
     """
     user_name = flask_login.current_user.id
     current_year, current_period = return_current_year_period()
@@ -970,11 +991,12 @@ def show_class(class_name, group):
 @login_required(role='profesor')
 def edit_grade(class_name, group):
     """
-
+    Carga la ventana de edición de notas de un profesor
     PARAMETROS:
-
+        class_name: nombre de la asignatura
+        group: grupo específico de la asignatura
     RETORNA:
-
+        Ventana de edición de notas manuales de un profesor
     """
     user_name = flask_login.current_user.id
     students_class = get_student_grades(user_name, class_name, group)
@@ -987,11 +1009,13 @@ def edit_grade(class_name, group):
 @login_required(role='profesor')
 def update_grade(class_name, group):
     """
-
+    Actualiza las notas de los estudiantes en la base de de datos que han sido cambiadas 
+    por el profesor de forma manual.
     PARAMETROS:
-
+        class_name: nombre de la asignatura
+        group: grupo específico de la asignatura
     RETORNA:
-
+        Ventana con los estudiantes y sus notas actualizadas en la asignatura
     """
     user_name = flask_login.current_user.id
     students_class = get_student_grades(user_name, class_name, group)
@@ -1020,9 +1044,7 @@ def update_grade(class_name, group):
                 grades[idx] = new_grade
                 if grade is not None:
                     student_alerts(student[0], class_name, new_grade)
-        update_grades(*grades, class_name, student[0], user_name, group)
-    current_year, current_period = return_current_year_period()
-    course_alert(class_name, group)
+        update_grade forma manuallass_name, group)
     ML_prediction()
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
@@ -1033,11 +1055,13 @@ def update_grade(class_name, group):
 @login_required(role='profesor')
 def upload_grades_from_csv(class_name, group):
     """
-
+    Actualiza las notas de los estudiantes en la base de de datos que han sido cambiadas 
+    por el profesor con un archivo csv.
     PARAMETROS:
-
+        class_name: nombre de la asignatura
+        group: grupo específico de la asignatura
     RETORNA:
-
+        Ventana con los estudiantes y sus notas actualizadas en la asignatura
     """
     user_name = flask_login.current_user.id
     file = request.files['inputfile']
@@ -1063,11 +1087,10 @@ def upload_grades_from_csv(class_name, group):
 @login_required(role='profesor')
 def class_history():
     """
-
-    PARAMETROS:
-
+    Carga una ventana con los periodos académicos en los que un profesor ha 
+    dictado asignaturas.
     RETORNA:
-
+        Ventana con los periodos académicos registrados por un profesor
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'CONSULTA', sobre_que="PERIODOS")
@@ -1083,11 +1106,14 @@ def class_history():
 @login_required(role='profesor')
 def classes(user_name, year, period):
     """
-
+    Carga una ventana con todas las asignaturas dictadas por un profesor en un año y 
+    periodo específico.
     PARAMETROS:
-
+        user_name: nombre de usuario del profesor
+        year: año a observar.
+        period: periodo a observar.
     RETORNA:
-
+        Ventana con las asignaturas en un añio y periodo determinado
     """
     period_year = f"{period}_{year}"
     logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS", cuando=period_year)
@@ -1108,11 +1134,15 @@ def classes(user_name, year, period):
 @login_required(role='profesor')
 def show__historic_class(class_name, year, period, group):
     """
-
+    Carga una ventana con los estudiantes y notas de una asignatura específica en un año
+    específico en un periodo específico.
     PARAMETROS:
-
+        class_name: nombre de la asignatura a observar
+        year: año a observar
+        period: periodo a observar
+        group: grupo a observar
     RETORNA:
-
+        Ventana con los estudiantes y sus notas en la asignatura 
     """
     period_year = f"{period}_{year}"
     user_name = flask_login.current_user.id
@@ -1130,11 +1160,10 @@ def show__historic_class(class_name, year, period, group):
 @login_required(role='administrador')
 def main_admin():
     """
-
-    PARAMETROS:
-
+    Cargar la ventana principal de los usuarios de tipo administrador mostrando las opciones que 
+    este puede realizar.
     RETORNA:
-
+        Ventana principal de administrador
     """
     user_name = flask_login.current_user.id
     count = count_admin_alerts()
@@ -1147,9 +1176,8 @@ def main_admin():
 @login_required(role='administrador')
 def load_students():
     """
-
-    PARAMETROS:
-
+    Garga una ventana con todos los estudiantes registrados en la aplicación con datos de 
+    interes como su promedio acumulado y créditos cursados.
     RETORNA:
 
     """
@@ -2035,7 +2063,7 @@ def publish_alert():
     user_name = inf_user.split(" ")[-1][1:-1]
     tipo = request.form["tipo"]
     description = request.form["descripcion"]
-    date = str(time.strftime('%Y-%m-%d %H:%M:%S'))
+    date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
     cur.execute("""SELECT max(periodo),anio FROM semestre WHERE anio = (SELECT max(anio)
                     from semestre) GROUP BY(anio);""")
     period, year = list(cur.fetchone())
