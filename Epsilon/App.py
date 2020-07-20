@@ -57,7 +57,7 @@ def init_app():
         password="Jgrccgv",
         host="localhost",
         port="5432",
-        database="Epsilon52",
+        database="Epsilon55",
         )
 
     conn.set_session(autocommit=True)
@@ -515,7 +515,7 @@ def student_alerts(student, class_name, grade):
     if grade < 2:  # row[corte] es la nota de la materia del estudiante ne esa asignatura
         # Consulta que mete el string a la base de datos
         if grade >= 1:
-            alert_student = "Tiene una alerta de nota baja en la materia"+class_name
+            alert_student = "Tiene una alerta de nota baja en la materia "+class_name
             alert_type = 'MEDIA'
         if grade < 1:
             # Consulta que mete el string a la base de datos
@@ -577,7 +577,7 @@ def course_alert(class_name,group):
                 ,(class_name,text_alert,Tipo,date,period,year))
     cur.execute("""INSERT INTO notificacion select %s,%s,codigo from empleado where esadmin='1';""",(class_name,date))
 
-def ML_main2():
+def ML_prediction():
     cur.execute("""SELECT count(*) from toma where anio = (select max(anio) from RESUMEN) AND
                 periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN)); """)
     total_student = cur.fetchone()[0]
@@ -585,9 +585,8 @@ def ML_main2():
                 periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));  """)
     corte1,corte2 = cur.fetchone()
     if corte1 == total_student or corte2 == total_student:
-        ML_alert_student = ML.main2()
+        ML_alert_student = ML.prediction_from_trained_models()
     tipo = "Grave"
-    print(ML_alert_student)
     for index, student in ML_alert_student.iterrows():
         cur.execute("""SELECT nombre,apellido_1,apellido_2 FROM personas WHERE usuario = %s """, (student['est_usr'],))
         name = " ".join(cur.fetchone())
@@ -738,7 +737,6 @@ def change_passwd():
         cur.execute("""UPDATE personas set contrasena = crypt(%s,gen_salt('xdes'))
                     where usuario = %s; """, (password_input_conf, user_name))
         cur.execute("""UPDATE personas set estado_cuenta = '0' WHERE usuario = %s""", (user_name,))
-        flash('La contraseña fue cambiada', 'error')
         return render_main_windows(user_name)
 
 
@@ -1006,7 +1004,7 @@ def update_grade(class_name, group):
         update_grades(*grades, class_name, student[0], user_name, group)
     current_year, current_period = return_current_year_period()
     course_alert(class_name, group)
-    ML_main2()
+    ML_prediction()
     return redirect(url_for('show_class', user_name=user_name,
                             class_name=class_name, group=group))
 
@@ -1672,6 +1670,7 @@ def upload_classes(year, period):
     # logging(user_name, '3', 'IMPORTAR', sobre_que='DATOS', sobre_quien='MATERIAS',
     #         asignatura=class_name, grupo=group, cuando=period_year)
     count = count_admin_alerts()
+    ML.model_training()
     return render_template('admin/import_success.html', count=count)
 
 
