@@ -1437,11 +1437,9 @@ def admin_show_class(user_name, class_name, year, period, group):
 @login_required(role='administrador')
 def historic_class():
     """
-
-    PARAMETROS:
-
+    Carga una ventana con todos los años y periodos en los que se han dictado asignaturas.
     RETORNA:
-
+        Ventana con periodos y años.
     """
     user_name = flask_login.current_user.id
     logging(user_name, '1', 'CONSULTA', sobre_que="ASIGNATURAS")
@@ -1457,11 +1455,12 @@ def historic_class():
 @login_required(role='administrador')
 def load_classes(year, period):
     """
-
+    Carga una ventana con todas las asignaturas dictadas en un periodo y año específico.
     PARAMETROS:
-
+        year: año a observar
+        period: periodo a observar
     RETORNA:
-
+        ventana con asignaturas y datos de estas.
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1485,11 +1484,14 @@ def load_classes(year, period):
 @login_required(role='administrador')
 def load_groups(class_name, year, period):
     """
-
+    Carga una ventana con los grupos de una asignatura específica en un periodo y año específico con el
+    profesor que dicto la asignatura.
     PARAMETROS:
-
+        class_name: nobre de la asignatura a observar
+        year: año a obsrvar
+        period: periodo a obserrvar
     RETORNA:
-
+        Ventana con grupos y respectivos profesores.
     """
     cur.execute("""SELECT distinct nombre_asignatura,grupo,prof_usr,
                 nombre_prof,ap1_prof,ap2_prof
@@ -1510,11 +1512,13 @@ def load_groups(class_name, year, period):
 @login_required(role='administrador')
 def admin_show_group_class(user_name, class_name, group, year, period):
     """
-
+    Muestra los grupos de clases
     PARAMETROS:
-
-    RETORNA:
-
+        user_name: nombre de usuario
+        class_name: nombre de la clase
+        group: grupo
+        year: anio que se quiere mostrar
+        period: periodo que se quiere mostrar
     """
     user_name = flask_login.current_user.id
     period_year = f"{period}_{year}"
@@ -1531,11 +1535,12 @@ def admin_show_group_class(user_name, class_name, group, year, period):
 @login_required(role='administrador')
 def admin_edit_class(year, period):
     """
-
+    Permite editar los datos de las clases de un estudiante
     PARAMETROS:
-
+        year:año de la actualizacion
+        Period: periodo de la actualizcion
     RETORNA:
-
+        EL HTML en donde se puede realizar los cambios
     """
     current_year, current_period = return_current_year_period()
     if int(year) == current_year and int(period) == current_period:
@@ -1561,11 +1566,12 @@ def admin_edit_class(year, period):
 @login_required(role='administrador')
 def admin_update_class(year, period):
     """
-
+    Actualiza los datos de las clases de un estudiante
     PARAMETROS:
-
+        year:año de la actualizacion
+        Period: periodo de la actualizcion
     RETORNA:
-
+        EL HTML en donde se puede ver los cambios realizados
     """
     cur.execute("""SELECT distinct nombre_asignatura,codigo_asignatura,
                 creditos_asignatura, porcentaje1,
@@ -1630,11 +1636,12 @@ def admin_update_class(year, period):
 @login_required(role='administrador')
 def admin_functions():
     """
-
+    Permite realizar la actualizacion de los datos de las clases
     PARAMETROS:
-
+        year: anio de la modificacion
+        period: periodo de la modificacion
     RETORNA:
-
+        Retorna el HTML donde se puede evidenciar los cambios
     """
     count = count_admin_alerts()
     return render_template('admin/admin_functions.html', count=count)
@@ -1644,13 +1651,12 @@ def admin_functions():
 @login_required(role='administrador')
 def import_data_from_file(data_type):
     """
-
+    Carga una HTML para poder subir la informacion
     PARAMETROS:
-
+        data_type: datos de los usuarios
     RETORNA:
-
+        El HTML que permite importar la informacion
     """
-
     count = count_admin_alerts()
     return render_template('admin/import_data_from_file.html', count=count, data_type=data_type)
 
@@ -1660,13 +1666,14 @@ def import_data_from_file(data_type):
 @login_required(role='administrador')
 def import_data_from_file_year(data_type, year, period):
     """
-
+    Carga una HTML para poder subir la informacion de un año y periodo específico
     PARAMETROS:
-
+        data_type: datos de los usuarios
+        year: año
+        period: periodo
     RETORNA:
-
+        El HTML que permite importar la informacion
     """
-
     count = count_admin_alerts()
     return render_template('admin/import_data_from_file.html',
                            count=count, data_type=data_type, year=year, period=period)
