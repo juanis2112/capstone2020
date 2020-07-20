@@ -54,6 +54,15 @@ Asimismo las alertas que tiene.
 
 
 
+![main_profesor](https://user-images.githubusercontent.com/33558020/87894540-a54c1f80-ca08-11ea-950a-6f81788a9117.PNG)
+![materias_periodos](https://user-images.githubusercontent.com/33558020/87894541-a5e4b600-ca08-11ea-9d8a-5f17caaef8c4.PNG)
+![notas](https://user-images.githubusercontent.com/33558020/87894543-a5e4b600-ca08-11ea-995a-61cf5723409a.PNG)
+![notas_periodos](https://user-images.githubusercontent.com/33558020/87894545-a67d4c80-ca08-11ea-9e84-9597fec1f518.PNG)
+![periodos](https://user-images.githubusercontent.com/33558020/87894546-a715e300-ca08-11ea-80aa-c830d01b63b8.PNG)
+![edicion_notas](https://user-images.githubusercontent.com/33558020/87894547-a715e300-ca08-11ea-8baf-c8fda2e88c45.PNG)
+![login](https://user-images.githubusercontent.com/33558020/87894549-a7ae7980-ca08-11ea-95d5-a169bca15892.PNG)
+
+
 
 
 
