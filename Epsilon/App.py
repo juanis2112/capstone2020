@@ -2009,7 +2009,7 @@ def create_alert():
 @login_required(role='administrador')
 def publish_alert():
     """
-
+    Publica alerta de ad
     PARAMETROS:
 
     RETORNA:
