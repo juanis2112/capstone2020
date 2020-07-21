@@ -63,11 +63,24 @@ Para que la conexión con su base de datos sea exitosa, debe abrir el archivo `E
 
 ### Corriendo Epsilon
 
-Para correr la aplicación desde el repositorio:
+Para ejecutar la aplicación, debe ubicarse en la carpeta Epsilon:
 
 ```bash
-$ python Epsilon/App.py
+$ cd Epsilon
 ```
+
+Primero, es necesario correr el archivo `ML.py` para actualizar los modelos de machine learning:
+
+```bash
+$ python ML.py
+```
+
+Ahora debe correr la aplicación desde el repositorio:
+
+```bash
+$ python App.py
+```
+
 Si su ejercución fue exitosa, aparecerá el siguiente mensaje en la terminal
 `Running on http://127.0.0.1:2000/`
 
@@ -149,6 +162,8 @@ Teniendo su archivo de la aplicación ya configurado podrá realizar la activaci
 
 ```bash
 $ sudo systemctl start nginx
+$ cd Epsilon
+$ gunicorn3 ML:app
 $ gunicorn3 App:app
 ```
 La ejecución del gunicorn 3 debe realizarse en la carpeta en donde se encuentra el archivo de flask.
@@ -156,9 +171,4 @@ La ejecución del gunicorn 3 debe realizarse en la carpeta en donde se encuentra
 **NOTA**
 La aplicación ya se encuentra corriendo en una instancia con la siguiente dirección:
 http://54.225.233.22/
-
-
-
-
-
 

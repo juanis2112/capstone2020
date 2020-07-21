@@ -473,12 +473,13 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
         teacher_usr: nombre del profesor de la materia para la cual se van a
         cambiar notas
     """
+    is_none = lambda n: float(n) if n is not None and n != 'None' else (n if n != 'None' else None)
     current_year, current_period = return_current_year_period()
     period_year = f"{current_period}_{current_year}"
     previous_grades = [u[4:9] for u in get_student_grades(teacher_usr, class_name, group)
                        if u[0] == user][0]
-    previous_grades = [float(grade) for grade in previous_grades]
-    grades = [float(grade1), float(grade2), float(grade3), float(grade4), float(grade5)]
+    previous_grades = [is_none(grade) for grade in previous_grades]
+    grades = [is_none(grade1), is_none(grade2), is_none(grade3), is_none(grade4), is_none(grade5)]
     new_grades = [i for i in range(len(previous_grades)) if previous_grades[i] != grades[i]]
     if(len(new_grades) != 0):
         logging(teacher_usr, '2', 'EDICION', sobre_que="NOTAS", sobre_quien=user,
@@ -509,8 +510,8 @@ def update_grades(grade1, grade2, grade3, grade4, grade5, class_name, user, teac
                         anio = (SELECT max(anio) from RESUMEN) AND
                         periodo = (SELECT max(periodo) from RESUMEN
                                    where anio = (SELECT max(anio) from RESUMEN))""",
-                (grade1, grade2, grade3, grade4, grade5,
-                 class_name, user, teacher_usr, class_name, user))
+                (is_none(grade1), is_none(grade2), is_none(grade3), is_none(grade4),
+                 is_none(grade5), class_name, user, teacher_usr, class_name, user))
 
 
 def student_alerts(student, class_name, grade):
@@ -585,7 +586,7 @@ def course_alert(class_name, group):
         else:
             corte = idx
             break
-    corte_string = "nota" + str(corte)
+    corte_string = str(corte)
     cur.execute(
         """SELECT round(avg("""+corte_string+"""),3)
         from toma join asignaturas as asig on toma.codigo_asignatura = asig.codigo_asignatura
@@ -593,11 +594,11 @@ def course_alert(class_name, group):
         periodo = (select max(periodo) from RESUMEN where anio = (select max(anio) from RESUMEN));""",(class_name,group))
     mean_corte = cur.fetchone()[0]
     if mean_corte  >= 2 and mean_corte < 3:
-        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es bajo"
-        Tipo = "BAJO"
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es baja"
+        Tipo = "MEDIA"
     elif mean_corte < 2:
-        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy bajo"
-        Tipo = "MUY BAJO"
+        text_alert = "La nota de "+class_name + " en el corte "+corte_string+" es muy baja"
+        Tipo = "GRAVE"
     else:
         return
     date = str(utc_to_local(datetime.utcnow()).strftime('%Y-%m-%d %H:%M:%S.%f'))
@@ -1991,26 +1992,26 @@ def show_admin_alerts():
     """
     user_name = flask_login.current_user.id
     cur.execute(""" SELECT
-                    nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,anio,
+                    nombre,apellido_1,apellido_2,texto,R.tipo as alerta, R.fecha,periodo,anio,
                     nombre_asignatura,R.usuario
                     from (SELECT distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,
                     nombre_asignatura,visto_admin,oculto_admin,codigo from
                     alertas join notificacion as noti on alertas.usuario = noti.usuario and
                     alertas.fecha = noti.fecha order by(codigo)
-                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '0'
+                    ) as R left join personas on R.usuario = personas.usuario where visto_admin = '0'
                     AND oculto_admin = '0' AND R.codigo = (
                     SELECT codigo from personas where usuario = %s
                     )order by (R.fecha) desc;
                     """, (user_name,))
     unread_alerts = cur.fetchall()
     cur.execute(""" SELECT
-                    nombre,apellido_1,apellido_2,texto,R.tipo as alerta, fecha,periodo,
-                    anio,nombre_asignatura,R.usuario
+                    nombre,apellido_1,apellido_2,texto,R.tipo as alerta, R.fecha,periodo,anio,
+                    nombre_asignatura,R.usuario
                     from (SELECT distinct noti.usuario,noti.fecha,texto,tipo,periodo,anio,
                     nombre_asignatura,visto_admin,oculto_admin,codigo from
-                    alertas join notificacion as noti on alertas.usuario = noti.usuario
-                    and alertas.fecha = noti.fecha order by(codigo)
-                    ) as R join personas on R.usuario = personas.usuario where visto_admin = '1'
+                    alertas join notificacion as noti on alertas.usuario = noti.usuario and
+                    alertas.fecha = noti.fecha order by(codigo)
+                    ) as R left join personas on R.usuario = personas.usuario where visto_admin = '1'
                     AND oculto_admin = '0' AND R.codigo = (
                     SELECT codigo from personas where usuario = %s
                     )order by (R.fecha) desc;

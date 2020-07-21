@@ -844,8 +844,4 @@ def prediction_from_trained_models():
 
 
 if __name__ == "__main__":
-    pass
-    # model_selection_from_historic_data()
-    # main1()
-    # lista_estudiantes_alerta = main2()
-    # print(lista_estudiantes_alerta.head())
+    model_selection_from_historic_data()
